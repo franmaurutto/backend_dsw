@@ -1,0 +1,44 @@
+GET http://localhost:3000/api/cursos
+
+
+GET http://localhost:3000/api/cursos/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+
+
+POST http://localhost:3000/api/cursos
+Content-Type: application/json 
+
+{
+    "descripcion": "El objetivo de este curso de HTML es proporcionar a los estudiantes las habilidades necesarias para crear páginas web efectivas y atractivas, utilizando las mejores prácticas de codificación y diseño web. Al dominar HTML, los estudiantes pueden convertirse en profesionales capaces de construir y mantener sitios web de alta calidad que cumplan con los estándares modernos de la industria.",
+    "nombre": "Curso de HTML",
+    "cantCupos": 52,
+    "duracion": "1 mes",
+    "fechaInicio":"2 de febrero de 2025",
+    "fechaFin": "2 de marzo de 2025",
+    "horaInicio": "16:00 hs",
+    "horaFin": "18:00 hs",
+    "dias": ["Martes"]
+}
+
+PUT http://localhost:3000/api/cursos/a02b91bc-3769-4221-beb1-d7a3aeba7dad 
+Content-Type: application/json 
+
+{
+    "descripcion": "El objetivo de este curso de HTML es proporcionar a los estudiantes las habilidades necesarias para crear páginas web efectivas y atractivas, utilizando las mejores prácticas de codificación y diseño web. Al dominar HTML, los estudiantes pueden convertirse en profesionales capaces de construir y mantener sitios web de alta calidad que cumplan con los estándares modernos de la industria.",
+    "nombre": "Curso de HTML",
+    "cantCupos": 52,
+    "duracion": "2 mes",
+    "fechaInicio":"17 de febrero de 2025",
+    "fechaFin": "17 de abril de 2025",
+    "horaInicio": "16:00 hs",
+    "horaFin": "18:00 hs",
+    "dias": ["Martes"]
+}
+
+PATCH http://localhost:3000/api/cursos/a02b91bc-3769-4221-beb1-d7a3aeba7dad 
+Content-Type: application/json 
+
+{
+    "cantCupos":61,
+}
+
+DELETE http://localhost:3000/api/cursos/a02b91bc-3769-4221-beb1-d7a3aeba7dad
