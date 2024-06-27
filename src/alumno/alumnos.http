@@ -12,7 +12,7 @@ Content-Type: application/json
     "nombre_y_apellido": "Federico Diaz",
     "mail": "fedeprograma@hotmail.com",
     "telefono": 3415889546,
-    "contrasenia": "capofede11",
+    "contrasenia": "capofede11"
 }
 
 ###
@@ -20,10 +20,10 @@ PUT http://localhost:3000/api/alumnos/a02b91bc-3769-4221-beb1-d7a3aeba7dad
 Content-Type: application/json 
 
 {
-      'Juan Francisco Perez',
-      'juan.perez@gmail.com',
-      3413645543,
-      'nuevacontra'
+    "nombre_y_apellido": "Juan Francisco Perez",
+    "mail": "juan.perez@gmail.com",
+    "telefono": 3413645543,
+    "contrasenia": "nuevacontra"
 }
 
 ###
@@ -31,7 +31,7 @@ PATCH http://localhost:3000/api/alumnos/a02b91bc-3769-4221-beb1-d7a3aeba7dad
 Content-Type: application/json 
 
 {
-    "telefono":3413645545,
+    "telefono":3413645545
 }
 
 ###

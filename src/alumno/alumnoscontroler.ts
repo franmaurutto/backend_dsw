@@ -51,24 +51,24 @@ function add (req:Request, res:Response) {
 }
 
 function update(req:Request, res:Response) {
-  req.body.sanitizedInput.identificador=req.params.id
+  req.body.sanitizedInput.id=req.params.id
   const alumno= repository.update(req.body.sanitizedInput)
 
   if(!alumno){
     return res.status(404).json({message: 'Alumno no encontrado'})
   }
-   return res.status(200).json({message: 'Alumno se actualizo con exito', data: alumnos})
+   return res.status(200).json({message: 'Alumno se actualizo con exito', data: alumno})
 }
 
 
 function patch(req:Request, res:Response) {
-  req.body.sanitizedInput.identificador=req.params.id
+  req.body.sanitizedInput.id=req.params.id
   const alumno= repository.update(req.body.sanitizedInput)
 
   if(!alumno){ 
     return res.status(404).json({message: 'Alumno no encontrado'})
   }
-   return res.status(200).json({message: 'Alumno se actualizo con exito', data: alumnos})
+   return res.status(200).json({message: 'Alumno se actualizo con exito', data: alumno})
 }
 
 
