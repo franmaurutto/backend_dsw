@@ -1,0 +1,37 @@
+###
+GET http://localhost:3000/api/profesores
+
+###
+GET http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
+
+###
+POST http://localhost:3000/api/profesores
+Content-Type: application/json
+
+{
+    "nombre_y_apellido": "Dante Aguirre",
+    "mail": "danteaguirre@hotmail.com",
+    "telefono": 3413456546,
+    "contrasenia": "profedante"
+}
+
+###
+PUT http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
+Content-Type: application/json 
+
+{   "nombre_y_apellido": "Matias Maque",
+    "mail": "matimaque@hotmail.com",
+    "telefono": 3413462154,
+    "contrasenia": "mati90000"
+}
+###
+PATCH http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
+Content-Type: application/json 
+
+{   "nombre_y_apellido": "Matias Maque",
+    "mail": "matiMaque89@hotmail.com",
+    "telefono": 3413462154,
+    "contrasenia": "mati90000"}
+
+###
+DELETE http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
