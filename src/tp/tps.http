@@ -1,0 +1,31 @@
+###
+GET http://localhost:3000/api/tps
+
+###
+GET http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
+
+###
+POST http://localhost:3000/api/tps
+Content-Type: application/json 
+
+{
+    "consgina": "En este trabajo práctico, crearás un sistema básico de gestión de pacientes para una clínica ficticia. Este sistema permitirá registrar y manejar la información de los pacientes, las citas médicas, y el historial médico de cada paciente. "
+
+}
+###
+PUT http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
+Content-Type: application/json 
+
+{
+    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
+
+}
+###
+PATCH http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der 
+Content-Type: application/json 
+
+{
+    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
+}
+###
+DELETE http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
