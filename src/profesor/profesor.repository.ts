@@ -25,7 +25,7 @@ export class ProfesorRepository implements Repository<Profesor>{
         return item
     }
     public update(item: Profesor): Profesor | undefined {
-        const profesorIdx = profesores.findIndex((profesor) => profesor.identificador === item.identificador);
+        const profesorIdx = profesores.findIndex((profesor) => profesor.identificador=== item.identificador)    
 
         if (profesorIdx !== -1){
             profesores[profesorIdx] = { ...profesores[profesorIdx], ...item }
@@ -34,7 +34,7 @@ export class ProfesorRepository implements Repository<Profesor>{
     
     }
     public delete(item: { identificador: string; }): Profesor | undefined {
-        const profesorIdx = profesores.findIndex((profesor) => profesor.identificador === item.identificador);
+        const profesorIdx = profesores.findIndex((profesor) => profesor.identificador === item.identificador)
 
     if (profesorIdx !== -1) {
         const deletedProfesores= profesores[profesorIdx]

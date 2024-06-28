@@ -56,7 +56,7 @@ function update(req:Request, res:Response) {
    return res.status(200).json({message: 'Tp se actualizo con exito', data: tps})
 }
 
-
+/*
 function patch(req:Request, res:Response) {
   req.body.sanitizedInput.identificador=req.params.identificador
   const tp= repository.update(req.body.sanitizedInput)
@@ -65,7 +65,7 @@ function patch(req:Request, res:Response) {
     return res.status(404).json({message: 'Tp no encontrado'})
   }
    return res.status(200).json({message: 'Tp se actualizo con exito', data: tps})
-}
+}*/
 
 
 function remove (req: Request, res: Response) {
@@ -79,4 +79,4 @@ function remove (req: Request, res: Response) {
   }
 }
 
-export {sanitezeCursoInput, getAll, getOne, add, update, patch, remove }
+export {sanitezeCursoInput, getAll, getOne, add, update, remove }

@@ -71,20 +71,9 @@ function update(req:Request, res:Response) {
 }
 
 
-function patch(req:Request, res:Response) {
-  req.body.sanitizedInput.identificador=req.params.identificador
-  const curso= repository.update(req.body.sanitizedInput)
-
-  if(!curso){ 
-    return res.status(404).json({message: 'Curso no encontrado'})
-  }
-   return res.status(200).json({message: 'Curso se actualizo con exito', data: cursos})
-}
-
-
 function remove (req: Request, res: Response) {
-  const identificador=req.params.identificador;
-  const curso =repository.delete({identificador});
+  const identificador=req.params.identificador
+  const curso =repository.delete({identificador})
 
   if (!curso) {
     return res.status(404).json({ message: 'Curso no encontrado' })
@@ -93,4 +82,4 @@ function remove (req: Request, res: Response) {
   }
 }
 
-export {sanitezeCursoInput, getAll, getOne, add, update, patch, remove }
+export {sanitezeCursoInput, getAll, getOne, add, update, remove }

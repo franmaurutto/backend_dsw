@@ -38,7 +38,7 @@ function add(req: Request, res: Response, next: NextFunction) {
 
 function update(req: Request, res: Response) {
 
-    req.body.sanitizedInput.id=req.params.id
+    req.body.sanitizedInput.identificador=req.params.id
     const profesor= repository.update(req.body.sanitizedInput)
 
     if (!profesor) {
