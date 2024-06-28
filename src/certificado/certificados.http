@@ -1,0 +1,34 @@
+### obtener todos los characters
+GET http://localhost:3000/api/certificados
+
+### obtener un character
+GET http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
+
+### crear nuevo character
+POST http://localhost:3000/api/certificados
+Content-Type: application/json
+
+{
+    "descripcion": "Se otorga el siguiente certificado acreditando que el alumno ha asistido al curso de HTML y ha alcanzado los requisitos exigidos por el mismo",
+    "fechaEmision": "10 de noviembre de 2024"
+}
+
+### modificar un character (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
+Content-Type: application/json
+
+{
+    "descripcion": "Se otorga el siguiente certificado acreditando que el alumno ha asistido al curso de Java y ha alcanzado los requisitos exigidos por el mismo",
+    "fechaEmision": "05 de agosto de 2024"  
+}
+
+### modificar un character (PATCH - parcial)
+PATCH http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
+Content-Type: application/json
+
+{
+    "fechaEmision": "02 de agosto de 2024"
+}
+
+### borrar un character
+DELETE http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
