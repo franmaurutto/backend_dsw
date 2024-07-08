@@ -1,31 +1,36 @@
-###
+### obtener todos los characters
 GET http://localhost:3000/api/tps
 
-###
-GET http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
+### obtener un character
+GET http://localhost:3000/api/tps/a678gdab-d307-4221-be5e-f14e43hj5982
 
-###
+### crear nuevo character
 POST http://localhost:3000/api/tps
-Content-Type: application/json 
+Content-Type: application/json
 
 {
-    "consgina": "En este trabajo práctico, crearás un sistema básico de gestión de pacientes para una clínica ficticia. Este sistema permitirá registrar y manejar la información de los pacientes, las citas médicas, y el historial médico de cada paciente. "
-
+    "consigna": "Desarrolla un programa en Python que actúe como un sistema de gestión para una biblioteca. El sistema debe permitir registrar libros, gestionar préstamos y devoluciones, y realizar búsquedas de libros en el catálogo.
+    El objetivo de este trabajo práctico es crear un programa que facilite la administración de una biblioteca pequeña. El sistema debe cubrir las operaciones básicas que se necesitan para manejar el catálogo de libros y los préstamos realizados por los usuarios.",
+    "nroTp": 2
 }
-###
-PUT http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
-Content-Type: application/json 
+
+### modificar un character (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/tps/a678gdab-d307-4221-be5e-f14e43hj5982
+Content-Type: application/json
 
 {
-    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
-
+    "consigna": "El propósito de este trabajo práctico es desarrollar un programa en Python que facilite la gestión de pedidos en una pequeña tienda. El sistema debe permitir registrar, actualizar, eliminar y consultar pedidos, simplificando así el seguimiento y la administración de las órdenes de compra realizadas por los clientes.
+    El sistema que vas a desarrollar actuará como una herramienta de gestión de pedidos para una tienda. Este programa debe proporcionar funcionalidades básicas que permitan a los usuarios manejar eficazmente los pedidos de los clientes.",
+    "nroTp": 3  
 }
-###
-PATCH http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der 
-Content-Type: application/json 
+
+### modificar un character (PATCH - parcial)
+PATCH http://localhost:3000/api/tps/a678gdab-d307-4221-be5e-f14e43hj5982
+Content-Type: application/json
 
 {
-    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
+    "nroTp": 1
 }
-###
-DELETE http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
+
+### borrar un character
+DELETE http://localhost:3000/api/tps/a678gdab-d307-4221-be5e-f14e43hj5982
