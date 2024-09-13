@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express'; 
-import { AlumnoRepository } from "./alumnos.repository.js";
-import { Alumno } from './alumnos.entity.js';
+import { AlumnoRepository } from "./alumnos.repository.old.js";
+import { Alumno } from './alumnos.entity.old.js';
 const repository=new AlumnoRepository() 
 
 

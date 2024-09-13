@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { ProfesorRepository } from "./profesor.repository.js";
 import { Profesor } from "./profesores.entity.js";
-const repository = new ProfesorRepository()
+import { orm } from "../Shared/orm.js";
 
-function sanitizeProfesorInput(req: Request, res: Response, next: NextFunction) {
+const em = orm.em
+
+function sanitizeProfesorInput(
+    req: Request,
+    res: Response,
+    next: NextFunction) {
     req.body.sanitizedInput = {
         nombre_y_apellido: req.body.nombre_y_apellido,
         mail: req.body.mail,
@@ -18,47 +22,19 @@ function sanitizeProfesorInput(req: Request, res: Response, next: NextFunction) 
 
     next();
 }
-function findAll(req: Request, res: Response){
-    res.json({data:repository.findAll()})
+async function findAll(req: Request, res: Response){
+    res.status(500).json({ message:'No implementado'})
 }
-function findOne(req: Request, res: Response, next: NextFunction) {
-    const profesor = repository.findOne({identificador:req.params.id})
-
-    if(!profesor){
-       return res.status(404).send({message:'Profesor no encontrado'})
-    }
-    res.json({data:profesor})
+async function findOne(req: Request, res: Response){
+    res.status(500).json({ message:'No implementado'})
 }
-function add(req: Request, res: Response, next: NextFunction) {
-    const input = req.body.sanitizedInput;
-    const profesorInput = new Profesor(input.nombre_y_apellido, input.mail, input.telefono, input.contrasenia);
-    const profesor = repository.add(profesorInput)
-    return res.status(201).send({ message: 'Profesor creado', data: profesor });
+async function add(req: Request, res: Response){
+    res.status(500).json({ message:'No implementado'})
 }
-
-function update(req: Request, res: Response) {
-
-    req.body.sanitizedInput.identificador=req.params.id
-    const profesor= repository.update(req.body.sanitizedInput)
-
-    if (!profesor) {
-        return res.status(404).send({ message: 'Profesor no encontrado' })
-    }
-    return res.status(200).send({ message: 'Profesor actualizado con éxito', data: profesor });
+async function update(req: Request, res: Response){
+    res.status(500).json({ message:'No implementado'})
 }
-
-
-
-function remove(req: Request, res: Response) {
-
-    const identificador= req.params.id
-    const profesor = repository.delete({identificador})
-
-    if (!profesor) {
-        res.status(404).send({ message: 'Profesor no encontrado' })
-    } else{
-        res.status(200).send({ message: 'Profesor borrado con éxito'})
-    }
-   
+async function remove(req: Request, res: Response){
+    res.status(500).json({ message:'No implementado'})
 }
 export {sanitizeProfesorInput, findAll, findOne, add, update, remove}

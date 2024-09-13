@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {sanitezeCursoInput, getAll, getOne, add, update, remove } from './cursoscontroler.js';
+import {getAll, getOne, add, update, remove } from './cursoscontroler.js';
 export const cursoRouter = Router();
 
 cursoRouter.get("/",getAll);
-cursoRouter.get("/:identificador",getOne);
-cursoRouter.post("/",sanitezeCursoInput,add);
-cursoRouter.put("/:identificador",sanitezeCursoInput,update);
-cursoRouter.patch("/:identificador",sanitezeCursoInput,update);
-cursoRouter.delete("/:identificador",remove);
+cursoRouter.get("/:id",getOne);
+cursoRouter.post("/",add);
+cursoRouter.put("/:id",update);
+cursoRouter.patch("/:id",update);
+cursoRouter.delete("/:id",remove);

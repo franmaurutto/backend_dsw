@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { TpRepository } from "./tps.repository.js";
-import { Tp } from './tps.entity.js';
+import { Tp } from './tps.entity.old.js';
 const repository=new TpRepository() 
 
 

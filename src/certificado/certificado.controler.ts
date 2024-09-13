@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { CertificadoRepository } from "./certificados.repository.js"
-import { Certificado } from "./certificado.entity.js"
+import { Certificado } from "./certificado.entity.old.js"
 
 
 const repository = new CertificadoRepository()

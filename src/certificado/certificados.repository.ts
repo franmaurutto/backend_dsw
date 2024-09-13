@@ -1,5 +1,5 @@
-import { Repository } from "../Shared/repository.js";
-import { Certificado } from "./certificado.entity.js";
+//import { Repository } from "../Shared/repository.js";
+import { Certificado } from "./certificado.entity.old.js";
 
 const certificados = [
     new Certificado(
@@ -9,7 +9,7 @@ const certificados = [
     )
 ]
 
-export class CertificadoRepository implements Repository <Certificado>{
+export class CertificadoRepository {//implements Repository <Certificado>{
 
     public findAll(): Certificado[] | undefined {
         return certificados

@@ -1,5 +1,5 @@
-import { Repository } from "../Shared/repository.js";
-import { Tp } from "./tps.entity.js";
+//import { Repository } from "../Shared/repository.js";
+import { Tp } from "./tps.entity.old.js";
 
 const tps = [
     new Tp(
@@ -9,7 +9,7 @@ const tps = [
     ),
 ]
 
-export class TpRepository implements Repository <Tp>{ 
+export class TpRepository {//implements Repository <Tp>{ 
     public findAll(): Tp[] | undefined {
         return tps
     }
