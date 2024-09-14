@@ -3,13 +3,13 @@ GET http://localhost:3000/api/cursos
 
 
 
-###
+###FALTA AGREGAR LAS CLAVES FORANEAS DE CREOCURSOS
 POST http://localhost:3000/api/cursos
 # @name creoCurso
 Content-Type: application/json 
 
 {
-    "descripcion": "El objetivo de este curso de HTML es proporcionar a los estudiantes las habilidades necesarias para crear páginas web efectivas y atractivas, utilizando las mejores prácticas de codificación y diseño web. Al dominar HTML, los estudiantes pueden convertirse en profesionales capaces de construir y mantener sitios web de alta calidad que cumplan con los estándares modernos de la industria.",
+    "descripcion": "Este curso de HTML enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
     "nombre": "Curso de HTML",
     "cantCupos": 52,
     "duracion": "1 mes",
@@ -31,7 +31,7 @@ PUT http://localhost:3000/api/cursos/{{id}}
 Content-Type: application/json 
 
 {
-    "descripcion": "El objetivo de este curso de HTML es proporcionar a los estudiantes las habilidades necesarias para crear páginas web efectivas y atractivas, utilizando las mejores prácticas de codificación y diseño web. Al dominar HTML, los estudiantes pueden convertirse en profesionales capaces de construir y mantener sitios web de alta calidad que cumplan con los estándares modernos de la industria.",
+    "descripcion": "Este curso de HTML enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
     "nombre": "Curso de HTML",
     "cantCupos": 52,
     "duracion": "2 mes",

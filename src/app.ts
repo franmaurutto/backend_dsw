@@ -7,6 +7,7 @@ import { profesorRouter } from './profesor/profesor.routes.js';
 import { certificadoRouter } from './certificado/certificado.routes.js';
 import { orm, syncSchema } from './Shared/orm.js';
 import { RequestContext } from '@mikro-orm/core';
+import { inscripcionRouter } from './inscripcion/inscripciones.routes.js';
 
 const app = express() 
 app.use(express.json()) 
@@ -20,6 +21,7 @@ app.use("/api/alumnos", alumnoRouter)
 app.use("/api/tps", tpRouter)
 app.use("/api/profesores", profesorRouter)
 app.use("/api/certificados", certificadoRouter)
+app.use("/api/inscripciones", inscripcionRouter)
 
 await syncSchema()
 app.listen (3000, ()=>{

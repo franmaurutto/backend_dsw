@@ -1,0 +1,45 @@
+###
+GET http://localhost:3000/api/inscripciones
+
+
+
+###FALTA AGREGAR LAS CLAVES FORANEAS DE CREOINSCRIPCION
+POST http://localhost:3000/api/inscripciones
+# @name creoInscripcion
+Content-Type: application/json 
+
+{
+    "fechaInscripcion": "25 de marzo de 2025",
+    "cancelado": false,
+}
+
+### ID
+@id = {{creoInscripcion.response.body.data.id}}
+
+###
+GET http://localhost:3000/api/inscripciones/{{id}}
+
+###
+PUT http://localhost:3000/api/inscripciones/{{id}}
+Content-Type: application/json 
+
+{
+    "fechaInscripcion": "13 de marzo de 2025",
+    "cancelado": false,
+}
+
+###
+@idToDelete = {{creoInscripcion.response.body.data.id}}
+DELETE http://localhost:3000/api/inscripciones/{{idToDelete}}
+
+###
+PATCH http://localhost:3000/api/inscripciones/{{idToDelete}}
+Content-Type: application/json 
+
+{
+    "cancelado":true
+}
+
+###
+DELETE http://localhost:3000/api/inscripciones/{{idToDelete}}
+
