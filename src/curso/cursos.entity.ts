@@ -1,7 +1,7 @@
 import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel } from '@mikro-orm/core'
 import { BaseEntity } from '../Shared/baseEntity.entity.js'
 import { Profesor } from '../profesor/profesores.entity.js'
-import { Alumno } from '../alumno/alumnos.entity.old.js'
+import { Alumno } from '../alumno/alumnos.entity.js'
 import { Tp } from '../tp/tps.entity.old.js'
 @Entity()
 export class Curso extends BaseEntity{
@@ -25,12 +25,12 @@ export class Curso extends BaseEntity{
     dias!: string []
     @ManyToOne(()=> Profesor, {nullable: false})
     profesor!: Rel<Profesor>
-    /*@ManyToMany(()=>Alumno, (alumno)=>alumno.cursos){
+    @ManyToMany(()=>Alumno, (alumno)=>alumno.cursos, {
         cascade:[Cascade.ALL],
         owner:true
-    }
+    })
     alumnos = new Collection<Alumno>(this)
-    */
+    
    /* @OneToOne(()=>Parcial)
     parcial!: Parcial
     para cuando hagamos la clase Parcial

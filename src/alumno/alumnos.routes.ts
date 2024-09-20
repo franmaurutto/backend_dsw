@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {sanitezeAlumnoInput, getAll, getOne, add, update, patch, remove } from './alumnoscontroler.js';
+import {findAll, findOne, add, update, remove } from './alumnos.controler.js';
 export const alumnoRouter = Router();
 
-alumnoRouter.get("/",getAll);
-alumnoRouter.get("/:id",getOne);
-alumnoRouter.post("/",sanitezeAlumnoInput,add);
-alumnoRouter.put("/:id",sanitezeAlumnoInput,update);
-alumnoRouter.patch("/:id",sanitezeAlumnoInput,patch);
-alumnoRouter.delete("/:id",remove);
+alumnoRouter.get("/", findAll);
+alumnoRouter.get("/:id", findOne);
+alumnoRouter.post("/", add);
+alumnoRouter.put("/:id", update);
+alumnoRouter.patch("/:id", update);
+alumnoRouter.delete("/:id", remove);
