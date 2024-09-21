@@ -53,13 +53,3 @@ async function remove(req: Request, res: Response){
   }
 }
 export {findAll, findOne, add, update, remove}
- /*
-const alumnos = [
-    new Alumno(
-      'Federico Diaz',
-      'fedeprograma@hotmail.com',
-      3415889546,
-      'capofede11',
-    ),
-  ]
- */

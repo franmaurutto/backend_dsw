@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express"
-import { CertificadoRepository } from "./certificados.repository.js"
-import { Certificado } from "./certificado.entity.old.js"
+import { Certificado } from "./certificado.entity.js"
+import { orm } from "../Shared/orm.js";
 
 
-const repository = new CertificadoRepository()
+const em = orm.em
 
 function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunction){
     
@@ -21,52 +21,54 @@ function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunctio
     next()
 } //funcion q actua como un middleware, hay q hacer mas validaciones
 
-function findAll(req:Request,res:Response) {
-    res.json({data: repository.findAll()})
-}
-
-function findOne(req:Request,res:Response) {
-    const identificador = req.params.id
-    const certificado = repository.findOne({identificador})
-    if (!certificado){
-        return res.status(404).send({ message: 'Certificado no encontrado'})
+async function findAll(req: Request, res: Response){
+    try {
+      const certificados = await em.find(Certificado, {})
+      res.status(200).json({ message: 'Se encontraron todos los certificados', data: certificados })
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
     }
-    res.json({data: certificado}) // ver return
-}
-
-function add(req:Request,res:Response) {
-    const input = req.body.sanitizedInput
-
-    const certificadoInput = new Certificado(
-        input.descripcion,
-        input.fechaEmision,
-    )
-
-    const certificado = repository.add(certificadoInput)
-    return res.status(201).send({message:'Certificado creado', data: certificado})
-}
-
-function update(req:Request,res:Response) {
-    req.body.sanitizedInput.id = req.params.id
-    const certificado = repository.update(req.body.sanitizedInput)
-
-    if (!certificado){
-        return res.status(404).send({message: 'Certificado no enontrado'})
+    
+  }
+  async function findOne(req: Request, res: Response){
+    try {
+      const id = Number.parseInt(req.params.id)
+      const certificado = await em.findOneOrFail(Certificado, { id })
+      res.status(200).json({ message: 'Se encontró el certificado', data: certificado })
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
     }
-
-    return res.status(200).send({message: 'Certificado actualizado con éxito', data:certificado})
-}
-
-function remove(req:Request,res:Response) {
-    const identificador= req.params.id
-    const certificado = repository.delete ({identificador})
-
-    if(!certificado){
-        res.status(404).send({message: 'Certificado no enontrado'})
-    } else{
-        res.status(200).send({message: 'Certificado eliminado correctamente'}) // resource not found?
+  }
+  async function add(req: Request, res: Response){
+    try {
+      const certificado = em.create(Certificado, req.body)
+      await em.flush()
+      res.status(201).json({ message: 'Certificado creado', data: certificado })
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
     }
-}
+  }
+  async function update(req: Request, res: Response){
+    try {
+      const id = Number.parseInt(req.params.id)
+      const certificado = em.getReference(Certificado, id)
+      em.assign(certificado, req.body)
+      await em.flush()
+      res.status(200).json({ message: 'Certificado actualizado' })
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
+  }
+  async function remove(req: Request, res: Response){
+    try {
+      const id = Number.parseInt(req.params.id)
+      const certificado = em.getReference(Certificado, id)
+      await em.removeAndFlush(certificado)
+      res.status(200).send({ message: 'Certificado eliminado' })
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
+  }
 
 export {sanitizeCertificadoInput, findAll, findOne, add, update, remove}
 
