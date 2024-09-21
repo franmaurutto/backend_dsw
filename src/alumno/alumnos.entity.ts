@@ -1,6 +1,6 @@
 import { Entity, Property, OneToMany, ManyToMany, Collection, Cascade } from "@mikro-orm/core";
 import { BaseEntity } from "../Shared/baseEntity.entity.js";
-import { Curso } from "../curso/cursos.entity.js";
+import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
 
 @Entity()
 export class Alumno extends BaseEntity{
@@ -17,7 +17,7 @@ export class Alumno extends BaseEntity{
     @Property({ nullable: false })
     contrasenia!: string
 
-    @ManyToMany(()=>Curso, (curso)=>curso.alumnos)
-    cursos = new Collection<Curso>(this)
+    /*@OneToMany(() => Inscripcion, (inscripcion) => inscripcion.alumno)
+    inscripciones = new Collection<Inscripcion>(this);*/
     
 }
