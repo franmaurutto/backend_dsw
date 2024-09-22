@@ -1,10 +1,9 @@
 ### obtener todos los characters
 GET http://localhost:3000/api/certificados
 
-### obtener un character
-GET http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
 
 ### crear nuevo character
+# @name creoCertificado
 POST http://localhost:3000/api/certificados
 Content-Type: application/json
 
@@ -13,8 +12,14 @@ Content-Type: application/json
     "fechaEmision": "10 de noviembre de 2024"
 }
 
+### id
+@id = {{creoCertificado.response.body.data.id}}
+
+### obtener un character
+GET http://localhost:3000/api/certificados/{{id}}
+
 ### modificar un character (PUT - recurso completo e idempotente)
-PUT http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
+PUT http://localhost:3000/api/certificados/{{id}}
 Content-Type: application/json
 
 {
@@ -22,13 +27,24 @@ Content-Type: application/json
     "fechaEmision": "05 de agosto de 2024"  
 }
 
+### p borrar
+# @name creoCertificadoToDelete
+POST http://localhost:3000/api/certificados
+Content-Type: application/json
+
+{
+    "descripcion": "certificado de ...",
+    "fechaEmision": "02 de septiembre de 2024"  
+}
+
+### borrar un character
+@idToDelete = {{creoCertificadoToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/certificados/{{idToDelete}}
+
 ### modificar un character (PATCH - parcial)
-PATCH http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981
+PATCH http://localhost:3000/api/certificados/{{id}}
 Content-Type: application/json
 
 {
     "fechaEmision": "02 de agosto de 2024"
 }
-
-### borrar un character
-DELETE http://localhost:3000/api/certificados/a678gdab-d307-4221-be5e-f14e43hj5981

@@ -1,4 +1,4 @@
-import { Cascade, Collection, Entity, ManyToMany, ManyToOne, OneToMany, Property } from "@mikro-orm/core";
+/*import { Cascade, Collection, Entity, ManyToMany, ManyToOne, OneToMany, Property } from "@mikro-orm/core";
 import { Curso } from "../curso/cursos.entity.js";
 import { BaseEntity } from "../Shared/baseEntity.entity.js";
 
@@ -17,4 +17,4 @@ export class profesor extends BaseEntity {
     cascade: [Cascade.ALL],
   })
   cursos = new Collection<Curso>(this)
-  }
+  }*/

@@ -1,37 +1,60 @@
-###
+### 
 GET http://localhost:3000/api/profesores
 
-###
-GET http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
 
-###
+### 
+# @name creoProfe
 POST http://localhost:3000/api/profesores
 Content-Type: application/json
 
 {
     "nombre_y_apellido": "Dante Aguirre",
     "mail": "danteaguirre@hotmail.com",
-    "telefono": 3413456546,
+    "telefono": "3413456546",
     "contrasenia": "profedante"
 }
 
-###
-PUT http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
-Content-Type: application/json 
+### id
+@id = {{creoProfe.response.body.data.id}}
 
-{   "nombre_y_apellido": "Matias Maque",
+### 
+GET http://localhost:3000/api/profesores/{{id}}
+
+### 
+PUT http://localhost:3000/api/profesores/{{id}}
+Content-Type: application/json
+
+{
+    "nombre_y_apellido": "Matias Maque",
     "mail": "matimaque@hotmail.com",
-    "telefono": 3413462154,
+    "telefono": "3413462154",
+    "contrasenia": "mati90000" 
+}
+
+### 
+# @name creoProfeToDelete
+POST http://localhost:3000/api/profesores
+Content-Type: application/json
+
+{
+    "nombre_y_apellido": "Dante Aguirre",
+    "mail": "danteaguirre@hotmail.com",
+    "telefono": "3413456546",
+    "contrasenia": "profeddd"
+}
+
+### 
+@idToDelete = {{creoProfeToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/profesores/{{idToDelete}}
+
+### modificar un character (PATCH - parcial)
+PATCH http://localhost:3000/api/profesores/{{id}}
+Content-Type: application/json
+
+{
+
+    "nombre_y_apellido": "Matias Maque",
+    "mail": "matiMaque8@hotmail.com",
+    "telefono": "3413462154",
     "contrasenia": "mati90000"
 }
-###
-PATCH http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731
-Content-Type: application/json 
-
-{   "nombre_y_apellido": "Matias Maque",
-    "mail": "matiMaque89@hotmail.com",
-    "telefono": 3413462154,
-    "contrasenia": "mati90000"}
-
-###
-DELETE http://localhost:3000/api/profesores/a5e3d942-fca1-40c2-a4ae-14e4a1f70731

@@ -2,37 +2,54 @@
 GET http://localhost:3000/api/alumnos
 
 ###
-GET http://localhost:3000/api/alumnos/a02b91bc-3769-4221-beb1-d7a3aeba7dad
-
-###
+# @name creoAlumno
 POST http://localhost:3000/api/alumnos
 Content-Type: application/json 
 
 {
-    "nombre_y_apellido": "Federico Diaz",
+    "nombreCompleto": "Federico Diaz",
     "mail": "fedeprograma@hotmail.com",
-    "telefono": 3415889546,
+    "telefono": "341876098",
     "contrasenia": "capofede11"
 }
 
+### id
+@id = {{creoAlumno.response.body.data.id}}
+
 ###
-PUT http://localhost:3000/api/alumnos/a02b91bc-3769-4221-beb1-d7a3aeba7dad 
+GET http://localhost:3000/api/alumnos/{{id}}
+
+###
+PUT http://localhost:3000/api/alumnos/{{id}}
 Content-Type: application/json 
 
 {
-    "nombre_y_apellido": "Juan Francisco Perez",
+    "nombreCompleto": "Juan Francisco Perez",
     "mail": "juan.perez@gmail.com",
-    "telefono": 3413645543,
+    "telefono": "3413645543",
     "contrasenia": "nuevacontra"
 }
 
-###
-PATCH http://localhost:3000/api/alumnos/a02b91bc-3769-4221-beb1-d7a3aeba7dad 
-Content-Type: application/json 
+### p borrar
+# @name creoAlumnoToDelete
+POST http://localhost:3000/api/alumnos
+Content-Type: application/json
 
 {
-    "telefono":3413645545
+    "nombreCompleto": "Anchi",
+    "mail": "anchi1@gmail.com",
+    "telefono": "3412147687",
+    "contrasenia": "1234"
 }
 
 ###
-DELETE http://localhost:3000/api/alumnos/a02b91bc-3769-4221-beb1-d7a3aeba7dad
+@idToDelete = {{creoAlumnoToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/alumnos/{{idToDelete}}
+
+###
+PATCH http://localhost:3000/api/alumnos/{{id}}
+Content-Type: application/json 
+
+{
+    "telefono":"3413645545"
+}
