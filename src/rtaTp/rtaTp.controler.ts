@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from "express"
-import { Certificado } from "./certificado.entity.js"
+import { RtaTp } from "./rtaTp.entity.js";
 import { orm } from "../Shared/orm.js";
 
 
 const em = orm.em
 
-function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunction){
+function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
     
     req.body.sanitizedInput = {
-        descripcion: req.body.descripcion,
-        fechaEmision: req.body.fechaEmision,
-        
+        rtaConsignaTP: req.body. rtaConsignaTP  
     }
     
     Object.keys(req.body.sanitizedInput).forEach(key=>{
@@ -18,13 +16,16 @@ function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunctio
         delete req.body.sanitizedInput[key]
         }
     })
+
+    // validar tp e inscripcion¿?
+
     next()
-} //funcion q actua como un middleware, hay q hacer mas validaciones
+}
 
 async function findAll(req: Request, res: Response){
     try {
-      const certificados = await em.find(Certificado, {})
-      res.status(200).json({ message: 'Se encontraron todos los certificados', data: certificados })
+      const rtaTps = await em.find(RtaTp, {})
+      res.status(200).json({ message: 'Se encontraron todos las respuestas a los tp', data: rtaTps })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
@@ -33,17 +34,17 @@ async function findAll(req: Request, res: Response){
   async function findOne(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
-      const certificado = await em.findOneOrFail(Certificado, { id })
-      res.status(200).json({ message: 'Se encontró el certificado', data: certificado })
+      const rtaTp = await em.findOneOrFail(RtaTp, { id })
+      res.status(200).json({ message: 'Se encontró la respuesta al tp', data: rtaTp })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
   }
   async function add(req: Request, res: Response){
     try {
-      const certificado = em.create(Certificado, req.body)
+      const rtaTp = em.create(RtaTp, req.body)
       await em.flush()
-      res.status(201).json({ message: 'Certificado creado', data: certificado })
+      res.status(201).json({ message: 'Respuesta al tp creada', data: rtaTp })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
@@ -51,10 +52,10 @@ async function findAll(req: Request, res: Response){
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
-      const certificado = em.getReference(Certificado, id)
-      em.assign(certificado, req.body)
+      const rtaTp = em.getReference(RtaTp, id)
+      em.assign(rtaTp, req.body)
       await em.flush()
-      res.status(200).json({ message: 'Certificado actualizado' })
+      res.status(200).json({ message: 'Respuesta al tp actualizada' })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
@@ -62,13 +63,12 @@ async function findAll(req: Request, res: Response){
   async function remove(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
-      const certificado = em.getReference(Certificado, id)
-      await em.removeAndFlush(certificado)
-      res.status(200).send({ message: 'Certificado eliminado' })
+      const rtaTp = em.getReference(RtaTp, id)
+      await em.removeAndFlush(rtaTp)
+      res.status(200).send({ message: 'Respuesta al tp eliminada' })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
   }
 
-export {sanitizeCertificadoInput, findAll, findOne, add, update, remove}
-
+export {sanitizeRtaTpInput, findAll, findOne, add, update, remove}

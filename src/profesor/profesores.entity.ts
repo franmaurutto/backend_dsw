@@ -4,9 +4,6 @@ import { Curso } from "../curso/cursos.entity.js";
 
 @Entity()
 export class Profesor extends BaseEntity{
-    @Property({ nullable: false })
-    name!: string
-  
  //   @OneToMany(() => Curso, { nullable: false })
  //   curso!: Curso
   
@@ -17,7 +14,7 @@ export class Profesor extends BaseEntity{
     mail!: string
   
     @Property({ nullable: false })
-    telefono!: number
+    telefono!: string
   
     @Property({ nullable: false })
     contrasenia!: string
@@ -27,3 +24,4 @@ export class Profesor extends BaseEntity{
     })
     cursos = new Collection<Curso>(this)
 }
+
