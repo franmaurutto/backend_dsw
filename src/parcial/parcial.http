@@ -1,0 +1,52 @@
+### 
+GET http://localhost:3000/api/parciales
+
+### 
+# @name creoParcial
+POST http://localhost:3000/api/parciales
+Content-Type: application/json
+
+{
+    "nroParcial": 1,
+    "fechaLimite": "01/02/2025",
+    "consigna": "programar en java una calculadora simple"
+}
+
+### 
+@id = {{creoParcial.response.body.data.id}}
+
+### 
+GET http://localhost:3000/api/parciales/{{id}}
+
+### 
+PUT http://localhost:3000/api/parciales/{{id}}
+Content-Type: application/json
+
+{
+    "nroParcial": 2,
+    "fechaLimite": "01/03/2025",
+    "consigna": "programar en java una calculadora compleja"   
+}
+
+### 
+# @name creoParcialToDelete
+POST http://localhost:3000/api/parciales
+Content-Type: application/json
+
+{
+    "nroParcial": 3,
+    "fechaLimite": "01/04/2025",
+    "consigna": "programar en java un ajedrez" 
+}
+
+### 
+@idToDelete = {{creoParcialToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/parciales/{{idToDelete}}
+
+### 
+PATCH http://localhost:3000/api/parciales/{{id}}
+Content-Type: application/json
+
+{
+    "nroParcial": 4
+}
