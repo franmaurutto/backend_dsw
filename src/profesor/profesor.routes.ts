@@ -9,3 +9,5 @@ profesorRouter.post('/',sanitizeProfesorInput,add)
 profesorRouter.put('/:id',sanitizeProfesorInput,update)
 profesorRouter.patch('/:id',sanitizeProfesorInput,update)
 profesorRouter.delete('/:id',remove)
+
+
