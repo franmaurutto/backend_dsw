@@ -1,8 +1,8 @@
-import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel } from '@mikro-orm/core'
+import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel, OneToMany } from '@mikro-orm/core'
 import { BaseEntity } from '../Shared/baseEntity.entity.js'
 import { Profesor } from '../profesor/profesores.entity.js'
 import { Alumno } from '../alumno/alumnos.entity.old.js'
-import { Tp } from '../tp/tps.entity.old.js'
+import { Tp } from '../tp/tps.entity.js'
 @Entity()
 export class Curso extends BaseEntity{
     @Property()
@@ -37,4 +37,8 @@ export class Curso extends BaseEntity{
     @OneToOne(()=> Tp)
     tp!: Tp
     */
+   @OneToMany(()=> Tp,(tp)=> tp.curso,{
+    cascade:[Cascade.ALL]})
+   tps= new Collection<Tp>(this)
+   
 } //ver tema fecha

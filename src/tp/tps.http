@@ -1,31 +1,57 @@
-###
+### GET ALL
 GET http://localhost:3000/api/tps
 
-###
-GET http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
 
-###
+### POST 
 POST http://localhost:3000/api/tps
+# @name createTp
 Content-Type: application/json 
 
 {
-    "consgina": "En este trabajo práctico, crearás un sistema básico de gestión de pacientes para una clínica ficticia. Este sistema permitirá registrar y manejar la información de los pacientes, las citas médicas, y el historial médico de cada paciente. "
+    "nroTp": 1,
+    "consigna": "En este trabajo práctico, crearás un sistema básico de gestión de pacientes para una clínica ficticia. Este sistema permitirá registrar y manejar la información de los pacientes, las citas médicas, y el historial médico de cada paciente.",
+    "curso": null
+    
+}
+
+### ID
+@id={{createTp.response.body.data.id}}
+
+### GET ONE
+GET http://localhost:3000/api/tps/{{id}}
+
+###
+PUT http://localhost:3000/api/tps/{{id}}
+Content-Type: application/json 
+
+{
+    "nroTp": 1,
+    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
 
 }
+
+### POST 2
+
+POST http://localhost:3000/api/tps
+# @name createItemToDelete
+Content-Type: application/json 
+
+{
+    "nroTp": 2,
+    "consigna":"consigna 2",
+    "curso":null
+}
+
+### id2
+@idToDelete ={{createItemToDelete.response.body.data.id}}
+
+### DELETE
+DELETE http://localhost:3000/api/tps/{{idToDelete}}
+
 ###
-PUT http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der
+PATCH http://localhost:3000/api/tps/{{idToDelete}}
 Content-Type: application/json 
 
 {
     "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
-
 }
-###
-PATCH http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der 
-Content-Type: application/json 
-
-{
-    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
-}
-###
-DELETE http://localhost:3000/api/tps/a02b91bc-3769-4221-beb1-d7a3aeba7der

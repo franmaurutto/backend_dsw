@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {sanitezeCursoInput, getAll, getOne, add, update, remove } from './tpscontroler.js';
+import {sanitizeTpInput, getAll, getOne, add, update, remove } from './tpscontroler.js';
 export const tpRouter = Router();
 
 tpRouter.get("/",getAll);
-tpRouter.get("/:identificador",getOne);
-tpRouter.post("/",sanitezeCursoInput,add);
-tpRouter.put("/:identificador",sanitezeCursoInput,update);
-tpRouter.patch("/:identificador",sanitezeCursoInput,update);
-tpRouter.delete("/:identificador",remove);
+tpRouter.get("/:id",sanitizeTpInput,getOne);
+tpRouter.post("/",add);
+tpRouter.put("/:id",sanitizeTpInput,update);
+tpRouter.patch("/:id",sanitizeTpInput,update);
+tpRouter.delete("/:id",sanitizeTpInput,remove);
