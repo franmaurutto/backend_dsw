@@ -1,19 +1,19 @@
 import { Entity, Property, OneToMany, ManyToMany, Collection, Cascade, OneToOne, ManyToOne } from "@mikro-orm/core";
 import { BaseEntity } from "../Shared/baseEntity.entity.js";
 import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
-import { Tp } from "../tp/tps.entity.js";
+import { Parcial } from "../parcial/parcial.entity.js"
 
 @Entity()
-export class RtaTp extends BaseEntity{
+export class RtaParcial extends BaseEntity{
    
     @Property({ nullable: false })
-    rtaConsignaTP!: string
+    rtaConsignaParcial!: string
 
     /*@ManyToOne(() => Inscripcion)
     inscripcion!: Inscripcion;
 
-    @ManyToOne(() => Tp)
-    tp!: Tp; */
+    @ManyToOne(() => Parcial)
+    parcial!: Parcial; */
 
-    //ver si esta bien hacer la asociativa asi
+
 }

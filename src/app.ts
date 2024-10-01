@@ -10,6 +10,7 @@ import { RequestContext } from '@mikro-orm/core';
 import { inscripcionRouter } from './inscripcion/inscripciones.routes.js';
 import { rtaTpRouter } from './rtaTp/rtaTp.routes.js';
 import { parcialRouter } from './parcial/parcial.routes.js';
+import { rtaParcialRouter } from './rtaParcial/rtaParcial.routes.js';
 
 const app = express() 
 app.use(express.json()) 
@@ -26,6 +27,7 @@ app.use("/api/certificados", certificadoRouter)
 app.use("/api/inscripciones", inscripcionRouter)
 app.use("/api/rtaTps", rtaTpRouter)
 app.use("/api/parciales", parcialRouter)
+app.use("/api/rtaParciales", rtaParcialRouter)
 
 await syncSchema()
 app.listen (3000, ()=>{
