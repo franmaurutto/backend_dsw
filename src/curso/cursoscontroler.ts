@@ -57,6 +57,7 @@ async function getOne (req: Request,res: Response){
 }
 
 async function add (req:Request, res:Response) {
+  console.log(`curso add req.body: ${JSON.stringify(req.body.sanitizedInput)}`)
   try {
     const curso = em.create(Curso, req.body.sanitizeCursoInput)
     await em.flush()
