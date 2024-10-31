@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { Profesor } from "./profesores.entity.js"
 import { orm } from "../Shared/orm.js";
-
+import { Curso } from "../curso/cursos.entity.js";
 
 const em = orm.em
 
@@ -12,6 +12,7 @@ function sanitizeProfesorInput(req: Request, res: Response, next: NextFunction){
         mail: req.body.mail,
         telefono: req.body.telefono,
         contrasenia: req.body.contrasenia,
+        cursoId: req.body.cursoId,
         
     }
     
@@ -41,7 +42,7 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
-  async function add(req: Request, res: Response){
+ /* async function add(req: Request, res: Response){
     try {
       const profesor = em.create(Profesor, req.body)
       await em.flush()
@@ -49,7 +50,25 @@ async function findAll(req: Request, res: Response){
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
+  }*/
+  async function add(req: Request, res: Response) {
+    console.log(`profesor add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
+    try {
+      const curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
+      if (!curso) {
+        return res.status(404).json({ message: 'Curso no encontrado' });
+      }
+      const profesor = em.create(Profesor, {
+        ...req.body.sanitizedInput,
+        curso,              
+      });
+      await em.persistAndFlush(profesor);
+      res.status(201).json({ message: 'Profesor ha sido creado', data: profesor });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
   }
+  
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

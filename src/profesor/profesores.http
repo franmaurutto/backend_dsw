@@ -11,7 +11,8 @@ Content-Type: application/json
     "nombre_y_apellido": "Dante Aguirre",
     "mail": "danteaguirre@hotmail.com",
     "telefono": "3413456546",
-    "contrasenia": "profedante"
+    "contrasenia": "profedante",
+    "cursoId":1
 }
 
 ### id

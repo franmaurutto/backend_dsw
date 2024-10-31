@@ -17,7 +17,11 @@ Content-Type: application/json
     "fechaFin": "2 de marzo de 2025",
     "horaInicio": "16:00 hs",
     "horaFin": "18:00 hs",
-    "dias": ["Martes"]
+    "dias": ["Martes"],
+    "profesorId":1,
+    "parcialId":1,
+    "alumnoId":1,
+    "tpId":1
 }
 
 ### ID

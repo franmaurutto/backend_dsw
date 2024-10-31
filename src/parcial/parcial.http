@@ -1,6 +1,7 @@
 ### 
 GET http://localhost:3000/api/parciales
 
+
 ### 
 # @name creoParcial
 POST http://localhost:3000/api/parciales
@@ -9,7 +10,9 @@ Content-Type: application/json
 {
     "nroParcial": 1,
     "fechaLimite": "01/02/2025",
-    "consigna": "programar en java una calculadora simple"
+    "consigna": "programar en java una calculadora simple",
+    "cursoId": 1,
+    "inscripcionId":1
 }
 
 ### 

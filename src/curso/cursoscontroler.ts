@@ -1,7 +1,10 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { Curso } from './cursos.entity.js';
 import { orm } from "../Shared/orm.js";
-
+import { Profesor } from '../profesor/profesores.entity.js';
+import { Parcial } from '../parcial/parcial.entity.js';
+import { Alumno } from '../alumno/alumnos.entity.js';
+import { Tp } from '../tp/tps.entity.js';
 const em = orm.em
 
 function sanitizeCursoInput(
@@ -19,10 +22,11 @@ function sanitizeCursoInput(
     horaInicio: req.body.horaInicio,
     horaFin: req.body.horaFin,
     dias: req.body.dias,
-    profesor: req.body.profesor,
-    /*alumnos: req.body.alumnos,
-    parcial: req.body.parcial,
-    tp: req.body.tp,*/
+    profesorId: req.body.profesorId, 
+    parcialId: req.body.parcialId,
+    alumnoId:req.body.alumnoId,
+    tpId:req.body.tpId,
+
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -56,16 +60,37 @@ async function getOne (req: Request,res: Response){
   }
 }
 
-async function add (req:Request, res:Response) {
-  console.log(`curso add req.body: ${JSON.stringify(req.body.sanitizedInput)}`)
+
+async function add(req: Request, res: Response) {
+  console.log(`curso add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
   try {
-    const curso = em.create(Curso, req.body.sanitizeCursoInput)
-    await em.flush()
-    res
-      .status(201)
-      .json({ message: 'Curso ha sido creado', data: curso })
+    const profesor = await em.findOne(Profesor, { id: req.body.sanitizedInput.profesorId });
+    if (!profesor) {
+      return res.status(404).json({ message: 'Profesor no encontrado' });
+    }
+    const parcial = await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
+    if (!parcial) {
+      return res.status(404).json({ message: 'Parcial no encontrado' });
+    }
+    const alumno = await em.findOne(Alumno, { id: req.body.sanitizedInput.alumnoId });
+    if (!alumno) {
+      return res.status(404).json({ message: 'Alumno no encontrado' });
+    }
+    const tp = await em.findOne(Alumno, { id: req.body.sanitizedInput.tpId });
+    if (!alumno) {
+      return res.status(404).json({ message: 'Tp no encontrado' });
+    }
+    const curso = em.create(Curso, {
+      ...req.body.sanitizedInput,
+      profesor,
+      parcial,
+      alumno,
+      tp,                
+    });
+    await em.persistAndFlush(curso);
+    res.status(201).json({ message: 'Curso ha sido creado', data: curso });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
