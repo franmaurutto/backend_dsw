@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "fechaInscripcion": "25 de marzo de 2025",
-    "cancelado": false,
+    "cancelado": false
 }
 
 ### ID
