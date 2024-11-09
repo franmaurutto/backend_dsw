@@ -5,6 +5,14 @@ import { Curso } from '../curso/cursos.entity.js';
 
 const em=orm.em
 
+function validateTp(tp: Tp): boolean {
+  if (!tp) {
+      throw new Error("Los datos del trabajo practico son requeridos");
+    }
+    return true;
+  }
+
+
 async function getAll(req:Request,res:Response){
   try{
     const tps= await em.find(Tp,{},{populate:['curso']})
@@ -77,6 +85,7 @@ function sanitizeTpInput(req: Request, res: Response, next :NextFunction) {
       delete req.body.sanitizedInput[key]
     }
   })
+  validateTp(req.body.sanitizeInput)
   next()
 }
 

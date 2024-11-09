@@ -5,6 +5,17 @@ import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
 
 
 const em = orm.em
+function validateCertificado(certificado: Certificado): boolean {
+  if (!certificado) {
+      throw new Error("Los datos de certificado son requeridos");
+  }
+
+  if (!certificado.descripcion) {
+      throw new Error("El campo descripción es requerido");
+  }
+
+  return true;
+}
 
 function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunction){
     
@@ -20,6 +31,7 @@ function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunctio
         delete req.body.sanitizedInput[key]
         }
     })
+    validateCertificado(req.body.sanitizedInput);
     next()
 } //funcion q actua como un middleware, hay q hacer mas validaciones
 

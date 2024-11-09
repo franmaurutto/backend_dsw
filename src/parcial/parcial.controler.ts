@@ -6,6 +6,12 @@ import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
 
 
 const em = orm.em
+function validateParcial(parcial: Parcial): boolean {
+  if (!parcial) {
+      throw new Error("Los datos de parcial son requeridos");
+    }
+    return true;
+  }
 
 function sanitizeParcialInput(req: Request, res: Response, next: NextFunction){
     
@@ -22,6 +28,7 @@ function sanitizeParcialInput(req: Request, res: Response, next: NextFunction){
         delete req.body.sanitizedInput[key]
         }
     })
+    validateParcial(req.body.sanitizeInput)
     next()
 } 
 

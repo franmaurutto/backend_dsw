@@ -3,9 +3,21 @@ import { Inscripcion } from './inscripciones.entity.js';
 import { orm } from "../Shared/orm.js";
 import { Alumno } from '../alumno/alumnos.entity.js';
 import { Curso } from '../curso/cursos.entity.js';
+import { Certificado } from '../certificado/certificado.entity.js';
 
 const em = orm.em
 
+function validateInscripcion(inscripcion: Inscripcion): boolean {
+  if (!inscripcion) {
+      throw new Error("Los datos de inscripcion son requeridos");
+  }
+
+  if (!inscripcion.cancelado || (inscripcion.cancelado !== true && inscripcion.cancelado !== false)) {
+      throw new Error("El campo cancelado es requerido y debe ser 'Si' o 'No'");
+  }
+
+  return true;
+}
 function sanitizeInscripcionInput(
   req: Request,
   res: Response,
@@ -18,12 +30,10 @@ function sanitizeInscripcionInput(
     fechaInscripcion: req.body.fechaInscripcion,
     cancelado: req.body.cancelado,
     alumnoId: req.body.alumnoId, 
-    cursoId: req.body.cursoId
-    /*certificado: req.body.certificado,
-    parciales: req.body.parciales,
-    tps: req.body.tps,
-    rtaparcial: req.body.rtaparcial,
-    rtatp: req.body.rtatp*/
+    cursoId: req.body.cursoId,
+    certificadoId: req.body.certificadoId,
+    rtaparcialId: req.body.rtaparcialId,
+    rtatpId: req.body.rtatpId
   }
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -31,6 +41,7 @@ function sanitizeInscripcionInput(
       delete req.body.sanitizedInput[key]
     }
   })
+  validateInscripcion(req.body.sanitizedInput);
   next()
 }
 

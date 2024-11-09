@@ -11,7 +11,7 @@ Content-Type: application/json
 {
     "fechaInscripcion": "2025-03-27",
     "cancelado": false,
-    "alumnoId":11,
+    "alumnoId":1,
     "cursoId":1
 }
 

@@ -5,6 +5,13 @@ import { orm } from "../Shared/orm.js";
 
 const em = orm.em
 
+function validateRtaTp(rtaTp: RtaTp): boolean {
+  if (!rtaTp) {
+      throw new Error("Los datos de parcial son requeridos");
+    }
+    return true;
+  }
+
 function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
     
     req.body.sanitizedInput = {
@@ -17,7 +24,7 @@ function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
         }
     })
 
-    // validar tp e inscripcion¿?
+    validateRtaTp(req.body.sanitizeInput)
 
     next()
 }

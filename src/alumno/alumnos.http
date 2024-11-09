@@ -7,10 +7,10 @@ POST http://localhost:3000/api/alumnos
 Content-Type: application/json 
 
 {
-    "nombreCompleto": "Francesca Maurutto",
-    "mail": "fran666@hotmail.com",
+    "nombreCompleto": "Delfina Maurutto",
+    "mail": "delfi@hotmail.com",
     "telefono": "341876099",
-    "contrasenia": "fran666"
+    "contrasenia": "fdan666"
 }
 
 ### id

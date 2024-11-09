@@ -3,6 +3,30 @@ import { Alumno } from './alumnos.entity.js';
 import { orm } from '../Shared/orm.js';
 
 const em = orm.em 
+function validateAlumno(alumno: Alumno): boolean {
+  if (!alumno) {
+      throw new Error("Los datos de alumno son requeridos");
+  }
+
+  if (!alumno.nombreCompleto || alumno.nombreCompleto.trim() === "") {
+      throw new Error("El campo nombre completo es requerido");
+  }
+
+  if (alumno.telefono && alumno.telefono.length !== 10) {
+      throw new Error("El número de teléfono debe tener 10 caracteres");
+  }
+
+  const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  if (alumno.mail && !emailPattern.test(alumno.mail)) {
+      throw new Error("El mail no es válido");
+  }
+
+  if (!alumno.contrasenia || alumno.contrasenia.length < 4) {
+      throw new Error("La clave es requerida y debe tener 4 o más caracteres");
+  }
+
+  return true;
+}
 
 async function findAll(req: Request, res: Response){
   try {
@@ -88,6 +112,7 @@ function sanitizeAlumnoInput(req: Request, res: Response, next :NextFunction) {
       delete req.body.sanitizedInput[key]
     }
   })
+  validateAlumno(req.body.sanitizedInput);
   next()
 }
 export {findAll, findOne, add, update, remove, sanitizeAlumnoInput, findByEmail}

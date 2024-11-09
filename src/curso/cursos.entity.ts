@@ -24,7 +24,7 @@ export class Curso extends BaseEntity{
     @Property({ nullable: false})
     horaFin!: string
     @Property({ nullable: false}) 
-    dias!: string []
+    dias!: string 
     @ManyToOne(()=> Profesor, {nullable: false})
     profesor?: Rel<Profesor>
     

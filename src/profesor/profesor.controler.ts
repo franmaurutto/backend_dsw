@@ -4,6 +4,26 @@ import { orm } from "../Shared/orm.js";
 import { Curso } from "../curso/cursos.entity.js";
 
 const em = orm.em
+function validateProfesor(profesor: Profesor) {
+  if (!profesor) {
+      throw new Error("Los datos de profesor son requeridos");
+  }
+  if (!profesor.nombre_y_apellido || profesor.nombre_y_apellido.trim() === "") {
+      throw new Error("El campo nombre completo es requerido");
+  }
+  if (profesor.telefono && profesor.telefono.length !== 10) {
+      throw new Error("El número de teléfono debe tener 10 caracteres");
+  }
+  const patternEducatech = /^[^@\s]+@educatech\.com$/;
+  if (profesor.mail && !patternEducatech.test(profesor.mail)) {
+      throw new Error("El mail no es válido");
+  }
+  if (!profesor.contrasenia || profesor.contrasenia.length < 4) {
+      throw new Error("La clave es requerida y debe tener 4 o más caracteres");
+  }
+
+  return true;
+}
 
 function sanitizeProfesorInput(req: Request, res: Response, next: NextFunction){
     
@@ -21,6 +41,7 @@ function sanitizeProfesorInput(req: Request, res: Response, next: NextFunction){
         delete req.body.sanitizedInput[key]
         }
     })
+    validateProfesor(req.body.sanitizedInput);
     next()
 } 
 

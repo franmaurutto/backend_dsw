@@ -7,6 +7,13 @@ import { Parcial } from "../parcial/parcial.entity.js";
 
 const em = orm.em
 
+function validateRtaParcial(rtaparcial: RtaParcial): boolean {
+  if (!rtaparcial) {
+      throw new Error("Los datos de la respuesta parcial son requeridos");
+    }
+    return true;
+  }
+
 function sanitizeRtaParcialInput(req: Request, res: Response, next: NextFunction){
     
     req.body.sanitizedInput = {
@@ -21,7 +28,7 @@ function sanitizeRtaParcialInput(req: Request, res: Response, next: NextFunction
         }
     })
 
-
+    validateRtaParcial(req.body.sanitizedInput)
     next()
 }
 
@@ -45,24 +52,35 @@ async function findAll(req: Request, res: Response){
   }
   
   async function add(req: Request, res: Response){
-    try {
-      const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
-      if (!inscripcion) {
-        return res.status(404).json({ message: 'Inscripcion no encontrado' });}
-      const parcial= await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
-      if (!parcial) {
-        return res.status(404).json({ message: 'Parcialno encontrado' });}
+    console.log(`profesor add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
+      try {
+        let inscripcion= null;
+        if (req.body.sanitizedInput.inscripcionId) {
+        const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId })
+          if (!inscripcion) {
+            return res.status(404).json({ message: 'Inscripcion no encontrado' });}
+      };
+      let parcial= null;
+      if (req.body.sanitizedInput.parcialId) {
+        const parcial= await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
+          if (!parcial) {
+            return res.status(404).json({ message: 'Parcial no encontrado' });}}
 
       const rtaParcial = em.create(RtaParcial, {
         ...req.body.sanitizedInput,
-      inscripcion,
-    parcial})
+        inscripcion,
+        parcial})
       await em.persistAndFlush(rtaParcial)
       res.status(201).json({ message: 'Respuesta al parcial creada', data: rtaParcial })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
   }
+
+
+      /*if (req.body.sanitizedInput.cursoId) {*/
+      //curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
+       
 
 
 

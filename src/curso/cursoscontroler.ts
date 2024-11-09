@@ -7,6 +7,43 @@ import { Alumno } from '../alumno/alumnos.entity.js';
 import { Tp } from '../tp/tps.entity.js';
 const em = orm.em
 
+function validateCurso(curso: Curso): boolean {
+  if (!curso) {
+      throw new Error("Los datos de curso son requeridos");
+  }
+
+  if (!curso.nombre || curso.nombre.trim() === "") {
+      throw new Error("El campo nombre es requerido");
+  }
+
+  if (curso.cantCupos < 0) {
+      throw new Error("El número de cupos debe ser mayor a 0");
+  }
+
+  if (!curso.descripcion || curso.descripcion.trim() === "") {
+      throw new Error("La descripción es requerida");
+  }
+
+  const timePattern = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+  if (!curso.horaInicio || !timePattern.test(curso.horaInicio)) {
+      throw new Error("La hora de inicio es requerida y debe seguir el formato HH:mm");
+  }
+
+  if (!curso.horaFin || !timePattern.test(curso.horaFin)) {
+      throw new Error("La hora de fin es requerida y debe seguir el formato HH:mm");
+  }
+
+
+  return true;
+}
+
+function validarDia(dia: string): void {
+  const diasValidos = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  if (!diasValidos.includes(dia)) {
+      throw new Error("El día ingresado no es válido. Debe ser un día de lunes a sábado.");
+  }
+}
+
 function sanitizeCursoInput(
   req: Request,
   res: Response,
@@ -33,6 +70,7 @@ function sanitizeCursoInput(
       delete req.body.sanitizedInput[key]
     }
   })
+  validateCurso(req.body.sanitizedInput);
   next()
 }
 
