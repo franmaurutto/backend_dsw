@@ -8,11 +8,11 @@ POST http://localhost:3000/api/profesores
 Content-Type: application/json
 
 {
-    "nombre_y_apellido": "Dante Aguirre",
-    "mail": "danteaguirre@hotmail.com",
-    "telefono": "3413456546",
-    "contrasenia": "profedante",
-    "cursoId":1
+    "nombre_y_apellido": "Martin Aguilar",
+    "mail": "bob@hotmail.com",
+    "telefono": "3413456544",
+    "contrasenia": "spongebob",
+    "cursoId":3
 }
 
 ### id

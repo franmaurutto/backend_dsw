@@ -1,5 +1,5 @@
 import { Router} from "express";
-import { sanitizeProfesorInput, findAll, findOne,add, update, remove} from "./profesor.controler.js";
+import { sanitizeProfesorInput, findAll, findOne,add, update, remove,findByEmail} from "./profesor.controler.js";
 
 export const profesorRouter = Router()
 
@@ -9,5 +9,6 @@ profesorRouter.post('/',sanitizeProfesorInput,add)
 profesorRouter.put('/:id',sanitizeProfesorInput,update)
 profesorRouter.patch('/:id',sanitizeProfesorInput,update)
 profesorRouter.delete('/:id',remove)
+profesorRouter.post('/login',findByEmail)
 
 

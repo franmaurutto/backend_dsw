@@ -27,19 +27,14 @@ export class Curso extends BaseEntity{
     dias!: string []
     @ManyToOne(()=> Profesor, {nullable: false})
     profesor?: Rel<Profesor>
-    @ManyToMany(()=>Alumno, (alumno)=>alumno.cursos, {
-        cascade:[Cascade.ALL],
-        owner:true
-    })
-    alumnos = new Collection<Alumno>(this)
     
-    @OneToOne(() => Parcial, { nullable: false })
+    @OneToOne(() => Parcial, { nullable: true })
     parcial?:Rel<Parcial>
     /*@OneToOne(()=> Tp)
     tp!: Tp*/  //esta linea la hice con el profe, la de abajo es de regi
 
    @OneToMany(()=> Tp,(tp)=> tp.curso,{
     cascade:[Cascade.ALL]})
-   tps= new Collection<Tp>(this)
+   tps?: Collection<Tp>;
    
 } //ver tema fecha

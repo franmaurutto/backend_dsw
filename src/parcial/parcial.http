@@ -9,10 +9,10 @@ Content-Type: application/json
 
 {
     "nroParcial": 1,
-    "fechaLimite": "01/02/2025",
-    "consigna": "programar en java una calculadora simple",
-    "cursoId": 1,
-    "inscripcionId":1
+    "fechaLimite": "01/03/2025",
+    "consigna": "programar en css una calculadora simple",
+    "cursoId": 3
+    
 }
 
 ### 
@@ -26,8 +26,8 @@ PUT http://localhost:3000/api/parciales/{{id}}
 Content-Type: application/json
 
 {
-    "nroParcial": 2,
-    "fechaLimite": "01/03/2025",
+    "nroParcial": 1,
+    "fechaLimite": "01/04/2025",
     "consigna": "programar en java una calculadora compleja"   
 }
 

@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express"
 import { RtaParcial } from "./rtaParcial.entity.js";
 import { orm } from "../Shared/orm.js";
+import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
+import { Parcial } from "../parcial/parcial.entity.js";
 
 
 const em = orm.em
@@ -8,7 +10,9 @@ const em = orm.em
 function sanitizeRtaParcialInput(req: Request, res: Response, next: NextFunction){
     
     req.body.sanitizedInput = {
-        rtaConsignaParcial: req.body. rtaConsignaParcial 
+        rtaConsignaParcial: req.body.rtaConsignaParcial,
+        inscripcionId: req.body.inscripcionId,
+        parcialId: req.body.parcialId
     }
     
     Object.keys(req.body.sanitizedInput).forEach(key=>{
@@ -39,15 +43,29 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
+  
   async function add(req: Request, res: Response){
     try {
-      const rtaParcial = em.create(RtaParcial, req.body)
-      await em.flush()
+      const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
+      if (!inscripcion) {
+        return res.status(404).json({ message: 'Inscripcion no encontrado' });}
+      const parcial= await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
+      if (!parcial) {
+        return res.status(404).json({ message: 'Parcialno encontrado' });}
+
+      const rtaParcial = em.create(RtaParcial, {
+        ...req.body.sanitizedInput,
+      inscripcion,
+    parcial})
+      await em.persistAndFlush(rtaParcial)
       res.status(201).json({ message: 'Respuesta al parcial creada', data: rtaParcial })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
   }
+
+
+
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

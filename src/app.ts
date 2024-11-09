@@ -12,12 +12,23 @@ import { rtaTpRouter } from './rtaTp/rtaTp.routes.js';
 import { parcialRouter } from './parcial/parcial.routes.js';
 import { rtaParcialRouter } from './rtaParcial/rtaParcial.routes.js';
 
+
+import cors from 'cors'
+
 const app = express() 
+
 app.use(express.json()) 
+app.use(cors({
+  origin: 'http://localhost:3001', 
+  methods: 'GET,POST,PUT,DELETE', 
+  credentials: true 
+}));
+
 
 app.use((req, res, next) => {
     RequestContext.create(orm.em, next)
   })
+
 
 app.use("/api/cursos", cursoRouter)
 app.use("/api/alumnos", alumnoRouter)
@@ -31,7 +42,7 @@ app.use("/api/rtaParciales", rtaParcialRouter)
 
 await syncSchema()
 app.listen (3000, ()=>{
-    console.log("Server running on http: //localhost:3000/")
+    console.log("Server running on http://localhost:3000/")
 });
 
 app.use((_, res) => {

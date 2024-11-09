@@ -1,6 +1,8 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { Inscripcion } from './inscripciones.entity.js';
 import { orm } from "../Shared/orm.js";
+import { Alumno } from '../alumno/alumnos.entity.js';
+import { Curso } from '../curso/cursos.entity.js';
 
 const em = orm.em
 
@@ -8,10 +10,15 @@ function sanitizeInscripcionInput(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+  
+) 
+{
+  console.log('Body before sanitizing:', req.body);
   req.body.sanitizedInput = {
     fechaInscripcion: req.body.fechaInscripcion,
     cancelado: req.body.cancelado,
+    alumnoId: req.body.alumnoId, 
+    cursoId: req.body.cursoId
     /*certificado: req.body.certificado,
     parciales: req.body.parciales,
     tps: req.body.tps,
@@ -52,8 +59,19 @@ async function getOne (req: Request,res: Response){
 
 async function add (req:Request, res:Response) {
   try {
-    const inscripcion = em.create(Inscripcion, req.body.sanitizeInscripcionInput)
-    await em.flush()
+    const alumno = await em.findOne(Alumno, { id: req.body.sanitizedInput.alumnoId });
+    if (!alumno) {
+      return res.status(404).json({ message: 'Alumno no encontrado' });
+    }
+    const curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
+    if (!curso) {
+      return res.status(404).json({ message: 'Curso no encontrado' });
+    }
+    const inscripcion = em.create(Inscripcion,{
+       ...req.body.sanitizedInput,
+      alumno,
+      curso})
+    await em.persistAndFlush(inscripcion)
     res
       .status(201)
       .json({ message: 'Inscripcion ha sido creada', data: inscripcion })
@@ -65,14 +83,16 @@ async function add (req:Request, res:Response) {
 async function update(req:Request, res:Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const inscripcion = await em.findOneOrFail(Inscripcion, {id})
-    em.assign(inscripcion, req.body.sanitizeInscripcionInput)
+    const inscripcion= em.getReference(Inscripcion, id)
+    em.assign(inscripcion, req.body)
     await em.flush()
-    res.status(200).json({ message: 'Se ha actualizado la inscripcion', data: inscripcion })
+    res.status(200).json({ message: 'Se ha actualizado la inscripcion'})
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
+
+
 
 async function remove (req: Request, res: Response) {
   try {

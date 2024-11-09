@@ -8,9 +8,9 @@ POST http://localhost:3000/api/tps
 Content-Type: application/json 
 
 {
-    "nroTp": 1,
-    "consigna": "En este trabajo práctico, crearás un sistema básico de gestión de pacientes para una clínica ficticia. Este sistema permitirá registrar y manejar la información de los pacientes, las citas médicas, y el historial médico de cada paciente.",
-    "curso": null
+    "nroTp": 3,
+    "consigna": "En este trabajo práctico, crearás un sistema básico de gestión de viajes de colectivos. Este sistema permitirá registrar y manejar la información de los viajes y boletos..",
+    "cursoId": 1
     
 }
 

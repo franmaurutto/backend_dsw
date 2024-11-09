@@ -9,7 +9,8 @@ Content-Type: application/json
 
 {
     "descripcion": "Se otorga el siguiente certificado acreditando que el alumno ha asistido al curso de HTML y ha alcanzado los requisitos exigidos por el mismo",
-    "fechaEmision": "10 de noviembre de 2024"
+    "fechaEmision": "10 de noviembre de 2024",
+    "inscripcionId":1
 }
 
 ### id

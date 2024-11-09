@@ -1,33 +1,30 @@
-import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel } from '@mikro-orm/core'
+import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel, TinyIntType } from '@mikro-orm/core'
 import { BaseEntity } from '../Shared/baseEntity.entity.js'
-/*import { Certificado } from '../certificado/certificados.entity.js'
-import { Parcial } from '../parcial/parciales.entity.js'
-import { TP } from '../tp/tps.entity.js'
-import { RtaParcial } from '../rtaparcial/rtaparciales.entity.js'
-import { RtaTP } from '../rtatp/rtatps.entity.js'*/
+import { Alumno } from '../alumno/alumnos.entity.js'
+import { Curso } from '../curso/cursos.entity.js'
+import { Certificado } from '../certificado/certificado.entity.js'
+import { RtaParcial } from '../rtaParcial/rtaParcial.entity.js'
+import { RtaTp } from '../rtaTp/rtaTp.entity.js'
 
 @Entity()
 export class Inscripcion extends BaseEntity{
     @Property({ nullable: false})
     fechaInscripcion!:string
     @Property()
-    cancelado!:boolean
-    /*@OneToOne(()=>Certificado)
-    certificado!: Certificado
-    @ManyToMany(()=>Parcial, (parcial)=>parcial.inscripciones){
-        cascade:[Cascade.ALL],
-        PONER OWNER A PARCIAL
-    }
-    parciales = new Collection<Parcial>(this)
-    @ManyToMany(()=>TP, (tp)=>tp.inscripciones){
-        cascade:[Cascade.ALL],
-        PONER OWNER A TP
-    }
-    tps = new Collection<TP>(this)
-    @OneToOne(()=>RtaParcial)
-    rtaparcial!: RtaParcial
-    @OneToOne(()=>RtaTP)
-    rtatp!: RtaTP
-    PREGUNTAR SI LAS ASOCIATIVAS SE HACEN ASI
-    */
+    cancelado!:Boolean
+    @ManyToOne(()=> Alumno,{nullable:false})
+    alumno!:Rel<Alumno>
+    @ManyToOne(()=> Curso,{nullable:true})//cambiar nullable
+    curso?: Rel<Curso>
+    
+    @OneToOne(() => Certificado, {  owner: true, nullable:true })
+    certificado?: Rel<Certificado>;
+
+    
+    @OneToOne(()=>RtaParcial,{nullable:true})
+    rtaparcial?: RtaParcial;
+
+    @OneToOne(() => RtaTp, { nullable: true })
+    rtatp?: RtaTp;
+    
 }

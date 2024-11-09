@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {getAll, getOne, add, update, remove } from './inscripciones.controler.js';
+import {getAll, getOne, add, update, remove,sanitizeInscripcionInput } from './inscripciones.controler.js';
 export const inscripcionRouter = Router();
 
 inscripcionRouter.get("/",getAll);
 inscripcionRouter.get("/:id",getOne);
-inscripcionRouter.post("/",add);
-inscripcionRouter.put("/:id",update);
-inscripcionRouter.patch("/:id",update);
-inscripcionRouter.delete("/:id",remove);
+inscripcionRouter.post("/",sanitizeInscripcionInput,add);
+inscripcionRouter.put("/:id",sanitizeInscripcionInput,update);
+inscripcionRouter.patch("/:id",sanitizeInscripcionInput,update);
+inscripcionRouter.delete("/:id",sanitizeInscripcionInput,remove);

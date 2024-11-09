@@ -1,11 +1,11 @@
 import { Router} from "express";
-import { findAll, findOne, update, add, remove } from "./rtaTp.controler.js";
+import { findAll, findOne, update, add, remove,sanitizeRtaTpInput } from "./rtaTp.controler.js";
 
 export const rtaTpRouter = Router()
 
 rtaTpRouter.get('/', findAll)
 rtaTpRouter.get('/:id', findOne)
-rtaTpRouter.post('/', add)
-rtaTpRouter.put('/:id', update)
-rtaTpRouter.patch('/:id', update)
-rtaTpRouter.delete('/:id', remove)
+rtaTpRouter.post('/',sanitizeRtaTpInput, add)
+rtaTpRouter.put('/:id',sanitizeRtaTpInput, update)
+rtaTpRouter.patch('/:id',sanitizeRtaTpInput, update)
+rtaTpRouter.delete('/:id',sanitizeRtaTpInput, remove)

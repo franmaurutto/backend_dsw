@@ -20,7 +20,7 @@ export class Profesor extends BaseEntity{
     contrasenia!: string
 
     @OneToMany(() => Curso, (curso) => curso.profesor, { //se conecta con curso
-        cascade: [Cascade.ALL],
+        cascade: [Cascade.ALL],nullable: true 
     })
     cursos = new Collection<Curso>(this)
 }

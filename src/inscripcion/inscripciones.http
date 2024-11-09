@@ -9,8 +9,10 @@ POST http://localhost:3000/api/inscripciones
 Content-Type: application/json 
 
 {
-    "fechaInscripcion": "25 de marzo de 2025",
-    "cancelado": false
+    "fechaInscripcion": "2025-03-27",
+    "cancelado": false,
+    "alumnoId":11,
+    "cursoId":1
 }
 
 ### ID
@@ -20,12 +22,14 @@ Content-Type: application/json
 GET http://localhost:3000/api/inscripciones/{{id}}
 
 ###
-PUT http://localhost:3000/api/inscripciones/{{id}}
+PUT http://localhost:3000/api/inscripciones/4
 Content-Type: application/json 
 
 {
-    "fechaInscripcion": "13 de marzo de 2025",
+    "fechaInscripcion": "15 de marzo de 2025",
     "cancelado": false,
+    "alumnoId":11,
+    "cursoId":1
 }
 
 ###

@@ -48,17 +48,14 @@ async function add(req: Request, res: Response) {
 console.log(`parcial add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
   try {
     const curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
-    const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
+
     if (!curso) {
       return res.status(404).json({ message: 'Curso no encontrado' });
     const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId })};
-    if (!inscripcion) {
-      return res.status(404).json({ message: 'inscripcion no encontrada' });
-    }
+
     const parcial = em.create(Parcial, {
       ...req.body.sanitizedInput,
-      curso,        
-      inscripcion,      
+      curso,            
     });
     await em.persistAndFlush(parcial);
     res.status(201).json({ message: 'Parcial ha sido creado', data: parcial });
@@ -66,15 +63,7 @@ console.log(`parcial add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
     res.status(500).json({ message: error.message });
   } }
   
-    /*async function add(req: Request, res: Response){
-      try {
-        const parcial = em.create(Parcial, req.body)
-        await em.flush()
-        res.status(201).json({ message: 'parcial creado', data: parcial })
-      } catch (error: any) {
-        res.status(500).json({ message: error.message })
-      }
-    }*/
+
 async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

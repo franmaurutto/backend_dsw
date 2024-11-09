@@ -25,7 +25,7 @@ async function findOne(req: Request, res: Response){
 async function add(req: Request, res: Response){
   try {
     const alumno = em.create(Alumno, req.body)
-    await em.flush()
+    await orm.em.persistAndFlush(alumno);
     res.status(201).json({ message: 'Alumno creado', data: alumno })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -52,4 +52,42 @@ async function remove(req: Request, res: Response){
     res.status(500).json({ message: error.message })
   }
 }
-export {findAll, findOne, add, update, remove}
+
+async function findByEmail(req: Request, res: Response) {
+  try {
+    console.log('Cuerpo recibido:', req.body); // Para verificar qué llega realmente
+
+    const { mail, contrasenia } = req.body;
+
+    if (!mail || !contrasenia) {
+      return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
+    }
+    const alumno = await em.findOne(Alumno, { mail });
+    console.log(alumno)
+    if (!alumno|| alumno.contrasenia !== contrasenia) {
+      return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
+    }
+
+    res.status(200).json({ message: 'Inicio de sesión exitoso', data: alumno });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+function sanitizeAlumnoInput(req: Request, res: Response, next :NextFunction) {
+  
+  req.body.sanitizedInput= {
+    nombreCompleto:req.body.nombreCompleto,
+    mail: req.body.mail,
+    telefono: req.body.mail,
+    contrasenia:req.body.contrasenia,
+  }
+  
+  Object.keys(req.body.sanitizedInput).forEach((key) => { 
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key]
+    }
+  })
+  next()
+}
+export {findAll, findOne, add, update, remove, sanitizeAlumnoInput, findByEmail}

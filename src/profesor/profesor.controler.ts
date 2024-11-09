@@ -54,14 +54,18 @@ async function findAll(req: Request, res: Response){
   async function add(req: Request, res: Response) {
     console.log(`profesor add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
     try {
-      const curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
-      if (!curso) {
-        return res.status(404).json({ message: 'Curso no encontrado' });
+       let curso = null;
+      if (req.body.sanitizedInput.cursoId) {
+      curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
+        if (!curso) {
+          return res.status(404).json({ message: 'Curso no encontrado' });
       }
-      const profesor = em.create(Profesor, {
-        ...req.body.sanitizedInput,
-        curso,              
-      });
+    }
+
+    const profesor = em.create(Profesor, {
+      ...req.body.sanitizedInput,
+      curso,
+    });
       await em.persistAndFlush(profesor);
       res.status(201).json({ message: 'Profesor ha sido creado', data: profesor });
     } catch (error: any) {
@@ -91,4 +95,25 @@ async function findAll(req: Request, res: Response){
     }
   }
 
-export {sanitizeProfesorInput, findAll, findOne, add, update, remove}
+  async function findByEmail(req: Request, res: Response) {
+  try {
+    console.log('Cuerpo recibido:', req.body); // Para verificar qué llega realmente
+
+    const { mail, contrasenia } = req.body;
+
+    if (!mail || !contrasenia) {
+      return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
+    }
+    const profesor = await em.findOne(Profesor, { mail },{ populate: ['cursos'] });
+    console.log(profesor)
+    if (!profesor|| profesor.contrasenia !== contrasenia) {
+      return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
+    }
+
+    res.status(200).json({ message: 'Inicio de sesión exitoso', data: profesor });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export {sanitizeProfesorInput, findAll, findOne, add, update, remove,findByEmail}

@@ -8,7 +8,9 @@ POST http://localhost:3000/api/rtaParciales
 Content-Type: application/json
 
 {
-    "rtaConsignaParcial": "Desarrolla un programa en Python que gestione una lista de tareas. El programa debe permitir al usuario agregar tareas con una descripción y fecha de ...."
+    "rtaConsignaParcial": "Desarrolla un programa en Python que gestione una lista de tareas. El programa debe permitir al usuario agregar tareas con una descripción y fecha de ....",
+    "inscripcionId":1,
+    "parcialId":1
 }
 
 ### id

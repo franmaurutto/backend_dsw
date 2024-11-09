@@ -24,7 +24,6 @@ function sanitizeCursoInput(
     dias: req.body.dias,
     profesorId: req.body.profesorId, 
     parcialId: req.body.parcialId,
-    alumnoId:req.body.alumnoId,
     tpId:req.body.tpId,
 
   }
@@ -39,7 +38,7 @@ function sanitizeCursoInput(
 
 async function getAll (req: Request,res: Response){
   try {
-    const cursos = await em.find(Curso, {}, {populate: ['profesor']}) //falta agregar , 'alumnos', 'parcial', 'tp'
+    const cursos = await em.find(Curso, {}, {populate: ['profesor']}) //falta agregar ,'parcial', 'tp'
     res
       .status(200)
       .json({ message: 'Se han encontrado los cursos', data: cursos })
@@ -68,24 +67,21 @@ async function add(req: Request, res: Response) {
     if (!profesor) {
       return res.status(404).json({ message: 'Profesor no encontrado' });
     }
-    const parcial = await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
-    if (!parcial) {
-      return res.status(404).json({ message: 'Parcial no encontrado' });
-    }
-    const alumno = await em.findOne(Alumno, { id: req.body.sanitizedInput.alumnoId });
-    if (!alumno) {
-      return res.status(404).json({ message: 'Alumno no encontrado' });
-    }
-    const tp = await em.findOne(Alumno, { id: req.body.sanitizedInput.tpId });
-    if (!alumno) {
-      return res.status(404).json({ message: 'Tp no encontrado' });
-    }
+    const parcial = await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId })
+      ? await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId }) 
+      : null;
+
+
+    const tp = await em.findOne(Tp, { id: req.body.sanitizedInput.tpId })
+      ? await em.findOne(Tp, { id: req.body.sanitizedInput.tpId }) 
+      : null;
+
+
     const curso = em.create(Curso, {
       ...req.body.sanitizedInput,
       profesor,
-      parcial,
-      alumno,
-      tp,                
+      parcial:parcial || null,
+      tp:tp || null,                
     });
     await em.persistAndFlush(curso);
     res.status(201).json({ message: 'Curso ha sido creado', data: curso });
@@ -97,14 +93,16 @@ async function add(req: Request, res: Response) {
 async function update(req:Request, res:Response) {
   try {
     const id = Number.parseInt(req.params.id)
-    const curso = await em.findOneOrFail(Curso, {id})
-    em.assign(curso, req.body.sanitizeCursoInput)
+    const curso= em.getReference(Curso, id)
+    em.assign(curso, req.body)// va req.body.sanitizedInput?
     await em.flush()
-    res.status(200).json({ message: 'Se ha actualizado el curso', data: curso })
+    res.status(200).json({ message: 'Se ha actualizado el curso' })
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
 }
+
+
 
 async function remove (req: Request, res: Response) {
   try {

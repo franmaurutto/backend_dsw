@@ -7,10 +7,10 @@ POST http://localhost:3000/api/alumnos
 Content-Type: application/json 
 
 {
-    "nombreCompleto": "Federico Diaz",
-    "mail": "fedeprograma@hotmail.com",
-    "telefono": "341876098",
-    "contrasenia": "capofede11"
+    "nombreCompleto": "Francesca Maurutto",
+    "mail": "fran666@hotmail.com",
+    "telefono": "341876099",
+    "contrasenia": "fran666"
 }
 
 ### id
@@ -18,6 +18,15 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/alumnos/{{id}}
+###
+POST http://localhost:3000/api/alumnos/login
+
+Content-Type: application/json
+
+{
+    "mail": "fedeprograma@hotmail.com",
+    "contrasenia": "capofede11"
+}
 
 ###
 PUT http://localhost:3000/api/alumnos/{{id}}
@@ -44,7 +53,7 @@ Content-Type: application/json
 
 ###
 @idToDelete = {{creoAlumnoToDelete.response.body.data.id}}
-DELETE http://localhost:3000/api/alumnos/{{idToDelete}}
+DELETE http://localhost:3000/api/alumnos/12
 
 ###
 PATCH http://localhost:3000/api/alumnos/{{id}}

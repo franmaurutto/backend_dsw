@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { Certificado } from "./certificado.entity.js"
 import { orm } from "../Shared/orm.js";
+import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
 
 
 const em = orm.em
@@ -10,6 +11,7 @@ function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunctio
     req.body.sanitizedInput = {
         descripcion: req.body.descripcion,
         fechaEmision: req.body.fechaEmision,
+        inscripcionId: req.body.inscripcionId
         
     }
     
@@ -41,8 +43,14 @@ async function findAll(req: Request, res: Response){
   }
   async function add(req: Request, res: Response){
     try {
-      const certificado = em.create(Certificado, req.body)
-      await em.flush()
+      const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
+      if (!inscripcion) {
+        return res.status(404).json({ message: 'Inscripcion no encontrada' });
+      }
+      const certificado = em.create(Certificado, {
+        ...req.body.sanitizedInput,
+      inscripcion})
+      await em.persistAndFlush(inscripcion)
       res.status(201).json({ message: 'Certificado creado', data: certificado })
     } catch (error: any) {
       res.status(500).json({ message: error.message })

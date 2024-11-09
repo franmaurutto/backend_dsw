@@ -14,4 +14,6 @@ export class Parcial extends BaseEntity{
   
     @Property({ nullable: false })
     consigna!: string
+
+    
 }
