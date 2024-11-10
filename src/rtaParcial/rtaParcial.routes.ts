@@ -5,7 +5,7 @@ export const rtaParcialRouter = Router()
 
 rtaParcialRouter.get('/',findAll)
 rtaParcialRouter.get('/:id', sanitizeRtaParcialInput, findOne)
-rtaParcialRouter.post('/', add)
+rtaParcialRouter.post('/', sanitizeRtaParcialInput, add)
 rtaParcialRouter.put('/:id', sanitizeRtaParcialInput, update)
 rtaParcialRouter.patch('/:id', sanitizeRtaParcialInput, update)
 rtaParcialRouter.delete('/:id', sanitizeRtaParcialInput, remove)

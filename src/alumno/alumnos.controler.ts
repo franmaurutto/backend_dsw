@@ -35,7 +35,7 @@ function sanitizeAlumnoInput(req: Request, res: Response, next :NextFunction) {
   req.body.sanitizedInput= {
     nombreCompleto:req.body.nombreCompleto,
     mail: req.body.mail,
-    telefono: req.body.mail,
+    telefono: req.body.telefono,
     contrasenia:req.body.contrasenia,
   }
   

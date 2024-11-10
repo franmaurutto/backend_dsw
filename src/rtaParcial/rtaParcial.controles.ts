@@ -15,19 +15,19 @@ function validateRtaParcial(rtaparcial: RtaParcial): boolean {
   }
 
 function sanitizeRtaParcialInput(req: Request, res: Response, next: NextFunction){
-    
+  console.log('Contenido original de req.body:', req.body);
     req.body.sanitizedInput = {
         rtaConsignaParcial: req.body.rtaConsignaParcial,
         inscripcionId: req.body.inscripcionId,
         parcialId: req.body.parcialId
     }
-    
+    console.log('Datos en sanitizedInput antes de eliminar propiedades undefined:', req.body.sanitizedInput);
     Object.keys(req.body.sanitizedInput).forEach(key=>{
         if (req.body.sanitizedInput[key]===undefined){
         delete req.body.sanitizedInput[key]
         }
     })
-
+    console.log('Datos en sanitizedInput después de eliminar propiedades undefined:', req.body.sanitizedInput);
     validateRtaParcial(req.body.sanitizedInput)
     next()
 }
@@ -51,31 +51,37 @@ async function findAll(req: Request, res: Response){
     }
   }
   
-  async function add(req: Request, res: Response){
-    console.log(`profesor add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
-      try {
-        let inscripcion= null;
-        if (req.body.sanitizedInput.inscripcionId) {
-        const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId })
-          if (!inscripcion) {
-            return res.status(404).json({ message: 'Inscripcion no encontrado' });}
-      };
-      let parcial= null;
+  async function add(req: Request, res: Response) {
+    console.log(`rtaparcial add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
+    try {
+      let inscripcion = null;
+      if (req.body.sanitizedInput.inscripcionId) {
+        inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
+        if (!inscripcion) {
+          return res.status(404).json({ message: 'Inscripción no encontrada' });
+        }
+      }
+      
+      let parcial = null;
       if (req.body.sanitizedInput.parcialId) {
-        const parcial= await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
-          if (!parcial) {
-            return res.status(404).json({ message: 'Parcial no encontrado' });}}
-
+        parcial = await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId });
+        if (!parcial) {
+          return res.status(404).json({ message: 'Parcial no encontrado' });
+        }
+      }
+  
       const rtaParcial = em.create(RtaParcial, {
         ...req.body.sanitizedInput,
-        inscripcion,
-        parcial})
-      await em.persistAndFlush(rtaParcial)
-      res.status(201).json({ message: 'Respuesta al parcial creada', data: rtaParcial })
+        inscripcion: inscripcion || null,
+        parcial: parcial || null,
+      });
+      await em.persistAndFlush(rtaParcial);
+      res.status(201).json({ message: 'Respuesta al parcial creada', data: rtaParcial });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+      res.status(500).json({ message: error.message });
     }
   }
+  
 
 
       /*if (req.body.sanitizedInput.cursoId) {*/

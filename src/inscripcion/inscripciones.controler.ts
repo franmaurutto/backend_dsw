@@ -9,41 +9,47 @@ const em = orm.em
 
 function validateInscripcion(inscripcion: Inscripcion): boolean {
   if (!inscripcion) {
-      throw new Error("Los datos de inscripcion son requeridos");
+    throw new Error("Los datos de inscripcion son requeridos");
   }
 
-  if (!inscripcion.cancelado || (inscripcion.cancelado !== true && inscripcion.cancelado !== false)) {
-      throw new Error("El campo cancelado es requerido y debe ser 'Si' o 'No'");
+  if (inscripcion.cancelado !== true && inscripcion.cancelado !== false) {
+    throw new Error("El campo cancelado es requerido y debe ser 'Si' o 'No'");
   }
 
   return true;
 }
-function sanitizeInscripcionInput(
-  req: Request,
-  res: Response,
-  next: NextFunction
-  
-) 
-{
+
+function sanitizeInscripcionInput(req: Request, res: Response, next: NextFunction) {
+  // Mostrar el cuerpo antes de la sanitización
   console.log('Body before sanitizing:', req.body);
+
   req.body.sanitizedInput = {
     fechaInscripcion: req.body.fechaInscripcion,
-    cancelado: req.body.cancelado,
-    alumnoId: req.body.alumnoId, 
+    cancelado: req.body.cancelado === 'Si' ? true : (req.body.cancelado === 'No' ? false : undefined),
+    alumnoId: req.body.alumnoId,
     cursoId: req.body.cursoId,
     certificadoId: req.body.certificadoId,
     rtaparcialId: req.body.rtaparcialId,
     rtatpId: req.body.rtatpId
-  }
+  };
+
+  // Mostrar el cuerpo después de la asignación de sanitización
+  console.log('Body after sanitizing assignment:', req.body);
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key]
+      delete req.body.sanitizedInput[key];
     }
-  })
+  });
+
+  // Mostrar el cuerpo después de eliminar propiedades con valores undefined
+  console.log('Body after removing undefined values:', req.body);
+
+  // Validar la inscripción
   validateInscripcion(req.body.sanitizedInput);
-  next()
+  next();
 }
+
 
 async function getAll (req: Request,res: Response){
   try {
@@ -69,6 +75,7 @@ async function getOne (req: Request,res: Response){
 }
 
 async function add (req:Request, res:Response) {
+  console.log(`inscripcion add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
   try {
     const alumno = await em.findOne(Alumno, { id: req.body.sanitizedInput.alumnoId });
     if (!alumno) {

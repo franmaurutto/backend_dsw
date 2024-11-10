@@ -10,10 +10,10 @@ Content-Type: application/json
 
 {
     "nombre_y_apellido": "Martin Aguilar",
-    "mail": "bob@hotmail.com",
+    "mail": "bob@educatech.com",
     "telefono": "3413456544",
     "contrasenia": "spongebob",
-    "cursoId":3
+    "cursoId":1
 }
 
 ### id

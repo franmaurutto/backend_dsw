@@ -18,7 +18,7 @@ Content-Type: application/json
     "horaInicio": "16:00",
     "horaFin": "18:00",
     "dias": ["Martes"],
-    "profesorId":2
+    "profesorId":1
     
 }
 
