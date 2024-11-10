@@ -1,8 +1,10 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { Alumno } from './alumnos.entity.js';
 import { orm } from '../Shared/orm.js';
+import { Inscripcion } from '../inscripcion/inscripciones.entity.js';
 
 const em = orm.em 
+
 function validateAlumno(alumno: Alumno): boolean {
   if (!alumno) {
       throw new Error("Los datos de alumno son requeridos");
@@ -27,6 +29,25 @@ function validateAlumno(alumno: Alumno): boolean {
 
   return true;
 }
+
+function sanitizeAlumnoInput(req: Request, res: Response, next :NextFunction) {
+  
+  req.body.sanitizedInput= {
+    nombreCompleto:req.body.nombreCompleto,
+    mail: req.body.mail,
+    telefono: req.body.mail,
+    contrasenia:req.body.contrasenia,
+  }
+  
+  Object.keys(req.body.sanitizedInput).forEach((key) => { 
+    if (req.body.sanitizedInput[key] === undefined) {
+      delete req.body.sanitizedInput[key]
+    }
+  })
+  validateAlumno(req.body.sanitizedInput);
+  next()
+}
+
 
 async function findAll(req: Request, res: Response){
   try {
@@ -98,21 +119,24 @@ async function findByEmail(req: Request, res: Response) {
   }
 }
 
-function sanitizeAlumnoInput(req: Request, res: Response, next :NextFunction) {
-  
-  req.body.sanitizedInput= {
-    nombreCompleto:req.body.nombreCompleto,
-    mail: req.body.mail,
-    telefono: req.body.mail,
-    contrasenia:req.body.contrasenia,
-  }
-  
-  Object.keys(req.body.sanitizedInput).forEach((key) => { 
-    if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key]
+
+async function getCursosAlumno(req: Request, res: Response) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'El ID del alumno es requerido' });
     }
-  })
-  validateAlumno(req.body.sanitizedInput);
-  next()
+    const inscripciones = await em.find(Inscripcion, { alumno: id }, { populate: ['curso'] });
+    if (inscripciones.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron inscripciones para este alumno' });
+    }
+    
+    const cursos = inscripciones.map(inscripcion => inscripcion.curso);
+
+    res.status(200).json({ message: 'Cursos del alumno encontrados', data: cursos });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
-export {findAll, findOne, add, update, remove, sanitizeAlumnoInput, findByEmail}
+
+export {findAll, findOne, add, update, remove, sanitizeAlumnoInput, findByEmail, getCursosAlumno}

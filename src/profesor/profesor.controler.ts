@@ -117,24 +117,47 @@ async function findAll(req: Request, res: Response){
   }
 
   async function findByEmail(req: Request, res: Response) {
-  try {
-    console.log('Cuerpo recibido:', req.body); // Para verificar qué llega realmente
+    try {
+      console.log('Cuerpo recibido:', req.body); // Para verificar qué llega realmente
 
-    const { mail, contrasenia } = req.body;
+      const { mail, contrasenia } = req.body;
 
-    if (!mail || !contrasenia) {
-      return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
+      if (!mail || !contrasenia) {
+        return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
+      }
+      const profesor = await em.findOne(Profesor, { mail },{ populate: ['cursos'] });
+      console.log(profesor)
+      if (!profesor|| profesor.contrasenia !== contrasenia) {
+        return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
+      }
+
+      res.status(200).json({ message: 'Inicio de sesión exitoso', data: profesor });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
-    const profesor = await em.findOne(Profesor, { mail },{ populate: ['cursos'] });
-    console.log(profesor)
-    if (!profesor|| profesor.contrasenia !== contrasenia) {
-      return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
-    }
-
-    res.status(200).json({ message: 'Inicio de sesión exitoso', data: profesor });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
   }
-}
 
-export {sanitizeProfesorInput, findAll, findOne, add, update, remove,findByEmail}
+  async function getCursosProfesor(req: Request, res: Response) {
+    const profesorId = parseInt(req.params.id, 10);
+
+    try {
+      if (isNaN(profesorId)) {
+        return res.status(400).json({ message: 'ID de profesor inválido' });
+      }
+
+      const profesor = await em.findOne(Profesor, profesorId, { populate: ['cursos'] });
+    
+      if (!profesor) {
+        return res.status(404).json({ message: 'Profesor no encontrado' });
+      }
+
+      const cursos = profesor.cursos.getItems(); 
+      return res.status(200).json({ message: 'Cursos del profesor encontrados', data: cursos });
+
+    } catch (error: any) {
+      console.error(error);
+      return res.status(500).json({ message: 'Error al obtener los cursos del profesor' });
+    }
+  }
+
+export {sanitizeProfesorInput, findAll, findOne, add, update, remove,findByEmail,getCursosProfesor}

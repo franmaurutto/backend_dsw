@@ -2,6 +2,8 @@
 GET http://localhost:3000/api/alumnos
 
 ###
+GET http://localhost:3000/api/alumnos/11/cursos
+###
 # @name creoAlumno
 POST http://localhost:3000/api/alumnos
 Content-Type: application/json 

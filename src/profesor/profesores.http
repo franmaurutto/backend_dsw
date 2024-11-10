@@ -1,7 +1,8 @@
 ### 
 GET http://localhost:3000/api/profesores
 
-
+###
+GET http://localhost:3000/api/profesores/1/cursos
 ### 
 # @name creoProfe
 POST http://localhost:3000/api/profesores

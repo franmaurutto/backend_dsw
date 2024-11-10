@@ -9,16 +9,16 @@ POST http://localhost:3000/api/cursos
 Content-Type: application/json 
 
 {
-    "descripcion": "Este curso de CSS enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
-    "nombre": "Curso de CSS",
+    "descripcion": "Este curso de javascript enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
+    "nombre": "Curso de javascript",
     "cantCupos": 30,
-    "duracion": "1 mes",
+    "duracion": "3 mes",
     "fechaInicio":"2 de febrero de 2025",
-    "fechaFin": "2 de marzo de 2025",
-    "horaInicio": "16:00 hs",
-    "horaFin": "18:00 hs",
+    "fechaFin": "2 de abril de 2025",
+    "horaInicio": "16:00",
+    "horaFin": "18:00",
     "dias": ["Martes"],
-    "profesorId":1
+    "profesorId":2
     
 }
 
