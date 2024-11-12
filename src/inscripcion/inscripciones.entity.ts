@@ -9,7 +9,7 @@ import { RtaTp } from '../rtaTp/rtaTp.entity.js'
 @Entity()
 export class Inscripcion extends BaseEntity{
     @Property({ nullable: false})
-    fechaInscripcion!:string
+    fechaInscripcion!:Date
     @Property()
     cancelado!:Boolean
     @ManyToOne(()=> Alumno,{nullable:false})

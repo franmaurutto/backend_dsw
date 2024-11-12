@@ -9,15 +9,16 @@ POST http://localhost:3000/api/cursos
 Content-Type: application/json 
 
 {
-    "descripcion": "Este curso de Python está diseñado para enseñar a desarrollar aplicaciones robustas y eficientes utilizando uno de los lenguajes de programación más populares y versátiles del mundo.",
-    "nombre": "Curso de Python",
-    "cantCupos": 25,
-    "fechaInicio":"2025-09-03",
-    "fechaFin": "2025-10-03",
-    "horaInicio": "10:00",
-    "horaFin": "13:00",
-    "dias": "Viernes",
-    "profesorId":2
+    "descripcion": "Este curso de javascript enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
+    "nombre": "Curso de javascript",
+    "cantCupos": 30,
+    "duracion": "3 mes",
+    "fechaInicio":"2 de febrero de 2025",
+    "fechaFin": "2 de abril de 2025",
+    "horaInicio": "16:00",
+    "horaFin": "18:00",
+    "dias": ["Martes"],
+    "profesorId":1
     
 }
 
