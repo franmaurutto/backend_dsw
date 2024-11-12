@@ -13,7 +13,7 @@ export class Tp extends BaseEntity{
 
 
 
- @ManyToOne(()=> Curso,{nullable:true})//cambiar nullable
+ @ManyToOne(()=> Curso,{nullable:true})
   curso?: Rel<Curso>
   
 }

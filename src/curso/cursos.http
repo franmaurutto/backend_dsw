@@ -9,8 +9,8 @@ POST http://localhost:3000/api/cursos
 Content-Type: application/json 
 
 {
-    "descripcion": "Este es un curso cutie para girls cutie bad bit**** pus***",
-    "nombre": "Curso cute",
+    "descripcion": "Este curso de javascript enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
+    "nombre": "Curso de javascript",
     "cantCupos": 30,
     "duracion": "3 mes",
     "fechaInicio":"2 de febrero de 2025",
@@ -19,6 +19,7 @@ Content-Type: application/json
     "horaFin": "18:00",
     "dias": ["Martes"],
     "profesorId":1
+    
 }
 
 ### ID
@@ -42,6 +43,7 @@ Content-Type: application/json
     "horaFin": "18:00 hs",
     "dias": ["Martes"],
     "profesorId":1
+    
 }
 
 ###

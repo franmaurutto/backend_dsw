@@ -8,7 +8,9 @@ POST http://localhost:3000/api/rtaTps
 Content-Type: application/json
 
 {
-    "rtaConsignaTP": "Java es un lenguaje orientado a objetos que facilita el desarrollo de aplicaciones robustas y portables. Tiene independencia de plataforma, una amplia gama de bibliotecas y frameworks disponibles."
+    "rtaConsignaTP": "respuesta",
+    "inscripcionId":1,
+    "tpId":4
 }
 
 ### id

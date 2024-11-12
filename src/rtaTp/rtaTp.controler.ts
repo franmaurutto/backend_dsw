@@ -1,21 +1,27 @@
 import { Request, Response, NextFunction } from "express"
 import { RtaTp } from "./rtaTp.entity.js";
 import { orm } from "../Shared/orm.js";
+import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
+import { Tp } from "../tp/tps.entity.js";
 
 
 const em = orm.em
 
 function validateRtaTp(rtaTp: RtaTp): boolean {
   if (!rtaTp) {
-      throw new Error("Los datos de parcial son requeridos");
+      throw new Error("Los datos del tp son requeridos");
     }
     return true;
   }
 
 function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
+
+    console.log("req.body antes de sanitizar:", req.body);
     
     req.body.sanitizedInput = {
-        rtaConsignaTP: req.body. rtaConsignaTP  
+        rtaConsignaTP: req.body.rtaConsignaTP,
+        inscripcionId: req.body.inscripcionId,
+        tpId: req.body.tpId 
     }
     
     Object.keys(req.body.sanitizedInput).forEach(key=>{
@@ -24,7 +30,9 @@ function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
         }
     })
 
-    validateRtaTp(req.body.sanitizeInput)
+    console.log("req.body después de sanitizar:", req.body.sanitizedInput);
+
+    validateRtaTp(req.body.sanitizedInput)
 
     next()
 }
@@ -47,15 +55,31 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
+
   async function add(req: Request, res: Response){
+    console.log(`rtaTp add req.body: ${JSON.stringify(req.body.sanitizedInput)}`)
     try {
-      const rtaTp = em.create(RtaTp, req.body)
-      await em.flush()
+      const inscripcion = await em.findOne(Inscripcion, {id: req.body.sanitizedInput.inscripcionId})
+      if (!inscripcion) {
+        return res.status(404).json({ message: 'Inscripcion no encontrado' });
+      }
+      const tp= await em.findOne(Tp, {id: req.body.sanitizedInput.tpId})
+      if (!tp) {
+        return res.status(404).json({ message: 'Trabajo parctico no encontrado' });
+      }
+      const rtaTp = em.create(RtaTp, {
+        ...req.body.sanitizedInput,
+        inscripcion,
+        tp})
+      await em.persistAndFlush(rtaTp)
       res.status(201).json({ message: 'Respuesta al tp creada', data: rtaTp })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }
   }
+
+  
+
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

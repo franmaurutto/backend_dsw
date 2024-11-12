@@ -8,10 +8,11 @@ POST http://localhost:3000/api/parciales
 Content-Type: application/json
 
 {
-    "nroParcial": 1,
-    "fechaLimite": "01/03/2025",
-    "consigna": "programar en css una calculadora simple",
-    "cursoId": 3
+    "fecha": "2025-06-08",
+    "horaComienzo":"10:00",
+    "horaFin":"11:30",
+    "consigna": "programar en python una calculadora simple",
+    "cursoId": 5
     
 }
 

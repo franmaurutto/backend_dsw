@@ -1,4 +1,4 @@
-import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel, OneToMany } from '@mikro-orm/core'
+import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel, OneToMany, TimeType } from '@mikro-orm/core'
 import { BaseEntity } from '../Shared/baseEntity.entity.js'
 import { Profesor } from '../profesor/profesores.entity.js'
 import { Alumno } from '../alumno/alumnos.entity.js'
@@ -17,10 +17,10 @@ export class Curso extends BaseEntity{
     cantCupos!:number
     @Property({ nullable: false})
     duracion!:string
-    @Property({ nullable: false})
-    fechaInicio!:string
-    @Property({ nullable: false})
-    fechaFin!:string
+    @Property({ type:'date',nullable: false})
+    fechaInicio!:Date
+    @Property({ type:'date',nullable: false})
+    fechaFin!:Date
     @Property({ nullable: false})
     horaInicio!: string
     @Property({ nullable: false})
