@@ -5,6 +5,7 @@ import { Alumno } from '../alumno/alumnos.entity.js'
 import { Tp } from '../tp/tps.entity.js'
 import { Parcial } from '../parcial/parcial.entity.js'
 import { Inscripcion } from '../inscripcion/inscripciones.entity.js'
+import { Material } from '../material/material.entity.js'
 
 @Entity()
 export class Curso extends BaseEntity{
@@ -33,6 +34,9 @@ export class Curso extends BaseEntity{
     inscripciones?: Collection<Inscripcion>;
     @OneToOne(() => Parcial, { nullable: true })
     parcial?:Rel<Parcial>
+    @OneToMany(() => Material, (material) => material.profesor, { 
+        cascade: [Cascade.ALL],nullable: true 
+    })
 
 
    @OneToMany(()=> Tp,(tp)=> tp.curso,{

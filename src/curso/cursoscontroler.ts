@@ -5,6 +5,7 @@ import { Profesor } from '../profesor/profesores.entity.js';
 import { Parcial } from '../parcial/parcial.entity.js';
 import { Alumno } from '../alumno/alumnos.entity.js';
 import { Tp } from '../tp/tps.entity.js';
+import { Material } from '../material/material.entity.js';
 const em = orm.em
 
 function validateCurso(curso: Curso): boolean {
@@ -62,6 +63,7 @@ function sanitizeCursoInput(
     profesorId: req.body.profesorId, 
     parcialId: req.body.parcialId,
     tpId:req.body.tpId,
+    materialId: req.body.materialId,
 
   }
 
@@ -153,5 +155,28 @@ async function remove (req: Request, res: Response) {
   }
 }
 
+async function getMaterialesCurso(req: Request, res: Response) {
+  const cursoId = parseInt(req.params.id, 10);
 
-export {sanitizeCursoInput, getAll, getOne, add, update, remove }
+  try {
+    if (isNaN(cursoId)) {
+      return res.status(400).json({ message: 'ID de curso inválido' });
+    }
+
+    const curso = await em.findOne(Curso, cursoId, { populate: ['materiales'] });
+  
+    if (!curso) {
+      return res.status(404).json({ message: 'Curso no encontrado' });
+    }
+
+    const materiales = curso.materiales.getItems(); 
+    return res.status(200).json({ message: 'Materiales del curso encontrados', data: materiales });
+
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error al obtener los materiales del curso' });
+  }
+}
+
+
+export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso }

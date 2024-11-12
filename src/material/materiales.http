@@ -1,0 +1,52 @@
+### 
+GET http://localhost:3000/api/materiales
+
+
+### 
+# @name creoMat
+POST http://localhost:3000/api/materiales
+Content-Type: application/json
+
+{
+    "descripcion": "Python. Aplicaciones prácticas es un libro para entusiastas de la programación, estudiantes y profesionales en el mundo Python, los capítulos inician con prácticas sencillas que aumentan de complejidad gradualmente y está desarrollado en el lenguaje de programación Python",
+    "titulo": "Python. Aplicaciones prácticas",
+    "cursoId":1
+}
+
+### id
+@id = {{creoMat.response.body.data.id}}
+
+### 
+GET http://localhost:3000/api/materiales/{{id}}
+
+### 
+PUT http://localhost:3000/api/materiales/{{id}}
+Content-Type: application/json
+
+{
+    "descripcion": "Profundice en el mundo Python y domine los registros, los archivos y la programación dinámica En el ámbito de la informática, trabajar con registros y archivos es básico para manejar un lenguaje de programación",
+    "titulo": "Python desde el laboratorio"
+}
+
+### 
+# @name creoMatToDelete
+POST http://localhost:3000/api/materiales
+Content-Type: application/json
+
+{
+    "descripcion": "Profundice en el mundo Python y domine los registros, los archivos y la programación dinámica En el ámbito de la informática, trabajar con registros y archivos es básico para manejar un lenguaje de programación",
+    "titulo": "Python desde el laboratorio nueva edicion"
+}
+
+### 
+@idToDelete = {{creoMatToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/materiales/{{idToDelete}}
+
+### 
+PATCH http://localhost:3000/api/materiales/{{id}}
+Content-Type: application/json
+
+{
+ "descripcion": "Este libro proporciona todos los contenidos necesarios para entender qué es el Deep Learning y conocer las posibilidades de esta tecnología",
+    "titulo": "Python Deep Learning"
+}
