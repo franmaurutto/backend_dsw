@@ -26,15 +26,18 @@ PUT http://localhost:3000/api/inscripciones/4
 Content-Type: application/json 
 
 {
-    "fechaInscripcion": "15 de marzo de 2025",
+    "fechaInscripcion": "2024-11-11",
     "cancelado": false,
-    "alumnoId":11,
-    "cursoId":1
+    "alumnoId":1,
+    "cursoId":2,
+    "certificado": null,
+    "rtaparcial": null,
+    "rtatp": null
 }
 
 ###
 @idToDelete = {{creoInscripcion.response.body.data.id}}
-DELETE http://localhost:3000/api/inscripciones/{{idToDelete}}
+DELETE http://localhost:3000/api/inscripciones/10
 
 ###
 PATCH http://localhost:3000/api/inscripciones/{{idToDelete}}

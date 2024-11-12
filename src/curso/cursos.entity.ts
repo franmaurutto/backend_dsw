@@ -4,6 +4,7 @@ import { Profesor } from '../profesor/profesores.entity.js'
 import { Alumno } from '../alumno/alumnos.entity.js'
 import { Tp } from '../tp/tps.entity.js'
 import { Parcial } from '../parcial/parcial.entity.js'
+import { Inscripcion } from '../inscripcion/inscripciones.entity.js'
 
 @Entity()
 export class Curso extends BaseEntity{
@@ -27,11 +28,12 @@ export class Curso extends BaseEntity{
     dias!: string 
     @ManyToOne(()=> Profesor, {nullable: false})
     profesor?: Rel<Profesor>
-    
+    @OneToMany(()=> Inscripcion,(inscripcion)=> inscripcion.curso,{
+    cascade:[Cascade.ALL]})
+    inscripciones?: Collection<Inscripcion>;
     @OneToOne(() => Parcial, { nullable: true })
     parcial?:Rel<Parcial>
-    /*@OneToOne(()=> Tp)
-    tp!: Tp*/  //esta linea la hice con el profe, la de abajo es de regi
+
 
    @OneToMany(()=> Tp,(tp)=> tp.curso,{
     cascade:[Cascade.ALL]})
