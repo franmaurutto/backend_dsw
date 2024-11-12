@@ -5,6 +5,8 @@ import { Profesor } from '../profesor/profesores.entity.js';
 import { Parcial } from '../parcial/parcial.entity.js';
 import { Alumno } from '../alumno/alumnos.entity.js';
 import { Tp } from '../tp/tps.entity.js';
+import { differenceInDays } from 'date-fns';
+import { parse } from 'path';
 const em = orm.em
 
 function validateCurso(curso: Curso): boolean {
@@ -16,6 +18,17 @@ function validateCurso(curso: Curso): boolean {
       throw new Error("El campo nombre es requerido");
   }
 
+  console.log("horaInicio:", curso.horaInicio);
+  console.log("horaFin:", curso.horaFin);
+
+ if (!(curso.fechaInicio instanceof Date) || isNaN(curso.fechaInicio.getTime())) {
+    throw new Error("La fecha de inicio es requerida y debe ser una fecha válida");
+  }
+
+  if (!(curso.fechaFin instanceof Date) || isNaN(curso.fechaFin.getTime())) {
+    throw new Error("La fecha de fin es requerida y debe ser una fecha válida");
+  }
+
   if (curso.cantCupos < 0) {
       throw new Error("El número de cupos debe ser mayor a 0");
   }
@@ -24,22 +37,24 @@ function validateCurso(curso: Curso): boolean {
       throw new Error("La descripción es requerida");
   }
 
-  const timePattern = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
-  if (!curso.horaInicio || !timePattern.test(curso.horaInicio)) {
-      throw new Error("La hora de inicio es requerida y debe seguir el formato HH:mm");
-  }
 
-  if (!curso.horaFin || !timePattern.test(curso.horaFin)) {
-      throw new Error("La hora de fin es requerida y debe seguir el formato HH:mm");
+
+
+
+ if (curso.dias) {
+    validarDia(curso.dias);  
   }
 
 
   return true;
 }
 
+
+
 function validarDia(dia: string): void {
+  const diaLower=dia.toLocaleLowerCase()
   const diasValidos = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
-  if (!diasValidos.includes(dia)) {
+  if (!diasValidos.includes(diaLower)) {
       throw new Error("El día ingresado no es válido. Debe ser un día de lunes a sábado.");
   }
 }
@@ -49,13 +64,31 @@ function sanitizeCursoInput(
   res: Response,
   next: NextFunction
 ) {
+
+  const fechaInicio = req.body.fechaInicio;
+  const fechaFin = req.body.fechaFin;
+
+  if (!fechaInicio.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return res.status(400).json({ message: "La fecha de inicio no tiene el formato adecuado" });
+  }
+  if (!fechaFin.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    return res.status(400).json({ message: "La fecha de fin no tiene el formato adecuado" });
+  }
+
+  const parsedFechaInicio = new Date(fechaInicio);
+  const parsedFechaFin = new Date(fechaFin);
+
+
+  const duracionDias = differenceInDays(parsedFechaFin, parsedFechaInicio);
+
+
   req.body.sanitizedInput = {
     descripcion: req.body.descripcion,
     nombre: req.body.nombre,
     cantCupos: req.body.cantCupos,
-    duracion: req.body.duracion,
-    fechaInicio: req.body.fechaInicio,
-    fechaFin: req.body.fechaFin,
+    duracion: `${duracionDias} días`,
+    fechaInicio: parsedFechaInicio,
+    fechaFin: parsedFechaFin,
     horaInicio: req.body.horaInicio,
     horaFin: req.body.horaFin,
     dias: req.body.dias,
@@ -122,6 +155,7 @@ async function add(req: Request, res: Response) {
       tp:tp || null,                
     });
     await em.persistAndFlush(curso);
+    
     res.status(201).json({ message: 'Curso ha sido creado', data: curso });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

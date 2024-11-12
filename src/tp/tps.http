@@ -26,7 +26,9 @@ Content-Type: application/json
 
 {
     "nroTp": 1,
-    "consgina": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  "
+    "consigna": "En este trabajo práctico, se desarrollara un sistema para gestionar el inventario de una librería. El sistema permitirá a los usuarios registrar y actualizar información sobre libros, gestionar las existencias, y generar reportes sobre el inventario.  ",
+    "cursoId":3,
+
 
 }
 
