@@ -23,7 +23,6 @@ function sanitizeParcialInput(req: Request, res: Response, next: NextFunction){
   const parsedFecha = new Date(fecha);
 
     req.body.sanitizedInput = {
-        nroParcial: req.body.nroParcial,
         fecha: parsedFecha,
         horaComienzo: req.body.horaComienzo,
         horaFin: req.body.horaFin,
@@ -52,11 +51,15 @@ async function findAll(req: Request, res: Response){
 
 async function findOne(req: Request, res: Response){
     try {
-      const id = Number.parseInt(req.params.id)
-      const parcial = await em.findOneOrFail(Parcial, { id })
-      res.status(200).json({ message: 'Se encontró el parcial', data: parcial })
+        const id = Number(req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({ message: 'ID inválido' });
+        }
+
+        const parcial = await em.findOneOrFail(Parcial, { id });
+        res.status(200).json({ message: 'Se encontró el parcial', data: parcial });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }}
 
 async function add(req: Request, res: Response) {

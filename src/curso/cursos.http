@@ -43,6 +43,7 @@ Content-Type: application/json
     "horaFin": "18:00 hs",
     "dias": ["Martes"],
     "profesorId":1
+    
 }
 
 ###

@@ -5,10 +5,7 @@ import { Curso } from "../curso/cursos.entity.js";
 @Entity()
 export class Parcial extends BaseEntity{
     @OneToOne(() => Curso, (curso) => curso.parcial)
-    curso?: Rel<Curso>; 
-    
-    @Property({ nullable: false })
-    nroParcial!: number
+    curso?: Rel<Curso>;     
   
     @Property({ nullable: false })
     fecha!: Date
