@@ -6,6 +6,8 @@ import { Parcial } from '../parcial/parcial.entity.js';
 import { Alumno } from '../alumno/alumnos.entity.js';
 import { Tp } from '../tp/tps.entity.js';
 import { Material } from '../material/material.entity.js';
+import { differenceInDays } from 'date-fns';
+import { parse } from 'path';
 const em = orm.em
 
 function validateCurso(curso: Curso): boolean {
