@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "descripcion": "Este curso de javascript enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
-    "nombre": "Curso de css",
+    "nombre": "Otro lpmmmmmmmmmm",
     "cantCupos": 30,
     "duracion": "3 mes",
     "fechaInicio":"2025-02-02",
@@ -18,7 +18,7 @@ Content-Type: application/json
     "horaInicio": "16:00",
     "horaFin": "18:00",
     "dias": "Martes",
-    "profesorId":1
+    "profesorId":4
     
 }
 
@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ###
 @idToDelete = {{creoCurso.response.body.data.id}}
-DELETE http://localhost:3000/api/cursos/{{idToDelete}}
+DELETE http://localhost:3000/api/cursos/3
 
 ###
 PATCH http://localhost:3000/api/cursos/{{idToDelete}}

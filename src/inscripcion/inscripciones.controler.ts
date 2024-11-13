@@ -110,55 +110,37 @@ async function update(req: Request, res: Response) {
 }
 
 async function remove(req: Request, res: Response) {
-  console.log(`Body recibido: ${JSON.stringify(req.body)}`);
-  console.log(`Body sanitizedInput: ${JSON.stringify(req.body.sanitizedInput)}`);
-
+  console.log(`inscripcion remove req.body: ${JSON.stringify(req.body)}`);
   try {
-    console.log("Cuerpo de la solicitud:", req.body);
-    console.log("Alumno ID:", req.body.sanitizedInput.alumnoId);
-    console.log("Curso ID:", req.body.sanitizedInput.cursoId);
+    const ide = Number.parseInt(req.params.id)
+    const inscrip = em.getReference(Inscripcion, ide)
 
-    // Obtener los parámetros del cuerpo de la solicitud
-    const { alumnoId, cursoId, fechaInscripcion } = req.body.sanitizedInput;
+    // Buscar la inscripción por inscripcionId y cargar los datos del alumno y curso
+    const inscripcion = await em.findOne(Inscripcion, { id: ide }, { populate: ['alumno', 'curso'] });
 
-    // Verificar si alumnoId y cursoId están presentes
-    if (!alumnoId || !cursoId) {
-      return res.status(400).json({ message: 'Alumno ID o Curso ID no proporcionados' });
+    if (!inscripcion) {
+      return res.status(404).json({ message: 'Inscripción no encontrada' });
     }
 
-    // Buscar el alumno por su ID
-    const alumno = await em.findOne(Alumno, { id: alumnoId });
-    if (!alumno) {
-      return res.status(404).json({ message: 'Alumno no encontrado' });
-    }
-
-    // Buscar el curso por su ID
-    const curso = await em.findOne(Curso, { id: cursoId });
-    if (!curso) {
-      return res.status(404).json({ message: 'Curso no encontrado' });
-    }
-
-    // Buscar la inscripción existente
-    const inscripcionExistente = await em.findOne(Inscripcion, { alumno, curso });
-    if (!inscripcionExistente) {
-      return res.status(404).json({ message: 'La inscripción no existe' });
-    }
+    const { alumno, curso } = inscripcion;
 
     // Eliminar la inscripción
-    await em.removeAndFlush(inscripcionExistente);
+    await em.removeAndFlush(inscripcion);
 
-    // Aumentar los cupos del curso
-    curso.cantCupos += 1;
+    // Volver a aumentar la cantidad de cupos en el curso, si existe
+    if (curso) {
+      curso.cantCupos += 1;
+      await em.persistAndFlush(curso);
+    }
 
-    // Persistir el cambio en los cupos del curso
-    await em.persistAndFlush(curso);
-
-    res.status(200).json({ message: 'Inscripción eliminada y cupo aumentado', data: curso });
+    // Respuesta exitosa
+    res.status(200).json({ message: 'Inscripción eliminada exitosamente' });
   } catch (error: any) {
-    console.error('Error al borrar la inscripción:', error);
-    res.status(500).json({ message: 'Error al procesar la solicitud' });
+    // Manejo de errores
+    res.status(500).json({ message: error.message });
   }
 }
+
 async function getCursoDeInscripcion(req: Request, res: Response) {
   try {
     const inscripcionId = Number(req.params.id);  // Corregido
