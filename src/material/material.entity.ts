@@ -13,4 +13,5 @@ export class Material extends BaseEntity{
   
     @ManyToOne(()=> Curso, {nullable: true})
     curso?: Rel<Curso>
+
 }
