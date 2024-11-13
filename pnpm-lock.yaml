@@ -902,7 +902,6 @@ snapshots:
 
   '@mikro-orm/core@5.8.10(@mikro-orm/mysql@5.8.10)':
     dependencies:
-      '@mikro-orm/mysql': 5.8.10(@mikro-orm/core@5.8.10)(mysql@2.18.1)
       acorn-loose: 8.3.0
       acorn-walk: 8.2.0
       dotenv: 16.3.1
@@ -910,15 +909,18 @@ snapshots:
       globby: 11.1.0
       mikro-orm: 5.8.10
       reflect-metadata: 0.1.13
+    optionalDependencies:
+      '@mikro-orm/mysql': 5.8.10(@mikro-orm/core@5.8.10)(mysql@2.18.1)
 
-  '@mikro-orm/knex@5.8.10(@mikro-orm/core@5.8.10)(mysql2@3.6.2)(mysql@2.18.1)':
+  '@mikro-orm/knex@5.8.10(@mikro-orm/core@5.8.10(@mikro-orm/mysql@5.8.10))(mysql2@3.6.2)(mysql@2.18.1)':
     dependencies:
       '@mikro-orm/core': 5.8.10(@mikro-orm/mysql@5.8.10)
       fs-extra: 11.1.1
       knex: 2.5.1(mysql2@3.6.2)(mysql@2.18.1)
+      sqlstring: 2.3.3
+    optionalDependencies:
       mysql: 2.18.1
       mysql2: 3.6.2
-      sqlstring: 2.3.3
     transitivePeerDependencies:
       - pg-native
       - supports-color
@@ -927,7 +929,7 @@ snapshots:
   '@mikro-orm/mysql@5.8.10(@mikro-orm/core@5.8.10)(mysql@2.18.1)':
     dependencies:
       '@mikro-orm/core': 5.8.10(@mikro-orm/mysql@5.8.10)
-      '@mikro-orm/knex': 5.8.10(@mikro-orm/core@5.8.10)(mysql2@3.6.2)(mysql@2.18.1)
+      '@mikro-orm/knex': 5.8.10(@mikro-orm/core@5.8.10(@mikro-orm/mysql@5.8.10))(mysql2@3.6.2)(mysql@2.18.1)
       mysql2: 3.6.2
     transitivePeerDependencies:
       - better-sqlite3
@@ -1121,6 +1123,7 @@ snapshots:
   debug@4.3.4(supports-color@5.5.0):
     dependencies:
       ms: 2.1.2
+    optionalDependencies:
       supports-color: 5.5.0
 
   define-data-property@1.1.4:
@@ -1366,13 +1369,14 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql: 2.18.1
-      mysql2: 3.6.2
       pg-connection-string: 2.6.1
       rechoir: 0.8.0
       resolve-from: 5.0.0
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      mysql: 2.18.1
+      mysql2: 3.6.2
     transitivePeerDependencies:
       - supports-color
 
