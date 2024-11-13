@@ -189,7 +189,7 @@ async function remove (req: Request, res: Response) {
   }
 }
 
-async function getMaterialesCurso(req: Request, res: Response) {
+/*async function getMaterialesCurso(req: Request, res: Response) {
   const cursoId = parseInt(req.params.id, 10);
 
   try {
@@ -210,7 +210,7 @@ async function getMaterialesCurso(req: Request, res: Response) {
     console.error(error);
     return res.status(500).json({ message: 'Error al obtener los materiales del curso' });
   }
-}
+}*/
 
 
-export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso }
+export {sanitizeCursoInput, getAll, getOne, add, update, remove/*, getMaterialesCurso */}

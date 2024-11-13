@@ -10,14 +10,14 @@ Content-Type: application/json
 
 {
     "descripcion": "Este curso de javascript enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
-    "nombre": "Curso de javascript",
+    "nombre": "Curso de css",
     "cantCupos": 30,
     "duracion": "3 mes",
-    "fechaInicio":"2 de febrero de 2025",
-    "fechaFin": "2 de abril de 2025",
+    "fechaInicio":"2025-02-02",
+    "fechaFin": "2025-04-02",
     "horaInicio": "16:00",
     "horaFin": "18:00",
-    "dias": ["Martes"],
+    "dias": "Martes",
     "profesorId":1
     
 }
@@ -37,8 +37,8 @@ Content-Type: application/json
     "nombre": "Curso de HTML",
     "cantCupos": 52,
     "duracion": "2 mes",
-    "fechaInicio":"17 de febrero de 2025",
-    "fechaFin": "17 de abril de 2025",
+    "fechaInicio":"2025-02-17",
+    "fechaFin": "2025-04-17",
     "horaInicio": "16:00 hs",
     "horaFin": "18:00 hs",
     "dias": ["Martes"],

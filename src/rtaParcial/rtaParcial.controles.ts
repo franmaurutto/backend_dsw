@@ -69,7 +69,7 @@ async function findAll(req: Request, res: Response){
           return res.status(404).json({ message: 'Parcial no encontrado' });
         }
       }
-  
+      
       const rtaParcial = em.create(RtaParcial, {
         ...req.body.sanitizedInput,
         inscripcion: inscripcion || null,

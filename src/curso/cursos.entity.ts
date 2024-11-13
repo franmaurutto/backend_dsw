@@ -34,7 +34,7 @@ export class Curso extends BaseEntity{
     inscripciones?: Collection<Inscripcion>;
     @OneToOne(() => Parcial, { nullable: true })
     parcial?:Rel<Parcial>
-    @OneToMany(() => Material, (material) => material.profesor, { 
+    @OneToMany(() => Material, (material) => material.curso, { 
         cascade: [Cascade.ALL],nullable: true 
     })
 

@@ -10,9 +10,8 @@ Content-Type: application/json
 
 {
     "fechaInscripcion": "2025-03-27",
-    "cancelado": "No",
     "alumnoId":1,
-    "cursoId":1
+    "cursoId":8
 }
 
 ### ID
@@ -37,7 +36,9 @@ Content-Type: application/json
 
 ###
 @idToDelete = {{creoInscripcion.response.body.data.id}}
-DELETE http://localhost:3000/api/inscripciones/10
+DELETE http://localhost:3000/api/inscripciones/2
+
+
 
 ###
 PATCH http://localhost:3000/api/inscripciones/{{idToDelete}}

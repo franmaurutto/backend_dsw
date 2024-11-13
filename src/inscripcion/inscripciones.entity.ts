@@ -10,8 +10,6 @@ import { RtaTp } from '../rtaTp/rtaTp.entity.js'
 export class Inscripcion extends BaseEntity{
     @Property({ nullable: false})
     fechaInscripcion!:Date
-    @Property()
-    cancelado!:Boolean
     @ManyToOne(()=> Alumno,{nullable:false})
     alumno!:Rel<Alumno>
     @ManyToOne(()=> Curso,{nullable:true})//cambiar nullable
