@@ -11,6 +11,7 @@ import { inscripcionRouter } from './inscripcion/inscripciones.routes.js';
 import { rtaTpRouter } from './rtaTp/rtaTp.routes.js';
 import { parcialRouter } from './parcial/parcial.routes.js';
 import { rtaParcialRouter } from './rtaParcial/rtaParcial.routes.js';
+import { materialRouter} from './material/materiales.routes.js'
 
 
 import cors from 'cors'
@@ -39,6 +40,7 @@ app.use("/api/inscripciones", inscripcionRouter)
 app.use("/api/rtaTps", rtaTpRouter)
 app.use("/api/parciales", parcialRouter)
 app.use("/api/rtaParciales", rtaParcialRouter)
+app.use("/api/materiales", materialRouter)
 
 await syncSchema()
 app.listen (3000, ()=>{

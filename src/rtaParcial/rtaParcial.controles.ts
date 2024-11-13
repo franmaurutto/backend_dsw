@@ -35,7 +35,7 @@ function sanitizeRtaParcialInput(req: Request, res: Response, next: NextFunction
 async function findAll(req: Request, res: Response){
     try {
       const rtaParciales = await em.find(RtaParcial, {})
-      res.status(200).json({ message: 'Se encontraron todos las respuestas a los parciales', data: rtaParciales })
+      res.status(200).json({ message: 'Se encontraron todos las respuestas a los parciales1', data: rtaParciales })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }

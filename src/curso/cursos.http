@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "descripcion": "Este curso de javascript enseña a crear y mantener páginas web atractivas y de alta calidad, siguiendo los estándares actuales de la industria.",
-    "nombre": "Curso de css",
+    "nombre": "Curso de base de datos",
     "cantCupos": 30,
     "duracion": "3 mes",
     "fechaInicio":"2025-02-02",
