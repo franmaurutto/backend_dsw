@@ -98,7 +98,8 @@ async function findAll(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
       const profesor = em.getReference(Profesor, id)
-      em.assign(profesor, req.body)
+      const { cursos, ...otherFields } = req.body; 
+      em.assign(profesor, otherFields);
       await em.flush()
       res.status(200).json({ message: 'profesor actualizado' })
     } catch (error: any) {
