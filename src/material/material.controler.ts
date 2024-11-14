@@ -4,39 +4,42 @@ import { orm } from "../Shared/orm.js";
 import { Curso } from "../curso/cursos.entity.js";
 
 const em = orm.em
-function validateMaterial(material: Material) {
-    if (!material) {
+function validateMaterial(material: Partial<Material>) {
+  if (!material) {
       throw new Error("Los datos del material son requeridos");
-    }
-  
-    if (!material.titulo || material.titulo.trim() === "") {
-      throw new Error("El campo título es requerido");
-    }
-  
-    if (!material.descripcion || material.descripcion.trim() === "") {
-      throw new Error("El campo descripción es requerido");
-    }
-  
-    return true;
   }
-  
 
-function sanitizeMaterialInput(req: Request, res: Response, next: NextFunction){
-    
-    req.body.sanitizedInput = {
-        titulo: req.body.titulo,
-        descripcion: req.body.descripcion,
-        cursoId: req.body.cursoId,
-        
-    }
-    
-    Object.keys(req.body.sanitizedInput).forEach(key=>{
-        if (req.body.sanitizedInput[key]===undefined){
-        delete req.body.sanitizedInput[key]
-        }
-    })
-    validateMaterial(req.body.sanitizedInput);
-    next()
+  // Solo validar título y descripción si están presentes en la entrada
+  if (material.titulo !== undefined && material.titulo.trim() === "") {
+      throw new Error("El campo título es requerido");
+  }
+
+  if (material.descripcion !== undefined && material.descripcion.trim() === "") {
+      throw new Error("El campo descripción es requerido");
+  }
+
+  return true;
+}
+
+function sanitizeMaterialInput(req: Request, res: Response, next: NextFunction) {
+  req.body.sanitizedInput = {
+      titulo: req.body.titulo,
+      descripcion: req.body.descripcion,
+      cursoId: req.body.cursoId,
+  };
+
+  Object.keys(req.body.sanitizedInput).forEach((key) => {
+      if (req.body.sanitizedInput[key] === undefined) {
+          delete req.body.sanitizedInput[key];
+      }
+  });
+
+  // Validar solo si hay datos relevantes para crear o actualizar material
+  if (req.body.sanitizedInput.titulo || req.body.sanitizedInput.descripcion) {
+      validateMaterial(req.body.sanitizedInput);
+  }
+
+  next();
 } 
 
 async function findAll(req: Request, res: Response){
@@ -79,17 +82,34 @@ async function findAll(req: Request, res: Response){
     }
   }
   
-  async function update(req: Request, res: Response){
+  async function update(req: Request, res: Response) {
     try {
-      const id = Number.parseInt(req.params.id)
-      const material = em.getReference(Material, id)
-      em.assign(material, req.body)
-      await em.flush()
-      res.status(200).json({ message: 'Material actualizado' })
+        const id = Number.parseInt(req.params.id);
+        const material = await em.findOneOrFail(Material, { id });
+
+        // Asignar valores solo si están presentes en la solicitud
+        if (req.body.titulo !== undefined) material.titulo = req.body.titulo;
+        if (req.body.descripcion !== undefined) material.descripcion = req.body.descripcion;
+
+        // Manejar el curso: asignar o desvincular
+        if (req.body.curso === undefined) {
+            material.curso = undefined;
+        } else {
+            const curso = await em.findOne(Curso, { id: req.body.curso });
+            if (curso) {
+                material.curso = curso;
+            }
+        }
+
+        await em.persistAndFlush(material);
+        res.status(200).json({ message: "Material actualizado", data: material });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
-  }
+}
+
+  
+  
   async function remove(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
@@ -100,4 +120,51 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
-export {sanitizeMaterialInput, findAll, findOne, add, update, remove}
+  async function findMatSinCurso(req: Request, res: Response) {
+    try {
+      const materiales = await em.find(Material, { curso: null }); // Buscamos materiales cuyo campo 'curso' es null
+  
+      res.status(200).json({ message: 'Se encontraron todos los materiales sin curso asignado', data: materiales });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  async function addMaterialToCurso(req: Request, res: Response) {
+    try {
+      
+      const materialId = parseInt(req.params.materialId, 10);
+      const cursoId = parseInt(req.params.cursoId, 10);
+      
+
+      console.log('Material ID backend llega:', materialId); // Log para verificar el tipo y valor
+      console.log('Curso ID:', cursoId); // Log para verificar el tipo y valor
+
+      if (isNaN(materialId) || isNaN(cursoId)) {
+        console.log('Material ID backend llega:', materialId);
+        return res.status(400).json({ message: 'Material ID o Curso ID no válidos' });
+      }
+  
+      // Buscar material
+      const material = await em.findOneOrFail(Material, { id: materialId });
+      if (!material) {
+        return res.status(404).json({ message: "Material no encontrado" });
+      }
+  
+      // Buscar curso
+      const curso = await em.findOneOrFail(Curso, { id: cursoId });
+      if (!curso) {
+        return res.status(404).json({ message: "Curso no encontrado" });
+      }
+  
+      // Asignar el curso al material
+      material.curso = curso;
+      await em.persistAndFlush(material);
+  
+      res.status(200).json({ message: "Material agregado al curso correctamente", data: material });
+    } catch (error: any) {
+      console.error('Error en el servidor:', error);
+      res.status(500).json({ message: error.message });
+    }
+}
+
+export {sanitizeMaterialInput, findAll, findOne, add, update, remove, findMatSinCurso, addMaterialToCurso}

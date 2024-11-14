@@ -119,41 +119,6 @@ async function findByEmail(req: Request, res: Response) {
   }
 }
 
-
-/*async function getCursosAlumno(req: Request, res: Response) {
-  try {
-    const id = parseInt(req.params.id, 10);
-
-    if (isNaN(id)) {
-      return res.status(400).json({ message: 'El ID del alumno es inválido' });
-    }
-
-    const inscripciones = await em.find(Inscripcion, { alumno: id }, { populate: ['curso'] });
-
-    if (inscripciones.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron inscripciones para este alumno' });
-    }
-
-    const cursos = inscripciones.map(inscripcion => ({
-      cursoId: inscripcion.curso?.id,
-      nombre: inscripcion.curso?.nombre,
-      descripcion: inscripcion.curso?.descripcion,
-      fechaInicio: inscripcion.curso?.fechaInicio,
-      fechaFin: inscripcion.curso?.fechaFin,
-      cantCupos: inscripcion.curso?.cantCupos,
-      duracion: inscripcion.curso?.duracion,
-      horaFin: inscripcion.curso?.horaFin,
-      horaInicio: inscripcion.curso?.horaInicio,
-      dias: inscripcion.curso?.dias,
-    }));
-
-    console.log("Cursos enviados al frontend:", cursos); // Verifica lo que se envía
-    res.status(200).json({ message: 'Cursos del alumno encontrados', data: cursos });
-  } catch (error) {
-    console.error('Error al obtener cursos del alumno:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
-  }
-}*/
 async function getInscripcionesAlumno(req: Request, res: Response) {
   try {
     const id = parseInt(req.params.id, 10);

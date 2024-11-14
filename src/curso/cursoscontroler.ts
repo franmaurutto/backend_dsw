@@ -189,28 +189,18 @@ async function remove (req: Request, res: Response) {
   }
 }
 
-/*async function getMaterialesCurso(req: Request, res: Response) {
-  const cursoId = parseInt(req.params.id, 10);
-
+async function getMaterialesCurso(req: Request, res: Response) {
   try {
-    if (isNaN(cursoId)) {
-      return res.status(400).json({ message: 'ID de curso inválido' });
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'ID del curso inválido' });
     }
 
-    const curso = await em.findOne(Curso, cursoId, { populate: ['materiales'] });
-  
-    if (!curso) {
-      return res.status(404).json({ message: 'Curso no encontrado' });
-    }
-
-    const materiales = curso.materiales.getItems(); 
-    return res.status(200).json({ message: 'Materiales del curso encontrados', data: materiales });
-
-  } catch (error: any) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error al obtener los materiales del curso' });
+    const materiales = await em.find(Material, { curso: id });
+    res.status(200).json({ message: 'Materiales encontrados', data: materiales });
+  } catch (error) {
+    console.error('Error al obtener materiales del curso:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
-}*/
-
-
-export {sanitizeCursoInput, getAll, getOne, add, update, remove/*, getMaterialesCurso */}
+}
+export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso }

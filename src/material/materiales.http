@@ -8,9 +8,9 @@ POST http://localhost:3000/api/materiales
 Content-Type: application/json
 
 {
-    "descripcion": "Libro para aprender aplicaciones de python ",
+    "descripcion": "AAAAAAAAAAAAAAAAAAAAAAAAA ",
     "titulo": "Python. Aplicaciones prácticas",
-    "cursoId":10
+    "cursoId":6
 }
 
 ### id
