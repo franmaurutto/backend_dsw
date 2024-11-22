@@ -9,13 +9,9 @@ export class Certificado extends BaseEntity{
     descripcion!: string
   
     @Property({ nullable: false })
-   fechaEmision!: string
-   
+    fechaEmision!: string
   
     @OneToOne(() => Inscripcion, inscripcion => inscripcion.certificado, { cascade: [Cascade.ALL] })
     inscripcion?: Rel<Inscripcion>;
-
-    // en inscripcion va  @JoinColumn() o lo ponemos en certificado???
-    ////@JoinColumn({ name: 'nnn_id' })
 
 }

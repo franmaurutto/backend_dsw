@@ -3,7 +3,7 @@ import { sanitizeMaterialInput, findAll, findOne, add, update, remove, findMatSi
 
 export const materialRouter = Router();
 
-materialRouter.get('/sin-curso', findMatSinCurso); // Coloca esta línea primero
+materialRouter.get('/sin-curso', findMatSinCurso); 
 materialRouter.get('/', findAll);
 materialRouter.get('/:id', findOne);
 materialRouter.post('/', sanitizeMaterialInput, add);

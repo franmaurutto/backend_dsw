@@ -63,7 +63,6 @@ async function findOne(req: Request, res: Response){
     }}
 
 async function add(req: Request, res: Response) {
-console.log(`parcial add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
   try {
     const curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
 
@@ -76,7 +75,7 @@ console.log(`parcial add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
       curso,  
       habilitado: false          
     });
-    await em.persistAndFlush(parcial); // Primero guarda el parcial
+    await em.persistAndFlush(parcial);
 
     curso.parcial = parcial;
     await em.persistAndFlush(curso); 

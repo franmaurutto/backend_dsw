@@ -2,8 +2,7 @@
 GET http://localhost:3000/api/cursos
 
 
-
-###FALTA AGREGAR LAS CLAVES FORANEAS DE CREOCURSOS
+###
 POST http://localhost:3000/api/cursos
 # @name creoCurso
 Content-Type: application/json 
@@ -22,7 +21,7 @@ Content-Type: application/json
     
 }
 
-### ID
+### 
 @id = {{creoCurso.response.body.data.id}}
 
 ###

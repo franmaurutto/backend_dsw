@@ -12,7 +12,7 @@ export class Inscripcion extends BaseEntity{
     fechaInscripcion!:Date
     @ManyToOne(()=> Alumno,{nullable:false})
     alumno!:Rel<Alumno>
-    @ManyToOne(()=> Curso,{nullable:true})//cambiar nullable
+    @ManyToOne(()=> Curso,{nullable:true})
     curso?: Rel<Curso>
     
     @OneToOne(() => Certificado, {  owner: true, nullable:true })

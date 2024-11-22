@@ -19,9 +19,6 @@ function validateCurso(curso: Curso): boolean {
       throw new Error("El campo nombre es requerido");
   }
 
-  console.log("horaInicio:", curso.horaInicio);
-  console.log("horaFin:", curso.horaFin);
-
  if (!(curso.fechaInicio instanceof Date) || isNaN(curso.fechaInicio.getTime())) {
     throw new Error("La fecha de inicio es requerida y debe ser una fecha válida");
   }
@@ -39,9 +36,6 @@ function validateCurso(curso: Curso): boolean {
   }
 
 
-
-
-
  if (curso.dias) {
     validarDia(curso.dias);  
   }
@@ -49,8 +43,6 @@ function validateCurso(curso: Curso): boolean {
 
   return true;
 }
-
-
 
 function validarDia(dia: string): void {
   const diaLower=dia.toLocaleLowerCase()
@@ -111,7 +103,7 @@ function sanitizeCursoInput(
 
 async function getAll (req: Request,res: Response){
   try {
-    const cursos = await em.find(Curso, {}, {populate: ['profesor']}) //falta agregar ,'parcial', 'tp'
+    const cursos = await em.find(Curso, {}, {populate: ['profesor']})
     res
       .status(200)
       .json({ message: 'Se han encontrado los cursos', data: cursos })
@@ -123,7 +115,7 @@ async function getAll (req: Request,res: Response){
 async function getOne (req: Request,res: Response){
   try {
     const id = Number.parseInt(req.params.id)
-    const curso = await em.findOneOrFail(Curso, { id },  {populate: ['profesor']}) //falta agregar , 'alumnos', 'parcial', 'tp')
+    const curso = await em.findOneOrFail(Curso, { id },  {populate: ['profesor']})
     res
       .status(200)
       .json({ message: 'Se ha encontrado el curso', data: curso })
@@ -134,7 +126,6 @@ async function getOne (req: Request,res: Response){
 
 
 async function add(req: Request, res: Response) {
-  console.log(`curso add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
   try {
     const profesor = await em.findOne(Profesor, { id: req.body.sanitizedInput.profesorId });
     if (!profesor) {
@@ -168,7 +159,7 @@ async function update(req:Request, res:Response) {
   try {
     const id = Number.parseInt(req.params.id)
     const curso= em.getReference(Curso, id)
-    em.assign(curso, req.body)// va req.body.sanitizedInput?
+    em.assign(curso, req.body)
     await em.flush()
     res.status(200).json({ message: 'Se ha actualizado el curso' })
   } catch (error: any) {

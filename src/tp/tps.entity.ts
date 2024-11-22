@@ -11,9 +11,7 @@ export class Tp extends BaseEntity{
   @Property({nullable: false})
   consigna!: string
 
-
-
- @ManyToOne(()=> Curso,{nullable:true})
+  @ManyToOne(()=> Curso,{nullable:true})
   curso?: Rel<Curso>
   
 }

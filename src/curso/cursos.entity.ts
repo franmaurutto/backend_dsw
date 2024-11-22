@@ -37,8 +37,8 @@ export class Curso extends BaseEntity{
     @OneToMany(() => Material, (material) => material.curso, { 
     cascade: [Cascade.ALL]})
     materiales?: Collection<Material>; 
-   @OneToMany(()=> Tp,(tp)=> tp.curso,{
+    @OneToMany(()=> Tp,(tp)=> tp.curso,{
     cascade:[Cascade.ALL]})
-   tps?: Collection<Tp>;
+    tps?: Collection<Tp>;
    
-} //ver tema fecha
+} 

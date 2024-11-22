@@ -100,7 +100,6 @@ async function remove(req: Request, res: Response){
 
 async function findByEmail(req: Request, res: Response) {
   try {
-    console.log('Cuerpo recibido:', req.body); // Para verificar qué llega realmente
 
     const { mail, contrasenia } = req.body;
 
@@ -108,7 +107,6 @@ async function findByEmail(req: Request, res: Response) {
       return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
     }
     const alumno = await em.findOne(Alumno, { mail });
-    console.log(alumno)
     if (!alumno|| alumno.contrasenia !== contrasenia) {
       return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
     }

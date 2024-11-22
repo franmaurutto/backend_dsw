@@ -15,8 +15,6 @@ function validateRtaTp(rtaTp: RtaTp): boolean {
   }
 
 function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
-
-    console.log("req.body antes de sanitizar:", req.body);
     
     req.body.sanitizedInput = {
         rtaConsignaTP: req.body.rtaConsignaTP,
@@ -29,8 +27,6 @@ function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
         delete req.body.sanitizedInput[key]
         }
     })
-
-    console.log("req.body después de sanitizar:", req.body.sanitizedInput);
 
     validateRtaTp(req.body.sanitizedInput)
 
@@ -57,7 +53,6 @@ async function findAll(req: Request, res: Response){
   }
 
   async function add(req: Request, res: Response){
-    console.log(`rtaTp add req.body: ${JSON.stringify(req.body.sanitizedInput)}`)
     try {
       const inscripcion = await em.findOne(Inscripcion, {id: req.body.sanitizedInput.inscripcionId})
       if (!inscripcion) {
@@ -77,8 +72,6 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
-
-  
 
   async function update(req: Request, res: Response){
     try {
