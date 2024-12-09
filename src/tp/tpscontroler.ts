@@ -27,11 +27,9 @@ async function getOne(req:Request,res:Response){
 }
 
 async function add(req: Request, res: Response) {
-  console.log(`tp add req.body: ${JSON.stringify(req.body)}`);
   
   try {
     const sanitizedInput = req.body.sanitizedInput;
-    console.log(`Sanitized Input: ${JSON.stringify(sanitizedInput)}`);
 
     const curso = await em.findOne(Curso, { id: sanitizedInput.cursoId });
     if (!curso) {
@@ -88,12 +86,10 @@ function sanitizeTpInput(req: Request, res: Response, next: NextFunction) {
     }
   });
 
-  // Verificación adicional para asegurar que 'cursoId' existe
   if (!req.body.sanitizedInput.cursoId) {
     return res.status(400).json({ message: "El campo cursoId es obligatorio." });
   }
 
-  // Validación de los datos sanitizados
   try {
     validateTp(req.body.sanitizedInput);
   } catch (error: any) {

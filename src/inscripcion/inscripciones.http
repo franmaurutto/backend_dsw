@@ -3,7 +3,7 @@ GET http://localhost:3000/api/inscripciones
 
 
 
-###FALTA AGREGAR LAS CLAVES FORANEAS DE CREOINSCRIPCION
+###
 POST http://localhost:3000/api/inscripciones
 # @name creoInscripcion
 Content-Type: application/json 
@@ -14,7 +14,7 @@ Content-Type: application/json
     "cursoId":4
 }
 
-### ID
+### 
 @id = {{creoInscripcion.response.body.data.id}}
 
 ###

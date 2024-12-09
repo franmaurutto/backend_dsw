@@ -16,7 +16,7 @@ Content-Type: application/json
     "cursoId":1
 }
 
-### id
+### 
 @id = {{creoProfe.response.body.data.id}}
 
 ### 
@@ -49,7 +49,7 @@ Content-Type: application/json
 @idToDelete = {{creoProfeToDelete.response.body.data.id}}
 DELETE http://localhost:3000/api/profesores/{{idToDelete}}
 
-### modificar un character (PATCH - parcial)
+### 
 PATCH http://localhost:3000/api/profesores/{{id}}
 Content-Type: application/json
 

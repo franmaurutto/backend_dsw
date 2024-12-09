@@ -54,6 +54,7 @@ async function findAll(req: Request, res: Response){
     }
     
   }
+
   async function findOne(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
@@ -63,17 +64,8 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
- /* async function add(req: Request, res: Response){
-    try {
-      const profesor = em.create(Profesor, req.body)
-      await em.flush()
-      res.status(201).json({ message: 'profesor creado', data: profesor })
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
-  }*/
+
   async function add(req: Request, res: Response) {
-    console.log(`profesor add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
     try {
        let curso = null;
       if (req.body.sanitizedInput.cursoId) {
@@ -98,7 +90,8 @@ async function findAll(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)
       const profesor = em.getReference(Profesor, id)
-      em.assign(profesor, req.body)
+      const { cursos, ...otherFields } = req.body; 
+      em.assign(profesor, otherFields);
       await em.flush()
       res.status(200).json({ message: 'profesor actualizado' })
     } catch (error: any) {
@@ -118,7 +111,6 @@ async function findAll(req: Request, res: Response){
 
   async function findByEmail(req: Request, res: Response) {
     try {
-      console.log('Cuerpo recibido:', req.body); // Para verificar qué llega realmente
 
       const { mail, contrasenia } = req.body;
 
@@ -126,7 +118,7 @@ async function findAll(req: Request, res: Response){
         return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
       }
       const profesor = await em.findOne(Profesor, { mail },{ populate: ['cursos'] });
-      console.log(profesor)
+      
       if (!profesor|| profesor.contrasenia !== contrasenia) {
         return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
       }

@@ -1,8 +1,8 @@
-### GET ALL
+### 
 GET http://localhost:3000/api/tps
 
 
-### POST 
+###  
 POST http://localhost:3000/api/tps
 # @name createTp
 Content-Type: application/json 
@@ -14,10 +14,10 @@ Content-Type: application/json
     
 }
 
-### ID
+### 
 @id={{createTp.response.body.data.id}}
 
-### GET ONE
+### 
 GET http://localhost:3000/api/tps/{{id}}
 
 ###
@@ -32,7 +32,7 @@ Content-Type: application/json
 
 }
 
-### POST 2
+### 
 
 POST http://localhost:3000/api/tps
 # @name createItemToDelete
@@ -44,14 +44,14 @@ Content-Type: application/json
     "curso":null
 }
 
-### id2
+### 
 @idToDelete ={{createItemToDelete.response.body.data.id}}
 
-### DELETE
+### 
 DELETE http://localhost:3000/api/tps/{{idToDelete}}
 
 ###
-PATCH http://localhost:3000/api/tps/{{idToDelete}}
+PATCH http://localhost:3000/api/tps/{{{{idToDelete}}}}
 Content-Type: application/json 
 
 {

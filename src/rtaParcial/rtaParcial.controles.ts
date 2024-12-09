@@ -15,19 +15,16 @@ function validateRtaParcial(rtaparcial: RtaParcial): boolean {
   }
 
 function sanitizeRtaParcialInput(req: Request, res: Response, next: NextFunction){
-  console.log('Contenido original de req.body:', req.body);
     req.body.sanitizedInput = {
         rtaConsignaParcial: req.body.rtaConsignaParcial,
         inscripcionId: req.body.inscripcionId,
         parcialId: req.body.parcialId
     }
-    console.log('Datos en sanitizedInput antes de eliminar propiedades undefined:', req.body.sanitizedInput);
     Object.keys(req.body.sanitizedInput).forEach(key=>{
         if (req.body.sanitizedInput[key]===undefined){
         delete req.body.sanitizedInput[key]
         }
     })
-    console.log('Datos en sanitizedInput después de eliminar propiedades undefined:', req.body.sanitizedInput);
     validateRtaParcial(req.body.sanitizedInput)
     next()
 }
@@ -52,7 +49,6 @@ async function findAll(req: Request, res: Response){
   }
   
   async function add(req: Request, res: Response) {
-    console.log(`rtaparcial add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
     try {
       let inscripcion = null;
       if (req.body.sanitizedInput.inscripcionId) {
@@ -81,15 +77,6 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message });
     }
   }
-  
-
-
-      /*if (req.body.sanitizedInput.cursoId) {*/
-      //curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
-       
-
-
-
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

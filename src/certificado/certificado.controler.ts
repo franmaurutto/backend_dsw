@@ -33,7 +33,7 @@ function sanitizeCertificadoInput(req: Request, res: Response, next: NextFunctio
     })
     validateCertificado(req.body.sanitizedInput);
     next()
-} //funcion q actua como un middleware, hay q hacer mas validaciones
+}
 
 async function findAll(req: Request, res: Response){
     try {

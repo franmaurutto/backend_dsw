@@ -1,8 +1,8 @@
-### obtener todos los characters
+### 
 GET http://localhost:3000/api/rtaParciales
 
 
-### crear nuevo character
+### 
 # @name creoRtaParcial
 POST http://localhost:3000/api/rtaParciales
 Content-Type: application/json
@@ -13,13 +13,13 @@ Content-Type: application/json
     "parcialId":1
 }
 
-### id
+### 
 @id = {{creoRtaParcial.response.body.data.id}}
 
-### obtener un character
+### 
 GET http://localhost:3000/api/rtaParciales/{{id}}
 
-### modificar un character (PUT - recurso completo e idempotente)
+### 
 PUT http://localhost:3000/api/rtaParciales/{{id}}
 Content-Type: application/json
 
@@ -27,7 +27,7 @@ Content-Type: application/json
     "rtaConsignaParcial": "Crea un programa en Python para gestionar una lista de tareas. El usuario podrá agregar tareas ....."
 }
 
-### p borrar
+### 
 # @name creoRtaParcialToDelete
 POST http://localhost:3000/api/rtaParciales
 Content-Type: application/json
@@ -36,6 +36,6 @@ Content-Type: application/json
     "rtaConsignaParcial": "Consigna 2"
 }
 
-### borrar un character
+### 
 @idToDelete = {{creoRtaParcialToDelete.response.body.data.id}}
 DELETE http://localhost:3000/api/rtaParciales/{{idToDelete}}

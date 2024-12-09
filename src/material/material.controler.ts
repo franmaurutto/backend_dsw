@@ -9,7 +9,6 @@ function validateMaterial(material: Partial<Material>) {
       throw new Error("Los datos del material son requeridos");
   }
 
-  // Solo validar título y descripción si están presentes en la entrada
   if (material.titulo !== undefined && material.titulo.trim() === "") {
       throw new Error("El campo título es requerido");
   }
@@ -34,7 +33,6 @@ function sanitizeMaterialInput(req: Request, res: Response, next: NextFunction) 
       }
   });
 
-  // Validar solo si hay datos relevantes para crear o actualizar material
   if (req.body.sanitizedInput.titulo || req.body.sanitizedInput.descripcion) {
       validateMaterial(req.body.sanitizedInput);
   }
@@ -61,7 +59,6 @@ async function findAll(req: Request, res: Response){
     }
   }
   async function add(req: Request, res: Response) {
-    console.log(`material add req.body: ${JSON.stringify(req.body.sanitizedInput)}`);
     try {
        let curso = null;
       if (req.body.sanitizedInput.cursoId) {
@@ -87,11 +84,9 @@ async function findAll(req: Request, res: Response){
         const id = Number.parseInt(req.params.id);
         const material = await em.findOneOrFail(Material, { id });
 
-        // Asignar valores solo si están presentes en la solicitud
         if (req.body.titulo !== undefined) material.titulo = req.body.titulo;
         if (req.body.descripcion !== undefined) material.descripcion = req.body.descripcion;
 
-        // Manejar el curso: asignar o desvincular
         if (req.body.curso === undefined) {
             material.curso = undefined;
         } else {
@@ -122,7 +117,7 @@ async function findAll(req: Request, res: Response){
   }
   async function findMatSinCurso(req: Request, res: Response) {
     try {
-      const materiales = await em.find(Material, { curso: null }); // Buscamos materiales cuyo campo 'curso' es null
+      const materiales = await em.find(Material, { curso: null }); 
   
       res.status(200).json({ message: 'Se encontraron todos los materiales sin curso asignado', data: materiales });
     } catch (error: any) {
@@ -134,29 +129,21 @@ async function findAll(req: Request, res: Response){
       
       const materialId = parseInt(req.params.materialId, 10);
       const cursoId = parseInt(req.params.cursoId, 10);
-      
-
-      console.log('Material ID backend llega:', materialId); // Log para verificar el tipo y valor
-      console.log('Curso ID:', cursoId); // Log para verificar el tipo y valor
 
       if (isNaN(materialId) || isNaN(cursoId)) {
-        console.log('Material ID backend llega:', materialId);
         return res.status(400).json({ message: 'Material ID o Curso ID no válidos' });
       }
-  
-      // Buscar material
+
       const material = await em.findOneOrFail(Material, { id: materialId });
       if (!material) {
         return res.status(404).json({ message: "Material no encontrado" });
       }
-  
-      // Buscar curso
+
       const curso = await em.findOneOrFail(Curso, { id: cursoId });
       if (!curso) {
         return res.status(404).json({ message: "Curso no encontrado" });
       }
-  
-      // Asignar el curso al material
+
       material.curso = curso;
       await em.persistAndFlush(material);
   

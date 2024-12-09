@@ -1,8 +1,8 @@
-### obtener todos los characters
+### 
 GET http://localhost:3000/api/rtaTps
 
 
-### crear nuevo character
+### 
 # @name creoRtaTp
 POST http://localhost:3000/api/rtaTps
 Content-Type: application/json
@@ -13,13 +13,13 @@ Content-Type: application/json
     "tpId":4
 }
 
-### id
+### 
 @id = {{creoRtaTp.response.body.data.id}}
 
-### obtener un character
+### 
 GET http://localhost:3000/api/rtaTps/{{id}}
 
-### modificar un character (PUT - recurso completo e idempotente)
+### 
 PUT http://localhost:3000/api/rtaTps/{{id}}
 Content-Type: application/json
 
@@ -27,7 +27,7 @@ Content-Type: application/json
     "rtaConsignaTP": "Python es un lenguaje de programación de alto nivel conocido por su sintaxis simple y legible. Facilita el desarrollo rápido y es utilizado en diversos campos como análisis de datos, inteligencia artificial, desarrollo web y automatización."
 }
 
-### p borrar
+### 
 # @name creoRtaTpToDelete
 POST http://localhost:3000/api/rtaTps
 Content-Type: application/json
@@ -36,6 +36,6 @@ Content-Type: application/json
     "rtaConsignaTP": "Python es ..."
 }
 
-### borrar un character
+### 
 @idToDelete = {{creoRtaTpToDelete.response.body.data.id}}
 DELETE http://localhost:3000/api/rtaTps/{{idToDelete}}
