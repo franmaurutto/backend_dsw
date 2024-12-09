@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express"
+/*import { Request, Response, NextFunction } from "express"
 import { Profesor } from "./profesores.entity.js"
 import { orm } from "../Shared/orm.js";
 import { Curso } from "../curso/cursos.entity.js";
@@ -153,3 +153,4 @@ async function findAll(req: Request, res: Response){
   }
 
 export {sanitizeProfesorInput, findAll, findOne, add, update, remove,findByEmail,getCursosProfesor}
+*/

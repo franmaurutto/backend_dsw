@@ -1,10 +1,10 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { Inscripcion } from './inscripciones.entity.js';
 import { orm } from "../Shared/orm.js";
-import { Alumno } from '../alumno/alumnos.entity.js';
+//import { Alumno } from '../alumno/alumnos.entity.js';
 import { Curso } from '../curso/cursos.entity.js';
 import { Certificado } from '../certificado/certificado.entity.js';
-
+import { Usuario } from '../usuario/usuario.entity.js';
 const em = orm.em
 
 
@@ -12,7 +12,7 @@ function sanitizeInscripcionInput(req: Request, res: Response, next: NextFunctio
 
   req.body.sanitizedInput = {
     fechaInscripcion: req.body.fechaInscripcion ? new Date(req.body.fechaInscripcion) : new Date(), 
-    alumnoId: req.body.alumnoId,
+    usuarioId: req.body.usuarioId,
     cursoId: req.body.cursoId,
     certificadoId: req.body.certificadoId,
     rtaparcialId: req.body.rtaparcialId,
@@ -55,15 +55,15 @@ async function getOne (req: Request,res: Response){
 
 async function add(req: Request, res: Response) {
   try {
-    const alumno = await em.findOne(Alumno, { id: req.body.sanitizedInput.alumnoId });
-    if (!alumno) {
+    const usuario = await em.findOne(Usuario, { id: req.body.sanitizedInput.usuarioId });
+    if (!usuario) {
       return res.status(404).json({ message: 'Alumno no encontrado' });
     }
     const curso = await em.findOne(Curso, { id: req.body.sanitizedInput.cursoId });
     if (!curso) {
       return res.status(404).json({ message: 'Curso no encontrado' });
     }
-    const inscripcionExistente = await em.findOne(Inscripcion, { alumno, curso});
+    const inscripcionExistente = await em.findOne(Inscripcion, { usuario, curso});
     if (inscripcionExistente) {
       return res.status(400).json({ message: 'El alumno ya está inscrito en este curso' });
     }
@@ -72,7 +72,7 @@ async function add(req: Request, res: Response) {
     }
     const inscripcion = em.create(Inscripcion, {
       ...req.body.sanitizedInput,
-      alumno,
+      usuario,
       curso
     });
     curso.cantCupos -= 1;
@@ -108,13 +108,13 @@ async function remove(req: Request, res: Response) {
     const ide = Number.parseInt(req.params.id)
     const inscrip = em.getReference(Inscripcion, ide)
 
-    const inscripcion = await em.findOne(Inscripcion, { id: ide }, { populate: ['alumno', 'curso'] });
+    const inscripcion = await em.findOne(Inscripcion, { id: ide }, { populate: ['usuario', 'curso'] });
 
     if (!inscripcion) {
       return res.status(404).json({ message: 'Inscripción no encontrada' });
     }
 
-    const { alumno, curso } = inscripcion;
+    const { usuario, curso } = inscripcion;
 
     await em.removeAndFlush(inscripcion);
 

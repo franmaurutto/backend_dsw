@@ -1,13 +1,14 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { Curso } from './cursos.entity.js';
 import { orm } from "../Shared/orm.js";
-import { Profesor } from '../profesor/profesores.entity.js';
+//import { Profesor } from '../profesor/profesores.entity.js';
 import { Parcial } from '../parcial/parcial.entity.js';
-import { Alumno } from '../alumno/alumnos.entity.js';
+//import { Alumno } from '../alumno/alumnos.entity.js';
 import { Tp } from '../tp/tps.entity.js';
 import { Material } from '../material/material.entity.js';
 import { differenceInDays } from 'date-fns';
 import { parse } from 'path';
+import {Usuario} from '../usuario/usuario.entity.js';
 const em = orm.em
 
 function validateCurso(curso: Curso): boolean {
@@ -103,7 +104,7 @@ function sanitizeCursoInput(
 
 async function getAll (req: Request,res: Response){
   try {
-    const cursos = await em.find(Curso, {}, {populate: ['profesor']})
+    const cursos = await em.find(Curso, {}, {populate: ['usuario']})
     res
       .status(200)
       .json({ message: 'Se han encontrado los cursos', data: cursos })
@@ -115,7 +116,7 @@ async function getAll (req: Request,res: Response){
 async function getOne (req: Request,res: Response){
   try {
     const id = Number.parseInt(req.params.id)
-    const curso = await em.findOneOrFail(Curso, { id },  {populate: ['profesor']})
+    const curso = await em.findOneOrFail(Curso, { id },  {populate: ['usuario']})
     res
       .status(200)
       .json({ message: 'Se ha encontrado el curso', data: curso })
@@ -127,8 +128,8 @@ async function getOne (req: Request,res: Response){
 
 async function add(req: Request, res: Response) {
   try {
-    const profesor = await em.findOne(Profesor, { id: req.body.sanitizedInput.profesorId });
-    if (!profesor) {
+    const usuario = await em.findOne(Usuario, { id: req.body.sanitizedInput.profesorId });
+    if (!usuario) {
       return res.status(404).json({ message: 'Profesor no encontrado' });
     }
     const parcial = await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId })
@@ -143,7 +144,7 @@ async function add(req: Request, res: Response) {
 
     const curso = em.create(Curso, {
       ...req.body.sanitizedInput,
-      profesor,
+      usuario,
       parcial:parcial || null,
       tp:tp || null,                
     });

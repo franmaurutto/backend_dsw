@@ -17,9 +17,9 @@ export class Profesor extends BaseEntity{
     @Property({ nullable: false })
     contrasenia!: string
 
-    @OneToMany(() => Curso, (curso) => curso.profesor, { 
+    /*@OneToMany(() => Curso, (curso) => curso.profesor, { 
         cascade: [Cascade.ALL],nullable: true 
     })
-    cursos = new Collection<Curso>(this)
+    cursos = new Collection<Curso>(this)*/
 }
 

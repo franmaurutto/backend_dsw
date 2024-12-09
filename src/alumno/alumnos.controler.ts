@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from 'express'; 
+/*import {Request, Response, NextFunction} from 'express'; 
 import { Alumno } from './alumnos.entity.js';
 import { orm } from '../Shared/orm.js';
 import { Inscripcion } from '../inscripcion/inscripciones.entity.js';
@@ -134,3 +134,4 @@ async function getInscripcionesAlumno(req: Request, res: Response) {
 
 
 export {findAll, findOne, add, update, remove, sanitizeAlumnoInput, findByEmail, getInscripcionesAlumno}
+*/

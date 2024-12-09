@@ -1,4 +1,4 @@
-import { Router} from "express";
+/*import { Router} from "express";
 import { sanitizeProfesorInput, findAll, findOne,add, update, remove,findByEmail, getCursosProfesor} from "./profesor.controler.js";
 
 export const profesorRouter = Router()
@@ -12,4 +12,4 @@ profesorRouter.delete('/:id',remove)
 profesorRouter.post('/login',findByEmail)
 profesorRouter.get('/:id/cursos',getCursosProfesor)
 
-
+*/
