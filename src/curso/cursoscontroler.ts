@@ -9,7 +9,53 @@ import { Material } from '../material/material.entity.js';
 import { differenceInDays } from 'date-fns';
 import { parse } from 'path';
 import {Usuario} from '../usuario/usuario.entity.js';
+import jwt from 'jsonwebtoken';
 const em = orm.em
+
+const SECRET_KEY = 'mi_clave_secreta_para_cursos';
+
+/**
+ * Genera un token JWT para un curso.
+ * @param curso Datos del curso.
+ * @returns Token JWT.
+ */
+function generateCourseToken(curso: any): string {
+  const { 
+    nombre, 
+    descripcion, 
+    cantCupos, 
+    duracion, 
+    fechaInicio, 
+    fechaFin, 
+    horaInicio, 
+    horaFin, 
+    dias, 
+    profesorId, 
+    parcialId, 
+    tpId, 
+    materialId 
+  } = curso;
+
+  return jwt.sign(
+    { 
+      nombre, 
+      descripcion, 
+      cantCupos, 
+      duracion, 
+      fechaInicio, 
+      fechaFin, 
+      horaInicio, 
+      horaFin, 
+      dias, 
+      profesorId, 
+      parcialId, 
+      tpId, 
+      materialId 
+    },  // Todos los datos del curso
+    SECRET_KEY,    // Clave secreta
+    { expiresIn: '1h' }  // El token expirará en 1 hora
+  );
+}
 
 function validateCurso(curso: Curso): boolean {
   if (!curso) {
@@ -195,4 +241,4 @@ async function getMaterialesCurso(req: Request, res: Response) {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 }
-export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso }
+export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,generateCourseToken }

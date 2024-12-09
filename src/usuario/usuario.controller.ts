@@ -1,9 +1,12 @@
-import { Request, Response, NextFunction } from "express"
-import { Usuario } from "./usuario.entity.js"
+import { Request, Response, NextFunction } from "express";
+import { Usuario } from "./usuario.entity.js";
 import { orm } from "../Shared/orm.js";
 import { Inscripcion } from '../inscripcion/inscripciones.entity.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-const em = orm.em
+const em = orm.em;
+
 function validateUsuario(usuario: Usuario): boolean {
     if (!usuario) {
         throw new Error("Los datos de usuario son requeridos");
@@ -28,15 +31,14 @@ function validateUsuario(usuario: Usuario): boolean {
 
     return true;
 }
-  
 
-  function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeUsuarioInput(req: Request, res: Response, next: NextFunction) {
     req.body.sanitizedInput = {
         nombreCompleto: req.body.nombreCompleto,
         mail: req.body.mail,
         telefono: req.body.telefono,
         contrasenia: req.body.contrasenia,
-        rol:req.body.rol
+        rol: req.body.rol
     };
 
     Object.keys(req.body.sanitizedInput).forEach(key => {
@@ -49,31 +51,38 @@ function validateUsuario(usuario: Usuario): boolean {
     next();
 }
 
-
-
-async function findAll(req: Request, res: Response){
+async function findAll(req: Request, res: Response) {
     try {
-      const usuarios = await em.find(Usuario, {})
-      res.status(200).json({ message: 'Se encontraron todos los usuarios', data: usuarios })
+        const usuarios = await em.find(Usuario, {});
+        res.status(200).json({ message: 'Se encontraron todos los usuarios', data: usuarios });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
-    
-  }
-  async function findOne(req: Request, res: Response){
-    try {
-      const id = Number.parseInt(req.params.id)
-      const usuario = await em.findOneOrFail(Usuario, { id })
-      res.status(200).json({ message: 'Se encontró el usuario', data: usuario })
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
-  }
+}
 
-  async function add(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
     try {
+        const id = Number.parseInt(req.params.id);
+        const usuario = await em.findOneOrFail(Usuario, { id });
+        res.status(200).json({ message: 'Se encontró el usuario', data: usuario });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+async function add(req: Request, res: Response) {
+    try {
+        const { nombreCompleto, mail, telefono, contrasenia, rol } = req.body.sanitizedInput;
+
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(contrasenia, salt);
+
         const usuario = em.create(Usuario, {
-            ...req.body.sanitizedInput,
+            nombreCompleto,
+            mail,
+            telefono,
+            contrasenia: hashedPassword,
+            rol
         });
 
         await em.persistAndFlush(usuario);
@@ -83,29 +92,30 @@ async function findAll(req: Request, res: Response){
     }
 }
 
-  async function update(req: Request, res: Response){
+async function update(req: Request, res: Response) {
     try {
-      const id = Number.parseInt(req.params.id)
-      const usuario = em.getReference(Usuario, id)
-      em.assign(usuario, req.body)
-      await em.flush()
-      res.status(200).json({ message: 'usuario actualizado' })
+        const id = Number.parseInt(req.params.id);
+        const usuario = em.getReference(Usuario, id);
+        em.assign(usuario, req.body);
+        await em.flush();
+        res.status(200).json({ message: 'Usuario actualizado' });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
-  }
-  async function remove(req: Request, res: Response){
-    try {
-      const id = Number.parseInt(req.params.id)
-      const usuario = em.getReference(Usuario, id)
-      await em.removeAndFlush(usuario)
-      res.status(200).send({ message: 'usuario eliminado' })
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
-  }
+}
 
-  async function findByEmail(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
+    try {
+        const id = Number.parseInt(req.params.id);
+        const usuario = em.getReference(Usuario, id);
+        await em.removeAndFlush(usuario);
+        res.status(200).send({ message: 'Usuario eliminado' });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+async function findByEmail(req: Request, res: Response) {
     try {
         const { mail, contrasenia } = req.body;
 
@@ -113,56 +123,64 @@ async function findAll(req: Request, res: Response){
             return res.status(400).json({ message: 'Faltan datos: mail o contraseña' });
         }
 
-        // Buscar el usuario según el correo, ahora sin la validación de dominio
-        const usuario = await em.findOne(Usuario, { mail }, { populate: ['cursos'] });
+        const usuario = await em.findOne(Usuario, { mail });
 
-        if (!usuario || usuario.contrasenia !== contrasenia) {
-            return res.status(401).json({ message: 'Correo o contraseña incorrecta' });
+        if (!usuario) {
+            return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
         }
 
-        res.status(200).json({ message: 'Inicio de sesión exitoso', data: usuario });
+        const isPasswordValid = bcrypt.compareSync(contrasenia, usuario.contrasenia);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+        }
+
+        const token = jwt.sign(
+            { id: usuario.id, mail: usuario.mail, rol: usuario.rol },
+            process.env.JWT_SECRET || 'clave_secreta',
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ message: 'Inicio de sesión exitoso', token });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 }
 
-  
-
-  async function getCursosProfesor(req: Request, res: Response) {
+async function getCursosProfesor(req: Request, res: Response) {
     const usuarioId = parseInt(req.params.id, 10);
 
     try {
-      if (isNaN(usuarioId)) {
-        return res.status(400).json({ message: 'ID de usuario inválido' });
-      }
+        if (isNaN(usuarioId)) {
+            return res.status(400).json({ message: 'ID de usuario inválido' });
+        }
 
-      const profesor = await em.findOne(Usuario, usuarioId, { populate: ['cursos'] });
-    
-      if (!profesor) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-      }
+        const profesor = await em.findOne(Usuario, usuarioId, { populate: ['cursos'] });
 
-      const cursos = profesor.cursos.getItems(); 
-      return res.status(200).json({ message: 'Cursos del profesor encontrados', data: cursos });
+        if (!profesor) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
 
+        const cursos = profesor.cursos.getItems();
+        return res.status(200).json({ message: 'Cursos del profesor encontrados', data: cursos });
     } catch (error: any) {
-      console.error(error);
-      return res.status(500).json({ message: 'Error al obtener los cursos del profesor' });
+        console.error(error);
+        return res.status(500).json({ message: 'Error al obtener los cursos del profesor' });
     }
-  }
-  async function getInscripcionesAlumno(req: Request, res: Response) {
-    try {
-      const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: 'ID de alumno inválido' });
-      }
-  
-      const inscripciones = await em.find(Inscripcion, { usuario: id });
-      res.status(200).json({ message: 'Inscripciones encontradas', data: inscripciones });
-    } catch (error) {
-      console.error('Error al obtener inscripciones del alumno:', error);
-      res.status(500).json({ message: 'Error interno del servidor' });
-    }
-  }
+}
 
-export {sanitizeUsuarioInput, findAll, findOne, add, update, remove,findByEmail,getCursosProfesor, getInscripcionesAlumno}
+async function getInscripcionesAlumno(req: Request, res: Response) {
+    try {
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) {
+            return res.status(400).json({ message: 'ID de alumno inválido' });
+        }
+
+        const inscripciones = await em.find(Inscripcion, { usuario: id });
+        res.status(200).json({ message: 'Inscripciones encontradas', data: inscripciones });
+    } catch (error) {
+        console.error('Error al obtener inscripciones del alumno:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+}
+
+export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, findByEmail, getCursosProfesor, getInscripcionesAlumno };

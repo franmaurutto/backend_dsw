@@ -2,8 +2,41 @@ import { Request, Response, NextFunction } from "express"
 import { Material } from "./material.entity.js";
 import { orm } from "../Shared/orm.js";
 import { Curso } from "../curso/cursos.entity.js";
+import jwt from 'jsonwebtoken';
 
 const em = orm.em
+
+const SECRET_KEY = 'mi_clave_secreta_para_materiales';
+
+/**
+ * @param material Objeto con los datos del material.
+ * @returns Token JWT generado.
+ */
+
+function generateMaterialToken(material: any): string {
+  const { 
+    titulo, 
+    descripcion, 
+    cursoId 
+  } = material;
+
+  return jwt.sign(
+    { 
+      titulo, 
+      descripcion, 
+      cursoId 
+    },  
+    SECRET_KEY,    
+    { expiresIn: '1h' }  
+  );
+}
+
+/**
+ * @param material Objeto con los datos del material.
+ * @returns Token JWT generado.
+ */
+
+
 function validateMaterial(material: Partial<Material>) {
   if (!material) {
       throw new Error("Los datos del material son requeridos");
@@ -154,4 +187,4 @@ async function findAll(req: Request, res: Response){
     }
 }
 
-export {sanitizeMaterialInput, findAll, findOne, add, update, remove, findMatSinCurso, addMaterialToCurso}
+export {sanitizeMaterialInput, findAll, findOne, add, update, remove, findMatSinCurso, addMaterialToCurso,generateMaterialToken}
