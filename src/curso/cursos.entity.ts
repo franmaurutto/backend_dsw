@@ -1,11 +1,10 @@
 import { Entity, Property, ManyToMany,OneToOne, ManyToOne, Collection, Cascade, Rel, OneToMany, TimeType } from '@mikro-orm/core'
 import { BaseEntity } from '../Shared/baseEntity.entity.js'
-import { Profesor } from '../profesor/profesores.entity.js'
-import { Alumno } from '../alumno/alumnos.entity.js'
 import { Tp } from '../tp/tps.entity.js'
 import { Parcial } from '../parcial/parcial.entity.js'
 import { Inscripcion } from '../inscripcion/inscripciones.entity.js'
 import { Material } from '../material/material.entity.js'
+import { Usuario } from '../usuario/usuario.entity.js'
 
 @Entity()
 export class Curso extends BaseEntity{
@@ -27,8 +26,8 @@ export class Curso extends BaseEntity{
     horaFin!: string
     @Property({ nullable: false}) 
     dias!: string 
-    @ManyToOne(()=> Profesor, {nullable: false})
-    profesor?: Rel<Profesor>
+    @ManyToOne(()=> Usuario, {nullable: false})
+    usuario?: Rel<Usuario>
     @OneToMany(()=> Inscripcion,(inscripcion)=> inscripcion.curso,{
     cascade:[Cascade.ALL]})
     inscripciones?: Collection<Inscripcion>;

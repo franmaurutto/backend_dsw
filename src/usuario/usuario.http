@@ -1,0 +1,59 @@
+### 
+GET http://localhost:3000/api/usuarios
+
+###
+GET http://localhost:3000/api/usuarios/1/cursos
+### 
+# @name creoProfe
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+    "nombre_y_apellido": "Martin Aguilar",
+    "mail": "bob@educatech.com",
+    "telefono": "3413456544",
+    "contrasenia": "spongebob",
+    "cursoId":1
+}
+
+
+### 
+GET http://localhost:3000/api/usuarios/{{id}}
+
+### 
+PUT http://localhost:3000/api/usuarios/{{id}}
+Content-Type: application/json
+
+{
+    "nombre_y_apellido": "Matias Maque",
+    "mail": "matimaque@hotmail.com",
+    "telefono": "3413462154",
+    "contrasenia": "mati90000" 
+}
+
+### 
+# @name creoProfeToDelete
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+    "nombre_y_apellido": "Dante Aguirre",
+    "mail": "danteaguirre@hotmail.com",
+    "telefono": "3413456546",
+    "contrasenia": "profeddd"
+}
+
+### 
+DELETE http://localhost:3000/api/usuarios/{{idToDelete}}
+
+### modificar un character (PATCH - parcial)
+PATCH http://localhost:3000/api/usuarios/{{id}}
+Content-Type: application/json
+
+{
+
+    "nombre_y_apellido": "Matias Maque",
+    "mail": "matiMaque8@hotmail.com",
+    "telefono": "3413462154",
+    "contrasenia": "mati90000"
+}

@@ -1,9 +1,10 @@
 import 'reflect-metadata'
 import express from 'express';
 import { cursoRouter } from './curso/cursos.routes.js';
-import { alumnoRouter } from './alumno/alumnos.routes.js';
+//import { alumnoRouter } from './alumno/alumnos.routes.js';
 import { tpRouter } from './tp/tps.routes.js';
-import { profesorRouter } from './profesor/profesor.routes.js';
+import { usuarioRouter } from './usuario/usuario.routes.js';
+//import { profesorRouter } from './profesor/profesor.routes.js';
 import { certificadoRouter } from './certificado/certificado.routes.js';
 import { orm, syncSchema } from './Shared/orm.js';
 import { RequestContext } from '@mikro-orm/core';
@@ -32,10 +33,11 @@ app.use((req, res, next) => {
 
 
 app.use("/api/cursos", cursoRouter)
-app.use("/api/alumnos", alumnoRouter)
+//app.use("/api/alumnos", alumnoRouter)
 app.use("/api/tps", tpRouter)
-app.use("/api/profesores", profesorRouter)
+//app.use("/api/profesores", profesorRouter)
 app.use("/api/certificados", certificadoRouter)
+app.use("/api/usuarios", usuarioRouter)
 app.use("/api/inscripciones", inscripcionRouter)
 app.use("/api/rtaTps", rtaTpRouter)
 app.use("/api/parciales", parcialRouter)
