@@ -21,6 +21,7 @@ const SECRET_KEY = 'mi_clave_secreta_para_cursos';
  */
 function generateCourseToken(curso: any): string {
   const { 
+    id,
     nombre, 
     descripcion, 
     cantCupos, 
@@ -37,7 +38,7 @@ function generateCourseToken(curso: any): string {
   } = curso;
 
   return jwt.sign(
-    { 
+    { id,
       nombre, 
       descripcion, 
       cantCupos, 
@@ -159,15 +160,35 @@ async function getAll (req: Request,res: Response){
   }
 }
 
-async function getOne (req: Request,res: Response){
+async function getOne(req: Request, res: Response) {
   try {
-    const id = Number.parseInt(req.params.id)
-    const curso = await em.findOneOrFail(Curso, { id },  {populate: ['usuario']})
-    res
-      .status(200)
-      .json({ message: 'Se ha encontrado el curso', data: curso })
+    const id = Number.parseInt(req.params.id);
+    const curso = await em.findOneOrFail(Curso, { id }, { populate: ['usuario'] });
+    const cursoToken = jwt.sign(
+      {
+        id: curso.id,
+        nombre: curso.nombre,
+        descripcion: curso.descripcion,
+        cantCupos: curso.cantCupos,
+        duracion: curso.duracion,
+        fechaInicio: curso.fechaInicio,
+        fechaFin: curso.fechaFin,
+        horaInicio: curso.horaInicio,
+        horaFin: curso.horaFin,
+        dias: curso.dias,
+        usuarioId: curso.usuario? curso.usuario.id :null,
+        parcialId: curso.parcial ? curso.parcial.id : null,
+      },
+      process.env.JWT_SECRET || 'clave_secreta',
+      { expiresIn: '1h' }
+    );
+    res.status(200).json({
+      message: 'Se ha encontrado el curso',
+      data: curso,
+      token: cursoToken,
+    });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
 
