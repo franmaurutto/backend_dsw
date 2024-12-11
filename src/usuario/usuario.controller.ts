@@ -4,6 +4,7 @@ import { orm } from "../Shared/orm.js";
 import { Inscripcion } from '../inscripcion/inscripciones.entity.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Console } from "console";
 
 const em = orm.em;
 
@@ -72,6 +73,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
+        console.log('entro')
         const { nombreCompleto, mail, telefono, contrasenia, rol } = req.body.sanitizedInput;
 
         const salt = bcrypt.genSaltSync(10);
@@ -88,16 +90,24 @@ async function add(req: Request, res: Response) {
         await em.persistAndFlush(usuario);
         res.status(201).json({ message: 'Usuario ha sido creado', data: usuario });
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message })
+        console.log(error.message);
     }
 }
 
 async function update(req: Request, res: Response) {
     try {
+        console.log('entroback')
         const id = Number.parseInt(req.params.id);
         const usuario = em.getReference(Usuario, id);
-        em.assign(usuario, req.body);
+        const {contrasenia,...updatedData}=req.body
+
+
+        em.assign(usuario, updatedData);
         await em.flush();
+
+        const updatedUsuario = await em.findOne(Usuario, id);
+        res.status(200).json(updatedUsuario);
         res.status(200).json({ message: 'Usuario actualizado' });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -117,6 +127,7 @@ async function remove(req: Request, res: Response) {
 
 async function findByEmail(req: Request, res: Response) {
     try {
+        console.log('entro en el backend')
         const { mail, contrasenia } = req.body;
 
         if (!mail || !contrasenia) {
@@ -126,21 +137,26 @@ async function findByEmail(req: Request, res: Response) {
         const usuario = await em.findOne(Usuario, { mail });
 
         if (!usuario) {
-            return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+            console.log('error 1');
+            return res.status(401).json({ message: 'Correo o contraseña incorrectos' })
+            
         }
 
         const isPasswordValid = bcrypt.compareSync(contrasenia, usuario.contrasenia);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+            console.log('error2');
+            return res.status(401).json({ message: 'Correo o contraseña incorrectos' })
+            
         }
 
         const token = jwt.sign(
-            { id: usuario.id, mail: usuario.mail, rol: usuario.rol },
+            { id: usuario.id, mail: usuario.mail, rol: usuario.rol, telefono: usuario.telefono, contrasenia: usuario.contrasenia, nombreCompleto: usuario.nombreCompleto },
             process.env.JWT_SECRET || 'clave_secreta',
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+        console.log(token)
+        res.status(200).json({ message: 'Inicio de sesión exitoso', usuariotoken: token });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -183,4 +199,44 @@ async function getInscripcionesAlumno(req: Request, res: Response) {
     }
 }
 
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, findByEmail, getCursosProfesor, getInscripcionesAlumno };
+async function cambiarContrasenia(req: Request, res: Response) {
+    try {
+        const id = parseInt(req.params.id, 10); 
+        console.log('ID recibido:', id); 
+        console.log('Body recibido:', req.body);
+        const { viejaContrasenia, nuevaContrasenia } = req.body; 
+
+        if (!viejaContrasenia || !nuevaContrasenia) {
+            return res.status(400).json({ message: 'Se requieren la contraseña actual y la nueva contraseña.' });
+        }
+
+
+        const usuario = await em.findOne(Usuario, { id });
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+
+        const esValida = bcrypt.compareSync(viejaContrasenia, usuario.contrasenia);
+        if (!esValida) {
+            return res.status(401).json({ message: 'La contraseña actual es incorrecta.' });
+        }
+
+        
+        const salt = bcrypt.genSaltSync(10);
+        const hashedNuevaContrasenia = bcrypt.hashSync(nuevaContrasenia, salt);
+
+      
+        usuario.contrasenia = hashedNuevaContrasenia;
+        await em.persistAndFlush(usuario);
+
+        res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
+    } catch (error: any) {
+        console.error('Error al cambiar la contraseña:', error);
+        res.status(500).json({message: 'Error interno del servidor.',
+            error: error.message || error});
+    }
+}
+
+
+export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, findByEmail, getCursosProfesor, getInscripcionesAlumno, cambiarContrasenia };

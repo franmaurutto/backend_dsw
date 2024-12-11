@@ -13,12 +13,14 @@ const verificarTokenYRol = (rolesPermitidos: string[]) => {
     // Verificar el token
     jwt.verify(token, process.env.JWT_SECRET || 'clave_secreta', (err, decoded: any) => {
       if (err) {
+        console.log('Error al verificar token:', err.message);
         return res.status(401).json({ message: 'Token inválido' });
       }
 
       // Verificar el rol
       const rol = decoded.rol;
       if (!rolesPermitidos.includes(rol)) {
+        console.log('Acceso denegado: rol no autorizado', rol);
         return res.status(403).json({ message: 'Acceso denegado: rol no autorizado' });
       }
 
