@@ -21,6 +21,7 @@ const SECRET_KEY = 'mi_clave_secreta_para_cursos';
  */
 function generateCourseToken(curso: any): string {
   const { 
+    id,
     nombre, 
     descripcion, 
     cantCupos, 
@@ -38,6 +39,7 @@ function generateCourseToken(curso: any): string {
 
   return jwt.sign(
     { 
+      id,
       nombre, 
       descripcion, 
       cantCupos, 
