@@ -73,7 +73,7 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
     try {
-        console.log('entro')
+
         const { nombreCompleto, mail, telefono, contrasenia, rol } = req.body.sanitizedInput;
 
         const salt = bcrypt.genSaltSync(10);
@@ -97,7 +97,7 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
     try {
-        console.log('entroback')
+
         const id = Number.parseInt(req.params.id);
         const usuario = em.getReference(Usuario, id);
         const {contrasenia,...updatedData}=req.body
@@ -127,7 +127,7 @@ async function remove(req: Request, res: Response) {
 
 async function findByEmail(req: Request, res: Response) {
     try {
-        console.log('entro en el backend')
+
         const { mail, contrasenia } = req.body;
 
         if (!mail || !contrasenia) {

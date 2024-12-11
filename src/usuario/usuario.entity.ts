@@ -24,7 +24,7 @@ export class Usuario extends BaseEntity{
     @OneToMany(() => Inscripcion, (inscripcion) => inscripcion.usuario, { nullable: true })
     inscripciones = new Collection<Inscripcion>(this);
 
-    @OneToMany(() => Curso, (curso) => curso.usuario, {
+    @OneToMany(() => Curso, (curso) => curso.profesor, {
         cascade: [Cascade.ALL],
         nullable: true
     })

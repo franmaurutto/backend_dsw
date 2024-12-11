@@ -152,7 +152,7 @@ function sanitizeCursoInput(
 
 async function getAll (req: Request,res: Response){
   try {
-    const cursos = await em.find(Curso, {}, {populate: ['usuario']})
+    const cursos = await em.find(Curso, {}, {populate: ['profesor']})
     res
       .status(200)
       .json({ message: 'Se han encontrado los cursos', data: cursos })
@@ -164,7 +164,7 @@ async function getAll (req: Request,res: Response){
 async function getOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const curso = await em.findOneOrFail(Curso, { id }, { populate: ['usuario'] });
+    const curso = await em.findOneOrFail(Curso, { id }, { populate: ['profesor'] });
     const cursoToken = jwt.sign(
       {
         id: curso.id,
@@ -177,7 +177,7 @@ async function getOne(req: Request, res: Response) {
         horaInicio: curso.horaInicio,
         horaFin: curso.horaFin,
         dias: curso.dias,
-        usuarioId: curso.usuario? curso.usuario.id :null,
+        profesor: curso.profesor,
         parcialId: curso.parcial ? curso.parcial.id : null,
       },
       process.env.JWT_SECRET || 'clave_secreta',
@@ -224,18 +224,33 @@ async function add(req: Request, res: Response) {
   }
 }
 
-async function update(req:Request, res:Response) {
+async function update(req: Request, res: Response) {
   try {
-    const id = Number.parseInt(req.params.id)
-    const curso= em.getReference(Curso, id)
-    em.assign(curso, req.body)
-    await em.flush()
-    res.status(200).json({ message: 'Se ha actualizado el curso' })
+    const id = Number.parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'El ID proporcionado no es válido.' });
+    }
+    const curso = await em.findOne(Curso, id);
+    if (!curso) {
+      return res.status(404).json({ message: `Curso con ID ${id} no encontrado.` });
+    }
+    em.assign(curso, req.body);
+    await em.flush();
+    res.status(200).json({ message: 'Se ha actualizado el curso', curso });
+    
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    console.error('Error al actualizar el curso:', {
+      message: error.message,
+      stack: error.stack, 
+      requestData: req.body,  
+    });
+
+    res.status(500).json({ 
+      message: 'Error en el servidor al actualizar el curso.', 
+      error: error.message 
+    });
   }
 }
-
 
 
 async function remove (req: Request, res: Response) {
@@ -263,4 +278,4 @@ async function getMaterialesCurso(req: Request, res: Response) {
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 }
-export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,generateCourseToken }
+export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,generateCourseToken}
