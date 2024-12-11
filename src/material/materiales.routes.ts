@@ -5,7 +5,7 @@ export const materialRouter = Router();
 
 materialRouter.get('/sin-curso',verificarTokenYRol(['profesor']), findMatSinCurso); 
 materialRouter.get('/',verificarTokenYRol(['profesor']), findAll);
-materialRouter.get('/:id', findOne);
+materialRouter.get('/:id',verificarTokenYRol(['profesor']), findOne);
 materialRouter.post('/',verificarTokenYRol(['profesor']), sanitizeMaterialInput, add);
 materialRouter.put('/:id', sanitizeMaterialInput,verificarTokenYRol(['profesor']), update);
 materialRouter.patch('/:id', sanitizeMaterialInput, update);

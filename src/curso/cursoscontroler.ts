@@ -38,7 +38,8 @@ function generateCourseToken(curso: any): string {
   } = curso;
 
   return jwt.sign(
-    { id,
+    { 
+      id,
       nombre, 
       descripcion, 
       cantCupos, 
