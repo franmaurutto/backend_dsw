@@ -1,0 +1,70 @@
+* [33m039cf3c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mramafranback[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m implementacion de verificacion del token
+* [33m4d08f36[m Implementacion del token
+* [33m6bdd92a[m cambio en usuario
+*   [33m1403172[m implementacion de usuario CRUD
+[32m|[m[33m\[m  
+[32m|[m * [33mcc9e981[m ultimos cambios minimos antes de la presentacion
+[32m|[m * [33m18fe80f[m Version final
+[32m|[m * [33m9bb0766[m modificaion update profesor
+* [33m|[m [33ma4d176f[m implementacion de usuario CRUD
+[33m|[m[33m/[m  
+* [33mfc69b08[m Arreglos para el front
+*   [33m7e43370[m Mantener mis cambios y resolver conflicto
+[34m|[m[35m\[m  
+[34m|[m * [33m816bac0[m Cambios cursos
+* [35m|[m [33mdbc887f[m Mis cambios locales antes de hacer el pull
+[35m|[m[35m/[m  
+*   [33m61de681[m correccion materiales
+[36m|[m[1;31m\[m  
+[36m|[m * [33m890a0cf[m arreglo crud inscripcion
+* [1;31m|[m [33m6e6ffb8[m Material corregido
+[1;31m|[m[1;31m/[m  
+* [33m8d49e2b[m algunos cambios en curso, inscripcion
+* [33m89b30ce[m CRUD Material
+*   [33m45c330e[m CRUD Material
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33mb242213[m cambios en crud parcial
+[1;32m|[m *   [33mc718733[m Merge branch 'master' of https://github.com/franmaurutto/backend_dsw
+[1;32m|[m [1;34m|[m[1;35m\[m  
+[1;32m|[m * [1;35m|[m [33mac6ee18[m modificaciones de curso y parcial
+* [1;35m|[m [1;35m|[m [33mb9bc775[m CRUD Material
+[1;35m|[m [1;35m|[m[1;35m/[m  
+[1;35m|[m[1;35m/[m[1;35m|[m   
+* [1;35m|[m [33m3ffee7f[m cambios para que ande la crud de inscripcion
+[1;35m|[m[1;35m/[m  
+* [33m1f16fcf[m unos cambios minimos
+* [33m4199854[m Agrego lista cursos de alumno y lista cursos de profesor
+* [33mb01ec24[m validacion de todas las cruds
+* [33m9283ee8[m actualizacion crud
+* [33m0baa6e6[m cambio en parcial
+* [33m40de30f[m asignacion de objetos en el add curso, parcial y profesor (errores a solucionar)
+* [33m853b7e2[m cambios hechos en consulta dsw
+* [33m28c0209[m correccion de errores clase consulta 14/10
+* [33m780cbfc[m CRUD Respuesta Parcial
+*   [33mecdac77[m Merge branch 'master' of https://github.com/franmaurutto/backend_dsw
+[1;36m|[m[31m\[m  
+[1;36m|[m *   [33me64161f[m Resolucion de conflicto
+[1;36m|[m [32m|[m[33m\[m  
+* [32m|[m [33m\[m   [33m0aa3036[m CRUD tp orm
+[32m|[m[33m\[m [32m\[m [33m\[m  
+[32m|[m [33m|[m[32m/[m [33m/[m  
+[32m|[m[32m/[m[33m|[m [33m/[m   
+[32m|[m [33m|[m[33m/[m    
+[32m|[m * [33me9d5ba4[m parcial MikroOrm
+[32m|[m * [33mc53512f[m Crud Profesor con MikroOrm
+[32m|[m * [33mdc7d33f[m arreglos alumno y certificado
+[32m|[m * [33m0159d11[m rtaTp ORM
+[32m|[m * [33me94abd5[m certificado ORM
+[32m|[m * [33m83a60c0[m alumno ORM
+* [35m|[m [33m6482ff4[m CRUD tp orm
+[35m|[m[35m/[m  
+* [33m7aa6db0[m arreglos crud de cursos (Fran) y creacion de crud inscripcion (Fran), commit anterior crud profesor (Delfi)
+* [33m0c5d3b4[m fix cursos
+* [33mfb48b44[m Cambio CRUD curso
+* [33md7f2c9d[m Arreglo errores en clase
+* [33m6bfe61f[m CRUD de certificado
+* [33m2a29d6a[m Crud tps -a
+* [33m307519d[m crud de profesor adjunta
+* [33mb998ea4[m Add files via upload
+* [33m2947147[m Creacion del CRUD de alumnos sin persistencia
+* [33ma684245[m segunda entrega CRUD Curso

@@ -15,6 +15,7 @@ const SECRET_KEY = 'mi_clave_secreta_para_materiales';
 
 function generateMaterialToken(material: any): string {
   const { 
+    id,
     titulo, 
     descripcion, 
     cursoId 
@@ -22,6 +23,7 @@ function generateMaterialToken(material: any): string {
 
   return jwt.sign(
     { 
+      id,
       titulo, 
       descripcion, 
       cursoId 
@@ -82,15 +84,21 @@ async function findAll(req: Request, res: Response){
     }
     
   }
-  async function findOne(req: Request, res: Response){
-    try {
-      const id = Number.parseInt(req.params.id)
-      const material = await em.findOneOrFail(Material, { id })
-      res.status(200).json({ message: 'Se encontró el material', data: material })
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
+async function findOne(req: Request, res: Response){
+  try {
+    const id = Number.parseInt(req.params.id)
+    const material = await em.findOneOrFail(Material, { id })
+    const token = jwt.sign(
+      { id: material.id, titulo: material.titulo, descripcion: material.descripcion, cursoId: material.curso ? material.curso.id : null },
+      process.env.JWT_SECRET || 'mi_clave_secreta_para_materiales',
+      { expiresIn: '1h' }
+  );
+
+    res.status(200).json({ message: 'Se encontró el material', materialToken: token })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
   }
+}
   async function add(req: Request, res: Response) {
     try {
        let curso = null;
