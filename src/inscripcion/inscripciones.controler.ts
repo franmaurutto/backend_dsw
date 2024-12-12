@@ -1,10 +1,12 @@
 import {Request, Response, NextFunction} from 'express'; 
 import { Inscripcion } from './inscripciones.entity.js';
 import { orm } from "../Shared/orm.js";
-//import { Alumno } from '../alumno/alumnos.entity.js';
+import { Alumno } from '../alumno/alumnos.entity.js';
 import { Curso } from '../curso/cursos.entity.js';
 import { Certificado } from '../certificado/certificado.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
+import jwt from 'jsonwebtoken';
+
 const em = orm.em
 
 
@@ -43,14 +45,18 @@ async function getAll (req: Request,res: Response){
 
 async function getOne (req: Request,res: Response){
   try {
-    const id = Number.parseInt(req.params.id)
-    const inscripcion = await em.findOneOrFail(Inscripcion, { id }) 
-    res
-      .status(200)
-      .json({ message: 'Se ha encontrado la inscripcion', data: inscripcion })
-  } catch (error: any) {
-    res.status(500).json({ message: error.message })
-  }
+      const id = Number.parseInt(req.params.id)
+      const inscripcion = await em.findOneOrFail(Inscripcion, { id })
+      const token = jwt.sign(
+        { id: inscripcion.id, fechaInscripcion: inscripcion.fechaInscripcion, usuarioId: inscripcion.usuario ? inscripcion.usuario.id : null, cursoId: inscripcion.curso ? inscripcion.curso.id : null, certificadoId: inscripcion.certificado ? inscripcion.certificado.id : null, rtaparcialId: inscripcion.rtaparcial ? inscripcion.rtaparcial.id : null, rtatpId: inscripcion.rtatp ? inscripcion.rtatp.id : null },
+        process.env.JWT_SECRET || 'mi_clave_secreta_para_inscripciones',
+        { expiresIn: '1h' }
+    );
+  
+      res.status(200).json({ message: 'Se encontró la inscripcion', inscripcionToken: token })
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
 }
 
 async function add(req: Request, res: Response) {
@@ -160,4 +166,35 @@ async function getCursoDeInscripcion(req: Request, res: Response) {
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
 }
-export {sanitizeInscripcionInput, getAll, getOne, add, update, remove, getCursoDeInscripcion}
+async function getAlumnoDeInscripcion(req: Request, res: Response) {
+  try {
+    const inscripcionId = Number(req.params.id); 
+    const alumnoId = Number(req.params.alumnoId); 
+
+    if (isNaN(inscripcionId) || isNaN(alumnoId)) {
+      return res.status(400).json({ message: 'Los IDs proporcionados no son válidos' });
+    }
+
+    const inscripcion = await em.findOne(Inscripcion, { id: inscripcionId });
+
+    if (!inscripcion) {
+      return res.status(404).json({ message: 'Inscripción no encontrada' });
+    }
+
+    await em.populate(inscripcion, ['usuario']);
+
+    if (!inscripcion.usuario) {
+      return res.status(404).json({ message: 'La inscripción no tiene un alumno asociado' });
+    }
+
+    if (inscripcion.usuario.id !== alumnoId) {
+      return res.status(404).json({ message: 'Alumno no encontrado para esta inscripción' });
+    }
+
+    return res.status(200).json(inscripcion.usuario);
+  } catch (error: any) {
+    console.error('Error al obtener el alumno de la inscripción:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+export {sanitizeInscripcionInput, getAll, getOne, add, update, remove, getCursoDeInscripcion, getAlumnoDeInscripcion}

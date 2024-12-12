@@ -99,4 +99,36 @@ async function findAll(req: Request, res: Response){
     }
   }
 
-export {sanitizeRtaParcialInput, findAll, findOne, add, update, remove}
+async function getInscripcionDeRtaParcial(req: Request, res: Response) {
+  try {
+    const rtaParcialId = Number(req.params.id); 
+    const inscripcionId = Number(req.params.inscripcionId); 
+
+    if (isNaN(inscripcionId) || isNaN(rtaParcialId)) {
+      return res.status(400).json({ message: 'Los IDs proporcionados no son válidos' });
+    }
+
+    const rtaParcial = await em.findOne(RtaParcial, { id: rtaParcialId });
+
+    if (!rtaParcial) {
+      return res.status(404).json({ message: 'Inscripción no encontrada' });
+    }
+
+    await em.populate(rtaParcial, ['inscripcion']);
+
+    if (!rtaParcial.inscripcion) {
+      return res.status(404).json({ message: 'La rtaParcial no tiene una inscripcion asociada' });
+    }
+
+    if (rtaParcial.inscripcion.id !== inscripcionId) {
+      return res.status(404).json({ message: 'inscripcion no encontrada para esta rtaParcial' });
+    }
+
+    return res.status(200).json(rtaParcial.inscripcion);
+  } catch (error: any) {
+    console.error('Error al obtener la inscripcion de la rtaParcial:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+
+export {sanitizeRtaParcialInput, findAll, findOne, add, update, remove, getInscripcionDeRtaParcial}
