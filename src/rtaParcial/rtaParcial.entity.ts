@@ -9,11 +9,10 @@ export class RtaParcial extends BaseEntity{
     @Property({ nullable: false })
     rtaConsignaParcial!: string
 
-    @OneToOne('Inscripcion', (inscripcion: Inscripcion) => inscripcion.rtaparcial, { cascade: [Cascade.ALL] })
-    inscripcion?: Rel<Inscripcion>;
+    @OneToOne(()=>Inscripcion,{nullable:true})
+    inscripcion?: Inscripcion | null;
 
-    @ManyToOne(() => Parcial)
-    parcial!: Parcial; 
-
+    @ManyToOne(() => Parcial, { nullable: true })  // Relación ManyToOne con Parcial
+    parcial!: Parcial | null;
 
 }

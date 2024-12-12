@@ -1,6 +1,7 @@
 import { Entity, Property, OneToMany, ManyToMany, Collection, Cascade, Rel, OneToOne } from "@mikro-orm/core";
 import { BaseEntity } from "../Shared/baseEntity.entity.js";
 import { Curso } from "../curso/cursos.entity.js";
+import { RtaParcial } from "../rtaParcial/rtaParcial.entity.js";
 
 @Entity()
 export class Parcial extends BaseEntity{
@@ -22,5 +23,10 @@ export class Parcial extends BaseEntity{
     @Property({ nullable: false })
     consigna!: string
 
+    @OneToMany(() => RtaParcial, (rtaparcial) => rtaparcial.parcial, {
+        cascade: [Cascade.ALL],
+        nullable: true,
+      })
+      rtasParcial?: Collection<RtaParcial> | null;
     
 }

@@ -27,7 +27,7 @@ export class Curso extends BaseEntity{
     @Property({ nullable: false}) 
     dias!: string 
     @ManyToOne(()=> Usuario, {nullable: false})
-    usuario?: Rel<Usuario>
+    profesor?: Rel<Usuario>
     @OneToMany(()=> Inscripcion,(inscripcion)=> inscripcion.curso,{
     cascade:[Cascade.ALL]})
     inscripciones?: Collection<Inscripcion>;
