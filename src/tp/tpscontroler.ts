@@ -8,7 +8,7 @@ const em=orm.em
 
 async function getAll(req:Request,res:Response){
   try{
-    const tps= await em.find(Tp,{},{populate:['curso']})
+    const tps= await em.find(Tp,{})
     res.status(200).json({message: 'Se encontraron todos los tps ',data:tps})
   }
   catch(error:any){
@@ -19,7 +19,7 @@ async function getAll(req:Request,res:Response){
 async function getOne(req:Request,res:Response){
   try{
     const id = Number.parseInt(req.params.id)
-    const tp= await em.findOneOrFail(Tp,{id},{populate:['curso']})
+    const tp= await em.findOneOrFail(Tp,{id})
     res.status(200).json({message: 'se encontro el tp',data:tp})
   }catch(error:any){
     res.status(500).json({message:error.message})
@@ -75,8 +75,8 @@ async function remove(req:Request,res:Response){
 
 function sanitizeTpInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
-    nroTp: req.body.nroTp,
     consigna: req.body.consigna,
+    fechaLimite: req.body.fechaLimite,
     cursoId: req.body.cursoId,
   };
 
@@ -101,7 +101,7 @@ function sanitizeTpInput(req: Request, res: Response, next: NextFunction) {
 }
 
 function validateTp(tp: any): boolean {
-  if (!tp || !tp.nroTp || !tp.consigna || !tp.cursoId) {
+  if (!tp || !tp.fechaLimite || !tp.consigna || !tp.cursoId) {
     throw new Error("Los datos del trabajo práctico son requeridos.");
   }
   return true;
