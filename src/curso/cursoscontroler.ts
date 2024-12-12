@@ -177,8 +177,9 @@ async function getOne(req: Request, res: Response) {
         horaInicio: curso.horaInicio,
         horaFin: curso.horaFin,
         dias: curso.dias,
-        profesor: curso.profesor,
+        usuario: curso.profesor,
         parcialId: curso.parcial ? curso.parcial.id : null,
+        tpId: curso.tp ? curso.tp.id : null,
       },
       process.env.JWT_SECRET || 'clave_secreta',
       { expiresIn: '1h' }
@@ -196,8 +197,8 @@ async function getOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const usuario = await em.findOne(Usuario, { id: req.body.sanitizedInput.profesorId });
-    if (!usuario) {
+    const profesor = await em.findOne(Usuario, { id: req.body.sanitizedInput.profesorId });
+    if (!profesor) {
       return res.status(404).json({ message: 'Profesor no encontrado' });
     }
     const parcial = await em.findOne(Parcial, { id: req.body.sanitizedInput.parcialId })
@@ -212,7 +213,7 @@ async function add(req: Request, res: Response) {
 
     const curso = em.create(Curso, {
       ...req.body.sanitizedInput,
-      usuario,
+      profesor,
       parcial:parcial || null,
       tp:tp || null,                
     });
