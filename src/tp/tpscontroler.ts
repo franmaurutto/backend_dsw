@@ -109,19 +109,25 @@ function validateTp(tp: any): boolean {
 }
 
 async function getRtaTpdeTp(req: Request, res: Response) {
+
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id)) {
-      return res.status(400).json({ message: 'ID del curso inválido' });
+    const tpId = parseInt(req.params.tpId, 10);
+    if (isNaN(tpId)) {
+      return res.status(400).json({ message: 'ID del trabajo práctico inválido' });
     }
 
-    const rtasTp = await em.find(RtaTp, { tp: id });
-    res.status(200).json({ message: 'RtasTp encontrados', data: rtasTp });
+    const rtasTp = await em.find(RtaTp, { tp: tpId });
+    res.status(200).json({
+      message: rtasTp.length > 0 ? 'Respuestas encontradas' : 'No hay respuestas para este TP',
+      data: rtasTp,
+    });
   } catch (error) {
-    console.error('Error al obtener RtasTp del curso:', error);
+    console.error('Error al obtener respuestas del TP:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 }
+
+
 
 export {sanitizeTpInput, getAll, getOne, add, update, remove, getRtaTpdeTp }
 

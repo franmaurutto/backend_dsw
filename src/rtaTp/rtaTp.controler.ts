@@ -103,7 +103,7 @@ async function findAll(req: Request, res: Response){
       }
   
       const rtaTp = em.create(RtaTp, {
-        rtaConsignaTP: req.body.rtaConsignaTP, // Corregido el nombre de la propiedad
+        rtaConsignaTP: req.body.rtaConsignaTP,
         inscripcion: inscripcion || null,
         tp: tp || null,
       });
@@ -114,52 +114,27 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message });
     }
   }
-  
-  
 
-  /*async function add(req: Request, res: Response) {
-    console.log('HOLA ADD')
+  async function update(req: Request, res: Response) {
     try {
-
-      const inscripcionId = req.body.inscripcionId;
-      const tpId = req.body.tpId;
-      const sanitizedInput = req.body.rtaConsignaTp;
-      console.log('HOLAAAA CONTROLLER');
-      const inscripcion = await em.findOne(Inscripcion, { id: inscripcionId });
-      if (!inscripcion) {
-        return res.status(404).json({ message: 'Inscripción no encontrada' });
-        console.log('HOLAAAA CONTROLLER INSC');
+      const id = Number.parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: 'ID inválido' });
       }
-      const tp = await em.findOne(Tp, { id: tpId });
-      if (!tp) {
-        return res.status(404).json({ message: 'Trabajo práctico no encontrado' });
-        console.log('HOLAAAA CONTROLLER TP');
+      const rtaTp = await em.findOne(RtaTp, id);
+      if (!rtaTp) {
+        return res.status(404).json({ message: 'Respuesta no encontrada' });
       }
-      const rtaTp = em.create(RtaTp, {
-        ...sanitizedInput,
-        inscripcion,  
-        tp            
-      });
-      await em.persistAndFlush(rtaTp);
-      res.status(201).json({ message: 'Respuesta al trabajo práctico creada', data: rtaTp });
+      rtaTp.rtaConsignaTP = req.body.rtaConsignaTP;
+      await em.flush();
+      res.status(200).json({ message: 'Respuesta actualizada correctamente', data: rtaTp });
     } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  }*/
-  
-  
-
-  async function update(req: Request, res: Response){
-    try {
-      const id = Number.parseInt(req.params.id)
-      const rtaTp = em.getReference(RtaTp, id)
-      em.assign(rtaTp, req.body)
-      await em.flush()
-      res.status(200).json({ message: 'Respuesta al tp actualizada' })
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
+      console.error(error);
+      res.status(500).json({ message: 'Error al actualizar la respuesta' });
     }
   }
+  
+  
   async function remove(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

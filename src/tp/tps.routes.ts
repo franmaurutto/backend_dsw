@@ -9,6 +9,6 @@ tpRouter.post("/",verificarTokenYRol(['profesor']),sanitizeTpInput,add);
 tpRouter.put("/:id",verificarTokenYRol(['profesor']),sanitizeTpInput,update);
 tpRouter.patch("/:id",sanitizeTpInput,update);
 tpRouter.delete("/:id",verificarTokenYRol(['profesor']),remove);
-tpRouter.get('/:id/rtastp',verificarTokenYRol(['profesor']),getRtaTpdeTp)
+tpRouter.get("/:tpId/rtaTps",verificarTokenYRol(['profesor', 'alumno']), getRtaTpdeTp)
 
 export{tpRouter};
