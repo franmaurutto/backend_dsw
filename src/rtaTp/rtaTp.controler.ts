@@ -33,6 +33,38 @@ function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
     next()
 }
 
+async function getInscripcionDeRtaTp(req: Request, res: Response) {
+  try {
+    const rtaTpId = Number(req.params.id); 
+    const inscripcionId = Number(req.params.inscripcionId); 
+
+    if (isNaN(inscripcionId) || isNaN(rtaTpId)) {
+      return res.status(400).json({ message: 'Los IDs proporcionados no son válidos' });
+    }
+
+    const rtaTp = await em.findOne(RtaTp, { id: rtaTpId });
+
+    if (!rtaTp) {
+      return res.status(404).json({ message: 'Inscripción no encontrada' });
+    }
+
+    await em.populate(rtaTp, ['inscripcion']);
+
+    if (!rtaTp.inscripcion) {
+      return res.status(404).json({ message: 'La rtaTp no tiene una inscripcion asociada' });
+    }
+
+    if (rtaTp.inscripcion.id !== inscripcionId) {
+      return res.status(404).json({ message: 'inscripcion no encontrada para esta rtaTp' });
+    }
+
+    return res.status(200).json(rtaTp.inscripcion);
+  } catch (error: any) {
+    console.error('Error al obtener la inscripcion de la rtaTp:', error);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+
 async function findAll(req: Request, res: Response){
     try {
       const rtaTps = await em.find(RtaTp, {})
@@ -52,26 +84,37 @@ async function findAll(req: Request, res: Response){
     }
   }
 
-  async function add(req: Request, res: Response){
+  async function add(req: Request, res: Response) {
+    console.log('HOLA ADD')
     try {
-      const inscripcion = await em.findOne(Inscripcion, {id: req.body.sanitizedInput.inscripcionId})
+
+      const inscripcionId = req.body.inscripcionId;
+      const tpId = req.body.tpId;
+      const sanitizedInput = req.body.sanitizedInput;
+      console.log('HOLAAAA CONTROLLER');
+      const inscripcion = await em.findOne(Inscripcion, { id: inscripcionId });
       if (!inscripcion) {
-        return res.status(404).json({ message: 'Inscripcion no encontrado' });
+        return res.status(404).json({ message: 'Inscripción no encontrada' });
+        console.log('HOLAAAA CONTROLLER INSC');
       }
-      const tp= await em.findOne(Tp, {id: req.body.sanitizedInput.tpId})
+      const tp = await em.findOne(Tp, { id: tpId });
       if (!tp) {
-        return res.status(404).json({ message: 'Trabajo parctico no encontrado' });
+        return res.status(404).json({ message: 'Trabajo práctico no encontrado' });
+        console.log('HOLAAAA CONTROLLER TP');
       }
       const rtaTp = em.create(RtaTp, {
-        ...req.body.sanitizedInput,
-        inscripcion,
-        tp})
-      await em.persistAndFlush(rtaTp)
-      res.status(201).json({ message: 'Respuesta al tp creada', data: rtaTp })
+        ...sanitizedInput,
+        inscripcion,  
+        tp            
+      });
+      await em.persistAndFlush(rtaTp);
+      res.status(201).json({ message: 'Respuesta al trabajo práctico creada', data: rtaTp });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+      res.status(500).json({ message: error.message });
     }
   }
+  
+  
 
   async function update(req: Request, res: Response){
     try {
@@ -95,4 +138,4 @@ async function findAll(req: Request, res: Response){
     }
   }
 
-export {sanitizeRtaTpInput, findAll, findOne, add, update, remove}
+export {sanitizeRtaTpInput, findAll, findOne, add, update, remove, getInscripcionDeRtaTp}

@@ -2,6 +2,8 @@ import {Request, Response, NextFunction} from 'express';
 import { orm } from '../Shared/orm.js'
 import { Tp } from './tps.entity.js';
 import { Curso } from '../curso/cursos.entity.js';
+import jwt from 'jsonwebtoken';
+import { RtaTp } from "../rtaTp/rtaTp.entity.js";
 
 const em=orm.em
 
@@ -48,7 +50,6 @@ async function add(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-
 
 async function update(req:Request,res:Response){
   try{
@@ -107,6 +108,21 @@ function validateTp(tp: any): boolean {
   return true;
 }
 
-export {sanitizeTpInput, getAll, getOne, add, update, remove }
+async function getRtaTpdeTp(req: Request, res: Response) {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ message: 'ID del curso inválido' });
+    }
+
+    const rtasTp = await em.find(RtaTp, { tp: id });
+    res.status(200).json({ message: 'RtasTp encontrados', data: rtasTp });
+  } catch (error) {
+    console.error('Error al obtener RtasTp del curso:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+
+export {sanitizeTpInput, getAll, getOne, add, update, remove, getRtaTpdeTp }
 
 
