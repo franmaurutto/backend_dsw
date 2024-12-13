@@ -12,7 +12,7 @@ function validateRtaTp(rtaTp: RtaTp): boolean {
       throw new Error("Los datos del tp son requeridos");
     }
     return true;
-  }
+}
 
 function sanitizeRtaTpInput(req: Request, res: Response, next: NextFunction){
     
@@ -85,12 +85,45 @@ async function findAll(req: Request, res: Response){
   }
 
   async function add(req: Request, res: Response) {
+    try {
+      let inscripcion = null;
+      if (req.body.inscripcionId) {
+        inscripcion = await em.findOne(Inscripcion, { id: req.body.inscripcionId });
+        if (!inscripcion) {
+          return res.status(404).json({ message: 'Inscripción no encontrada' });
+        }
+      }
+  
+      let tp = null;
+      if (req.body.tpId) {
+        tp = await em.findOne(Tp, { id: req.body.tpId });
+        if (!tp) {
+          return res.status(404).json({ message: 'Tp no encontrado' });
+        }
+      }
+  
+      const rtaTp = em.create(RtaTp, {
+        rtaConsignaTP: req.body.rtaConsignaTP, // Corregido el nombre de la propiedad
+        inscripcion: inscripcion || null,
+        tp: tp || null,
+      });
+  
+      await em.persistAndFlush(rtaTp);
+      res.status(201).json({ message: 'Respuesta al trabajo práctico creada', data: rtaTp });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  
+  
+
+  /*async function add(req: Request, res: Response) {
     console.log('HOLA ADD')
     try {
 
       const inscripcionId = req.body.inscripcionId;
       const tpId = req.body.tpId;
-      const sanitizedInput = req.body.sanitizedInput;
+      const sanitizedInput = req.body.rtaConsignaTp;
       console.log('HOLAAAA CONTROLLER');
       const inscripcion = await em.findOne(Inscripcion, { id: inscripcionId });
       if (!inscripcion) {
@@ -112,7 +145,7 @@ async function findAll(req: Request, res: Response){
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
-  }
+  }*/
   
   
 

@@ -77,6 +77,7 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message });
     }
   }
+  
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

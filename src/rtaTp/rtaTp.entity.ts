@@ -9,10 +9,10 @@ export class RtaTp extends BaseEntity{
     @Property({ nullable: false })
     rtaConsignaTP!: string
 
-    @OneToOne('Inscripcion', (inscripcion: Inscripcion) => inscripcion.rtatp, { cascade: [Cascade.ALL] })
-    inscripcion?: Rel<Inscripcion>;
+    @OneToOne(()=>Inscripcion,{nullable:true})
+    inscripcion?: Inscripcion | null;
 
-    @ManyToOne(() => Tp)
-    tp!: Tp; 
+    @ManyToOne(() => Tp, { nullable: true })
+    tp!: Tp | null; 
 
 }
