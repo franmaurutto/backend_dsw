@@ -11,7 +11,7 @@ export class Certificado extends BaseEntity{
     @Property({ nullable: false })
     fechaEmision!: string
   
-    @OneToOne(() => Inscripcion, inscripcion => inscripcion.certificado, { cascade: [Cascade.ALL] })
-    inscripcion?: Rel<Inscripcion>;
+    @OneToOne(() => Inscripcion,{nullable:true})
+    inscripcion?: Inscripcion | null;
 
 }

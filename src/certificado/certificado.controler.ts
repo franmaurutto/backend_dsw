@@ -53,8 +53,41 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message })
     }
   }
+  async function add(req: Request, res: Response) {
+    try {
+      console.log("Iniciando la creación del certificado...");
+      console.log("Datos sanitizados:", req.body.sanitizedInput);
+      
+      const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
+      if (!inscripcion) {
+        return res.status(404).json({ message: 'Inscripcion no encontrada' });
+      }
+      console.log("Inscripción encontrada:", inscripcion);
+  
+      // Crear el certificado con la inscripción asociada
+      const certificado = em.create(Certificado, {
+        ...req.body.sanitizedInput,
+        inscripcion,
+      });
+  
+      // Persistir y guardar el certificado
+      inscripcion.certificado = certificado;  // Actualiza la inscripción con el certificado creado
+      await em.persistAndFlush(inscripcion);
+      await em.persistAndFlush(certificado);
+      console.log("Certificado creado:", certificado);
+      
+      res.status(201).json({ message: 'Certificado creado', data: certificado });
+    } catch (error: any) {
+      console.log("Error en la creación del certificado:", error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+  /*
   async function add(req: Request, res: Response){
     try {
+      console.log("Inscripcion ID recibido:", req.body.sanitizedInput.inscripcionId);
+
+      console.log("Tipo de inscripcionId:", typeof req.body.sanitizedInput.inscripcionId);
       const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
       if (!inscripcion) {
         return res.status(404).json({ message: 'Inscripcion no encontrada' });
@@ -66,8 +99,9 @@ async function findAll(req: Request, res: Response){
       res.status(201).json({ message: 'Certificado creado', data: certificado })
     } catch (error: any) {
       res.status(500).json({ message: error.message })
+      console.log("hay un problema")
     }
-  }
+  }*/
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

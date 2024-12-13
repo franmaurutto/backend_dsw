@@ -9,6 +9,7 @@ import { Material } from '../material/material.entity.js';
 import { differenceInDays } from 'date-fns';
 import { parse } from 'path';
 import {Usuario} from '../usuario/usuario.entity.js';
+import { Inscripcion } from '../inscripcion/inscripciones.entity.js';
 import jwt from 'jsonwebtoken';
 const em = orm.em
 
@@ -277,6 +278,23 @@ async function getMaterialesCurso(req: Request, res: Response) {
   } catch (error) {
     console.error('Error al obtener materiales del curso:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
+
   }
 }
-export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,generateCourseToken}
+
+async function getInscripcionesCurso(req: Request, res: Response) {
+  try {
+    const cursoId = parseInt(req.params.id, 10);
+    if (isNaN(cursoId)) {
+      return res.status(400).json({ message: 'ID del curso inválido' });
+    }
+    const inscripciones = await em.find(Inscripcion, { curso: cursoId });
+    res.status(200).json({ message: 'Inscripciones encontradas', data: inscripciones });
+  } catch (error) {
+    console.error('Error al obtener inscripciones del curso:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+}
+
+
+export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,getInscripcionesCurso,generateCourseToken}

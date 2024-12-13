@@ -14,8 +14,8 @@ export class Inscripcion extends BaseEntity{
     usuario!:Rel<Usuario>
     @ManyToOne(()=> Curso,{nullable:true})//cambiar nullable
     curso?: Rel<Curso>
-    @OneToOne(() => Certificado, {  owner: true, nullable:true })
-    certificado?: Rel<Certificado>;
+    @OneToOne(() => Certificado, {nullable:true})
+    certificado?: Certificado | null;
     @OneToOne(()=>RtaParcial,{nullable:true})
     rtaparcial?: RtaParcial | null;
     @OneToOne(() => RtaTp, { nullable: true })
