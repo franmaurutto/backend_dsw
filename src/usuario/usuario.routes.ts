@@ -12,4 +12,4 @@ usuarioRouter.delete("/:id",verificarTokenYRol(['profesor','alumno']),sanitizeUs
 usuarioRouter.post("/login", findByEmail);
 usuarioRouter.get('/:id/inscripciones',verificarTokenYRol(['alumno']), getInscripcionesAlumno);
 usuarioRouter.get('/:id/cursos',verificarTokenYRol(['profesor']),getCursosProfesor)
-usuarioRouter.patch("/:id/cambiar-contrasenia",verificarTokenYRol(['profesor','alumno']),sanitizeUsuarioInput, cambiarContrasenia)
+usuarioRouter.patch("/:id/cambiar-contrasenia",verificarTokenYRol(['profesor','alumno']), cambiarContrasenia)
