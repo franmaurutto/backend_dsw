@@ -16,9 +16,30 @@ Content-Type: application/json
     "cursoId":1
 }
 
+###
+# @name creoUsuario
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json 
+
+{
+    "nombreCompleto": "Delfina Maurutto",
+    "rol":"alumno",
+    "mail": "delfi@hotmail.com",
+    "telefono": "3413645542",
+    "contrasenia": "fdan666"
+}
+
+### id
+@id = {{creoUsuario.response.body.data.id}}
+
+### id
+@mail = {{creoUsuario.response.body.data.mail}}
 
 ### 
 GET http://localhost:3000/api/usuarios/{{id}}
+
+###
+GET  http://localhost:3000/api/usuarios/{{mail}}
 
 ### 
 PUT http://localhost:3000/api/usuarios/{{id}}
@@ -44,7 +65,7 @@ Content-Type: application/json
 }
 
 ### 
-DELETE http://localhost:3000/api/usuarios/{{idToDelete}}
+DELETE http://localhost:3000/api/usuarios/{{id}}
 
 ### modificar un character (PATCH - parcial)
 PATCH http://localhost:3000/api/usuarios/{{id}}

@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {findAll, findOne, add, update, remove,sanitizeUsuarioInput,findByEmail, getInscripcionesAlumno, getCursosProfesor,cambiarContrasenia} from './usuario.controller.js';
+import {findAll, findOne, add, update, remove,sanitizeUsuarioInput,findByEmail, getInscripcionesAlumno, getCursosProfesor,cambiarContrasenia, findOneByEmail} from './usuario.controller.js';
 import { verificarTokenYRol } from '../middleware/verificarTokenYRol.js';
 export const usuarioRouter = Router();
 
@@ -12,4 +12,5 @@ usuarioRouter.delete("/:id",verificarTokenYRol(['profesor','alumno']),sanitizeUs
 usuarioRouter.post("/login", findByEmail);
 usuarioRouter.get('/:id/inscripciones',verificarTokenYRol(['alumno']), getInscripcionesAlumno);
 usuarioRouter.get('/:id/cursos',verificarTokenYRol(['profesor']),getCursosProfesor)
-usuarioRouter.patch("/:id/cambiar-contrasenia",verificarTokenYRol(['profesor','alumno']), cambiarContrasenia)
+usuarioRouter.patch("/:id/cambiar-contrasenia",verificarTokenYRol(['profesor','alumno']), cambiarContrasenia);
+usuarioRouter.post("/validar", sanitizeUsuarioInput, findOneByEmail);
