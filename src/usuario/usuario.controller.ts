@@ -71,6 +71,28 @@ async function findOne(req: Request, res: Response) {
     }
 }
 
+async function findOneByEmail(req: Request, res: Response) {
+    try {
+      const {mail} = req.body;
+      console.log(mail);
+  
+      if (!mail) {
+        return res.status(400).json({ message: 'Faltan datos: mail' });
+      }
+  
+      const usuario = await em.findOne(Usuario, { mail });
+
+      if (!usuario) {
+        return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+      }
+      res.status(200).json(usuario);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  
+
+
 async function add(req: Request, res: Response) {
     try {
 
@@ -239,4 +261,4 @@ async function cambiarContrasenia(req: Request, res: Response) {
 }
 
 
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, findByEmail, getCursosProfesor, getInscripcionesAlumno, cambiarContrasenia };
+export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, findByEmail, getCursosProfesor, getInscripcionesAlumno, cambiarContrasenia, findOneByEmail };
