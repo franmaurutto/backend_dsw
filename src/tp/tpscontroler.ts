@@ -37,6 +37,12 @@ async function add(req: Request, res: Response) {
     if (!curso) {
       return res.status(404).json({ message: "Curso no encontrado" });
     }
+    const fechaLimite = new Date(req.body.sanitizedInput.fechaLimite);
+    if (fechaLimite < curso.fechaInicio || fechaLimite > curso.fechaFin) {
+      return res.status(400).json({
+        message: `La fecha límite (${fechaLimite}) debe estar entre la fecha de inicio (${curso.fechaInicio}) y la fecha de fin (${curso.fechaFin}) del curso.`
+      });
+    }
 
     const tp = em.create(Tp, {
       ...sanitizedInput,

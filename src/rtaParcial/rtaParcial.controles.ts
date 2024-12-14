@@ -3,7 +3,7 @@ import { RtaParcial } from "./rtaParcial.entity.js";
 import { orm } from "../Shared/orm.js";
 import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
 import { Parcial } from "../parcial/parcial.entity.js";
-
+import { isAfter, isBefore, parse, format} from 'date-fns';
 
 const em = orm.em
 
@@ -57,6 +57,7 @@ async function findAll(req: Request, res: Response){
           return res.status(404).json({ message: 'Inscripción no encontrada' });
         }
       }
+      console.log(inscripcion)
       
       let parcial = null;
       if (req.body.sanitizedInput.parcialId) {
@@ -64,6 +65,26 @@ async function findAll(req: Request, res: Response){
         if (!parcial) {
           return res.status(404).json({ message: 'Parcial no encontrado' });
         }
+        const fechaActual = new Date();
+        const fechaParcial = new Date(parcial.fecha);
+        console.log("Fecha actual:", fechaActual.toISOString());
+        console.log("Fecha parcial:", fechaParcial.toISOString());
+      
+        console.log(parcial)
+      if (fechaActual.toISOString().slice(0, 10) !== fechaParcial.toISOString().slice(0, 10)) {
+        return res.status(400).json({
+          message: 'La fecha actual es mayor que la fecha del parcial. No se puede crear la respuesta.'
+        });
+      }
+
+      const horaActual = format(fechaActual, 'HH:mm');
+      
+      if (isBefore(parse(horaActual, 'HH:mm', new Date()), parse(parcial.horaComienzo, 'HH:mm', new Date())) ||
+          isAfter(parse(horaActual, 'HH:mm', new Date()), parse(parcial.horaFin, 'HH:mm', new Date()))) {
+        return res.status(400).json({
+          message: 'La hora actual está fuera del rango permitido para el parcial.'
+        });
+      }
       }
       
       const rtaParcial = em.create(RtaParcial, {

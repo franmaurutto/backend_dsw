@@ -6,6 +6,7 @@ import { Curso } from '../curso/cursos.entity.js';
 import { Certificado } from '../certificado/certificado.entity.js';
 import { Usuario } from '../usuario/usuario.entity.js';
 import jwt from 'jsonwebtoken';
+import { isBefore, isAfter } from 'date-fns';
 
 const em = orm.em
 
@@ -75,6 +76,12 @@ async function add(req: Request, res: Response) {
     }
     if (curso.cantCupos === 0) {
       return res.status(400).json({ message: 'No hay cupos disponibles para este curso' });
+    }
+    const fechaInscripcion = new Date(req.body.sanitizedInput.fechaInscripcion);
+    if (isBefore(fechaInscripcion, curso.fechaInicio) || isAfter(fechaInscripcion, curso.fechaFin)) {
+      return res.status(400).json({
+        message: 'La fecha de inscripción debe estar entre la fecha de inicio y la fecha de finalización del curso',
+      });
     }
     const inscripcion = em.create(Inscripcion, {
       ...req.body.sanitizedInput,

@@ -4,6 +4,7 @@ import { orm } from "../Shared/orm.js";
 import { Curso } from "../curso/cursos.entity.js";
 import jwt from 'jsonwebtoken';
 import { RtaParcial } from "../rtaParcial/rtaParcial.entity.js";
+import { isBefore, isAfter } from 'date-fns';
 
 const em = orm.em
 function validateParcial(parcial: Parcial): boolean {
@@ -71,6 +72,12 @@ async function add(req: Request, res: Response) {
     if (!curso) {
       return res.status(404).json({ message: 'Curso no encontrado' });
   };
+  const fechaParcial = new Date(req.body.sanitizedInput.fecha);
+  if (isBefore(fechaParcial, curso.fechaInicio) || isAfter(fechaParcial, curso.fechaFin)) {
+    return res.status(400).json({
+      message: 'La fecha del parcial debe estar entre la fecha de inicio y la fecha de finalización del curso',
+    });
+  }
 
     const parcial = em.create(Parcial, {
       ...req.body.sanitizedInput,

@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express"
 import { Certificado } from "./certificado.entity.js"
 import { orm } from "../Shared/orm.js";
 import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
+import { isAfter, isEqual, parseISO } from 'date-fns';
+
 
 
 const em = orm.em
@@ -63,15 +65,25 @@ async function findAll(req: Request, res: Response){
         return res.status(404).json({ message: 'Inscripcion no encontrada' });
       }
       console.log("Inscripción encontrada:", inscripcion);
+      await em.populate(inscripcion, ['curso']);
+      const curso = inscripcion.curso;
+      if (!curso || !curso.fechaFin) {
+        return res.status(400).json({ message: 'Curso o fecha de finalización no encontrada' });
+      }
   
-      // Crear el certificado con la inscripción asociada
+      const fechaEmision = new Date(req.body.sanitizedInput.fechaEmision); 
+      const fechaFinCurso = curso.fechaFin; 
+  
+      if (!isAfter(fechaEmision, fechaFinCurso) && !isEqual(fechaEmision, fechaFinCurso)) {
+        return res.status(400).json({ message: 'La fecha de emisión debe ser mayor o igual que la fecha de fin del curso' });
+      }
+  
       const certificado = em.create(Certificado, {
         ...req.body.sanitizedInput,
         inscripcion,
       });
   
-      // Persistir y guardar el certificado
-      inscripcion.certificado = certificado;  // Actualiza la inscripción con el certificado creado
+      inscripcion.certificado = certificado; 
       await em.persistAndFlush(inscripcion);
       await em.persistAndFlush(certificado);
       console.log("Certificado creado:", certificado);
@@ -82,26 +94,7 @@ async function findAll(req: Request, res: Response){
       res.status(500).json({ message: error.message });
     }
   }
-  /*
-  async function add(req: Request, res: Response){
-    try {
-      console.log("Inscripcion ID recibido:", req.body.sanitizedInput.inscripcionId);
-
-      console.log("Tipo de inscripcionId:", typeof req.body.sanitizedInput.inscripcionId);
-      const inscripcion = await em.findOne(Inscripcion, { id: req.body.sanitizedInput.inscripcionId });
-      if (!inscripcion) {
-        return res.status(404).json({ message: 'Inscripcion no encontrada' });
-      }
-      const certificado = em.create(Certificado, {
-        ...req.body.sanitizedInput,
-      inscripcion})
-      await em.persistAndFlush(inscripcion)
-      res.status(201).json({ message: 'Certificado creado', data: certificado })
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-      console.log("hay un problema")
-    }
-  }*/
+  
   async function update(req: Request, res: Response){
     try {
       const id = Number.parseInt(req.params.id)

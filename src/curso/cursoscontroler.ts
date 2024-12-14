@@ -11,54 +11,9 @@ import { parse } from 'path';
 import {Usuario} from '../usuario/usuario.entity.js';
 import { Inscripcion } from '../inscripcion/inscripciones.entity.js';
 import jwt from 'jsonwebtoken';
+import { isBefore } from 'date-fns';
+
 const em = orm.em
-
-const SECRET_KEY = 'mi_clave_secreta_para_cursos';
-
-/**
- * Genera un token JWT para un curso.
- * @param curso Datos del curso.
- * @returns Token JWT.
- */
-function generateCourseToken(curso: any): string {
-  const { 
-    id,
-    nombre, 
-    descripcion, 
-    cantCupos, 
-    duracion, 
-    fechaInicio, 
-    fechaFin, 
-    horaInicio, 
-    horaFin, 
-    dias, 
-    profesorId, 
-    parcialId, 
-    tpId, 
-    materialId 
-  } = curso;
-
-  return jwt.sign(
-    { 
-      id,
-      nombre, 
-      descripcion, 
-      cantCupos, 
-      duracion, 
-      fechaInicio, 
-      fechaFin, 
-      horaInicio, 
-      horaFin, 
-      dias, 
-      profesorId, 
-      parcialId, 
-      tpId, 
-      materialId 
-    },  // Todos los datos del curso
-    SECRET_KEY,    // Clave secreta
-    { expiresIn: '1h' }  // El token expirará en 1 hora
-  );
-}
 
 function validateCurso(curso: Curso): boolean {
   if (!curso) {
@@ -76,7 +31,9 @@ function validateCurso(curso: Curso): boolean {
   if (!(curso.fechaFin instanceof Date) || isNaN(curso.fechaFin.getTime())) {
     throw new Error("La fecha de fin es requerida y debe ser una fecha válida");
   }
-
+  if (!isBefore(curso.fechaInicio, curso.fechaFin)) {
+    throw new Error("La fecha de inicio debe ser menor que la fecha de fin");
+  }
   if (curso.cantCupos < 0) {
       throw new Error("El número de cupos debe ser mayor a 0");
   }
@@ -297,4 +254,4 @@ async function getInscripcionesCurso(req: Request, res: Response) {
 }
 
 
-export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,getInscripcionesCurso,generateCourseToken}
+export {sanitizeCursoInput, getAll, getOne, add, update, remove, getMaterialesCurso,getInscripcionesCurso}

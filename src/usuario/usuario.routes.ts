@@ -13,4 +13,4 @@ usuarioRouter.post("/login", findByEmail);
 usuarioRouter.get('/:id/inscripciones',verificarTokenYRol(['alumno']), getInscripcionesAlumno);
 usuarioRouter.get('/:id/cursos',verificarTokenYRol(['profesor']),getCursosProfesor)
 usuarioRouter.patch("/:id/cambiar-contrasenia",verificarTokenYRol(['profesor','alumno']), cambiarContrasenia);
-usuarioRouter.post("/validar", sanitizeUsuarioInput, findOneByEmail);
+usuarioRouter.post("/validar", findOneByEmail);

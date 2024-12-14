@@ -3,6 +3,7 @@ import { RtaTp } from "./rtaTp.entity.js";
 import { orm } from "../Shared/orm.js";
 import { Inscripcion } from "../inscripcion/inscripciones.entity.js";
 import { Tp } from "../tp/tps.entity.js";
+import { isAfter } from 'date-fns';
 
 
 const em = orm.em
@@ -99,6 +100,13 @@ async function findAll(req: Request, res: Response){
         tp = await em.findOne(Tp, { id: req.body.tpId });
         if (!tp) {
           return res.status(404).json({ message: 'Tp no encontrado' });
+        }else{
+          const fechaActual = new Date();
+          if (isAfter(fechaActual, tp.fechaLimite)) {
+            return res.status(400).json({
+              message: 'La respuesta al trabajo práctico no puede ser creada, ya que ha pasado la fecha límite',
+            });
+          }
         }
       }
   
