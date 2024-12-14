@@ -10,4 +10,4 @@ rtaParcialRouter.post('/', sanitizeRtaParcialInput,verificarTokenYRol(['alumno']
 rtaParcialRouter.put('/:id', sanitizeRtaParcialInput, update)
 rtaParcialRouter.patch('/:id', sanitizeRtaParcialInput, update)
 rtaParcialRouter.delete('/:id', sanitizeRtaParcialInput, remove)
-rtaParcialRouter.get("/:id/inscripcion/:inscripcionId", getInscripcionDeRtaParcial);//verificarTokenYRol(['profesor']),
+rtaParcialRouter.get("/:id/inscripcion/:inscripcionId", verificarTokenYRol(['profesor']),getInscripcionDeRtaParcial);
