@@ -109,6 +109,10 @@ async function findAll(req: Request, res: Response){
       });
   
       await em.persistAndFlush(rtaTp);
+      if (inscripcion) {
+        inscripcion.rtatp = rtaTp;  // Asignar el ID de la respuesta parcial a la inscripción
+        await em.persistAndFlush(inscripcion);  // Guardar los cambios en la inscripción
+      }
       res.status(201).json({ message: 'Respuesta al trabajo práctico creada', data: rtaTp });
     } catch (error: any) {
       res.status(500).json({ message: error.message });

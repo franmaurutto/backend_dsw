@@ -72,6 +72,10 @@ async function findAll(req: Request, res: Response){
         parcial: parcial || null,
       });
       await em.persistAndFlush(rtaParcial);
+      if (inscripcion) {
+        inscripcion.rtaparcial = rtaParcial;  // Asignar el ID de la respuesta parcial a la inscripción
+        await em.persistAndFlush(inscripcion);  // Guardar los cambios en la inscripción
+      }
       res.status(201).json({ message: 'Respuesta al parcial creada', data: rtaParcial });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
