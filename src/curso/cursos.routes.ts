@@ -3,8 +3,8 @@ import {getAll, getOne, add, update, remove, sanitizeCursoInput, getMaterialesCu
 import { verificarTokenYRol } from '../middleware/verificarTokenYRol.js';
 export const cursoRouter = Router();
 
-cursoRouter.get("/",getAll);
-cursoRouter.get("/:id",getOne);
+cursoRouter.get("/",verificarTokenYRol(['alumno']),getAll);
+cursoRouter.get("/:id",verificarTokenYRol(['profesor','alumno']),getOne);
 cursoRouter.post("/",verificarTokenYRol(['profesor']),sanitizeCursoInput, add);
 cursoRouter.put("/:id",verificarTokenYRol(['profesor']),sanitizeCursoInput, update);
 cursoRouter.patch("/:id",update);

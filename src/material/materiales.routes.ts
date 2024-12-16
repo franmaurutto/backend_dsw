@@ -11,4 +11,3 @@ materialRouter.put('/:id', sanitizeMaterialInput,verificarTokenYRol(['profesor']
 materialRouter.patch('/:id', sanitizeMaterialInput, update);
 materialRouter.delete('/:id',verificarTokenYRol(['profesor']), remove);
 materialRouter.post('/:materialId/add-to-curso/:cursoId',verificarTokenYRol(['profesor']), addMaterialToCurso);
-

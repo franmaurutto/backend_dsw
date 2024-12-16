@@ -9,6 +9,6 @@ rtaTpRouter.get('/:id', findOne)
 rtaTpRouter.post('/', sanitizeRtaTpInput, verificarTokenYRol(['alumno']), add)
 rtaTpRouter.put('/:id',sanitizeRtaTpInput, update)
 rtaTpRouter.patch('/:id',sanitizeRtaTpInput, update)
-rtaTpRouter.delete('/:id',sanitizeRtaTpInput, remove)
-rtaTpRouter.get("/:id/inscripcion/:inscripcionId", getInscripcionDeRtaTp);
-rtaTpRouter.get('/:tpId/rtaTps', findAll);
+rtaTpRouter.delete('/:id', verificarTokenYRol(['profesor']),sanitizeRtaTpInput, remove)
+rtaTpRouter.get("/:id/inscripcion/:inscripcionId",verificarTokenYRol(['profesor']), getInscripcionDeRtaTp);
+rtaTpRouter.get('/:tpId/rtaTps', verificarTokenYRol(['profesor']), findAll);
