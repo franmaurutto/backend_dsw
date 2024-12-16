@@ -1,0 +1,4 @@
+{
+  "forceExit":true,
+  "testMatch":["//*.test.js"]
+}
