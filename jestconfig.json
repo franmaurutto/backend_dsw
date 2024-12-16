@@ -1,4 +1,4 @@
 {
   "forceExit":true,
-  "testMatch":["//*.test.js"]
+  "testMatch":["//*.test.ts"]
 }
