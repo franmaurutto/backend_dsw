@@ -2,10 +2,11 @@ import { getApp } from "./appconfig.js";
 import { syncSchema } from './Shared/orm.js';
 import dotenv from 'dotenv';
 dotenv.config();
+const app=getApp()
+const PORT = process.env.PORT || 3000;
 
-const app = getApp()
+await syncSchema();
 
-await syncSchema()
-app.listen (process.env.PORT, ()=>{
-    console.log(`Server running on ${process.env.API_SERVER}:${process.env.API_PORT}`)
+app.listen(PORT, () => {
+    console.log(`Server running on ${process.env.API_SERVER || 'http://localhost'}:${PORT}`);
 });
