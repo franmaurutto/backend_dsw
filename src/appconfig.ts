@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import express from 'express';
+import dotenv from 'dotenv';
 import { cursoRouter } from './curso/cursos.routes.js';
 //import { alumnoRouter } from './alumno/alumnos.routes.js';
 import { tpRouter } from './tp/tps.routes.js';
@@ -16,13 +17,13 @@ import { materialRouter} from './material/materiales.routes.js'
 
 
 import cors from 'cors'
-
+dotenv.config();
 export function getApp(){
     const app = express() 
 
     app.use(express.json()) 
     app.use(cors({
-    origin: 'http://localhost:3001', 
+    origin: process.env.API_SERVER_FRONT, 
     methods: 'GET,POST,PUT,DELETE,PATCH', 
     credentials: true 
     }));
